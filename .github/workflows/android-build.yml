@@ -66,16 +66,16 @@ jobs:
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: dietpilot-debug.apk
-          name: Release ${{ github.ref_name }}
+          name: ${{ github.ref_type == 'tag' && format('Release {0}', github.ref_name) || 'Latest Build' }}
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || 'latest' }}
           body: |
             DietPilot Android Build
             
-            - Version: ${{ github.ref_name }}
+            - Version/Branch: ${{ github.ref_name }}
             - Build Type: Debug APK
           draft: false
-          prerelease: false
+          prerelease: ${{ github.ref_type != 'tag' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
