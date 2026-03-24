@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Meals - DietPilot</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-tint": "#446900",
+              "secondary": "#0058be",
+              "on-secondary": "#ffffff",
+              "inverse-on-surface": "#f0f1f1",
+              "error": "#ba1a1a",
+              "secondary-container": "#2170e4",
+              "on-surface": "#1a1c1c",
+              "tertiary-container": "#f3c1ff",
+              "surface-dim": "#dadada",
+              "on-secondary-fixed": "#001a42",
+              "on-background": "#1a1c1c",
+              "surface-container-highest": "#e2e2e2",
+              "surface-bright": "#f9f9f9",
+              "primary-container": "#a3e635",
+              "background": "#f9f9f9",
+              "on-primary-container": "#416400",
+              "surface-container-low": "#f3f3f4",
+              "on-tertiary-fixed-variant": "#5e376b",
+              "surface": "#f9f9f9",
+              "on-tertiary-fixed": "#2f093d",
+              "primary-fixed-dim": "#98da27",
+              "inverse-primary": "#98da27",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-high": "#e8e8e8",
+              "outline-variant": "#c2cab0",
+              "on-primary-fixed": "#121f00",
+              "secondary-fixed-dim": "#adc6ff",
+              "surface-variant": "#e2e2e2",
+              "primary-fixed": "#b2f746",
+              "inverse-surface": "#2f3131",
+              "on-error": "#ffffff",
+              "tertiary-fixed": "#fad7ff",
+              "secondary-fixed": "#d8e2ff",
+              "on-primary-fixed-variant": "#334f00",
+              "outline": "#727a64",
+              "on-tertiary": "#ffffff",
+              "on-error-container": "#93000a",
+              "on-secondary-container": "#fefcff",
+              "on-primary": "#ffffff",
+              "tertiary-fixed-dim": "#e7b6f3",
+              "surface-container": "#eeeeee",
+              "error-container": "#ffdad6",
+              "tertiary": "#784f85",
+              "on-tertiary-container": "#734b80",
+              "on-surface-variant": "#424936",
+              "on-secondary-fixed-variant": "#004395",
+              "primary": "#446900"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl fixed top-0 w-full z-50 shadow-[0_20px_50px_rgba(0,0,0,0.04)]">
+<div class="flex justify-between items-center px-6 h-20 w-full">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-zinc-900 dark:text-white" data-icon="menu">menu</span>
+<h1 class="text-2xl font-black tracking-tight text-zinc-900 dark:text-white">DietPilot</h1>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container">
+<img alt="User Profile" data-alt="Close up portrait of a smiling young man with clean grooming, natural lighting, soft professional photography style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhllTETsmhhjkHDjkCdEcz6plipG2_H6RAFKcZx2b5nl94EAsclrT6DmsWw-QpVyUJDXUTFa1LJkkNNmCzyGleUuXR6Fd-yTfwNEfs9UkaqGBBnDg8iQGuX6R1wucxjIxSTf2amxRscNB6YYg7V0EUVPttLkzwGD20HsOJ58p1djCquztxLAmDljmnmt51RDbq9tNPZOCZa6mNee3CcB_5dpSL5FHN0KaWo4GpINrGLByRIDDoR9mP-tbck3fNd864cd3InxI15wk"/>
+</div>
+</div>
+</header>
+<main class="pt-28 px-6 max-w-2xl mx-auto">
+<!-- Search Section -->
+<section class="mb-10">
+<div class="relative group">
+<div class="absolute inset-y-0 left-5 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-zinc-400" data-icon="search">search</span>
+</div>
+<input class="w-full h-16 pl-14 pr-6 bg-white/60 backdrop-blur-2xl rounded-xl border border-white/20 shadow-[0_10px_30px_rgba(0,0,0,0.03)] focus:ring-2 focus:ring-primary-container focus:border-transparent transition-all outline-none text-on-surface-variant" placeholder="Search Indian foods (e.g. Paneer Tikka)..." type="text"/>
+</div>
+</section>
+<!-- Calories Overview Hero -->
+<section class="mb-12 relative overflow-hidden rounded-xl bg-surface-container-lowest p-8 shadow-[0_30px_60px_rgba(0,0,0,0.04)]">
+<div class="relative z-10 flex justify-between items-end">
+<div>
+<span class="text-xs font-bold uppercase tracking-widest text-zinc-400 block mb-2">Calories Remaining</span>
+<div class="flex items-baseline gap-2">
+<span class="text-[4rem] leading-none font-extrabold tracking-tighter text-on-surface">1,420</span>
+<span class="text-xl font-bold text-primary italic">kcal</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<div class="w-16 h-16 rounded-full border-4 border-primary-container flex items-center justify-center">
+<span class="text-sm font-black">62%</span>
+</div>
+</div>
+</div>
+<!-- Decorative Vitality Shape -->
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-primary-container/20 rounded-full blur-3xl"></div>
+</section>
+<!-- Meal Slots (Bento Grid Style) -->
+<div class="grid grid-cols-1 gap-6">
+<!-- Breakfast Slot -->
+<div class="group bg-surface-container-low rounded-xl p-6 transition-all hover:bg-surface-container-lowest hover:shadow-xl">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-xl font-bold text-on-surface">Breakfast</h3>
+<p class="text-sm text-zinc-500">Suggested: 400-500 kcal</p>
+</div>
+<button class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-primary shadow-sm hover:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-4 bg-white/50 p-3 rounded-lg border border-white/40">
+<div class="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Traditional Indian Poha with turmeric yellow color, garnished with fresh cilantro and pomegranate seeds in a white bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5_Z3tVx1GLGeNUvmdZlJ2x1QpaW3FqMPB6TJjTF4V9piRsud7ImXXrhbSnQKlBtz20hY72Cplv1glQA6XDsieD8r486cF_StrgGkt0sjAHsWW8SCQ8N0ygVWIrbaURSW3q_zMlW1P25gT8rVKwUhAI_5X4AnAljgDZNvlNPUg3KCjGddpFegsjjKAMd-nA_peLQrTgYCKCHT7PooHebE_PqxMY7jnUA-mXcGIPKaIfZLAKI2pLqxVuUPNQxHZj0qzzhVNcZi7-Xw"/>
+</div>
+<div class="flex-grow">
+<h4 class="font-bold text-on-surface">Kanda Poha</h4>
+<p class="text-xs text-zinc-500">1 bowl (200g)</p>
+</div>
+<div class="text-right">
+<span class="font-bold text-on-surface">280</span>
+<span class="text-[10px] uppercase font-bold text-zinc-400 block">kcal</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Lunch Slot - Active Selection Example -->
+<div class="group bg-white rounded-xl p-6 shadow-2xl ring-1 ring-primary-container/30">
+<div class="flex justify-between items-start mb-6">
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-xl font-bold text-on-surface">Lunch</h3>
+<span class="px-2 py-0.5 bg-primary-container text-[10px] font-bold rounded-full uppercase">Logged</span>
+</div>
+<p class="text-sm text-zinc-500">Tracked at 1:30 PM</p>
+</div>
+<button class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container shadow-lg shadow-primary-container/20">
+<span class="material-symbols-outlined" data-icon="check">check</span>
+</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-4 bg-surface-container-low p-3 rounded-lg">
+<div class="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A serving of Dal Tadka in a copper bowl with tempered spices on top, vibrant yellow and orange colors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUTtUIwME0wTuBQnyt216RxYuxv7HaLyKrnzgCJBOe-p4pZ7XtWTFA3vaCBd77urJQPFwki20HroKfjS6JT90Ijcrmm8IN7aj6X-5SUe_nzkcn0h76q6nolw0kNXyIyWhD9XtYe0cSn6ujD-LghGh2UrlynL5DNy6uT2dlAHoUS6werb4MmiSS1WqMl37JF0P_fDLKn__Lg5Jd_8vi_e_k3CwuNrM92BNVDygAUBiwewSY_OGrnEjjdqN_tfEqRCyL_s5WTJIk6AA"/>
+</div>
+<div class="flex-grow">
+<h4 class="font-bold text-on-surface">Dal Tadka</h4>
+<p class="text-xs text-zinc-500">1.5 cups (300ml)</p>
+</div>
+<div class="text-right">
+<span class="font-bold text-on-surface">320</span>
+<span class="text-[10px] uppercase font-bold text-zinc-400 block">kcal</span>
+</div>
+</div>
+<div class="flex items-center gap-4 bg-surface-container-low p-3 rounded-lg">
+<div class="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-zinc-200 flex items-center justify-center">
+<span class="material-symbols-outlined text-zinc-400" data-icon="restaurant">restaurant</span>
+</div>
+<div class="flex-grow">
+<h4 class="font-bold text-on-surface">Missi Roti</h4>
+<p class="text-xs text-zinc-500">2 medium size</p>
+</div>
+<div class="text-right">
+<span class="font-bold text-on-surface">240</span>
+<span class="text-[10px] uppercase font-bold text-zinc-400 block">kcal</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Dinner Slot (With Indian Food Teaser) -->
+<div class="group bg-surface-container-low rounded-xl p-6 transition-all hover:bg-surface-container-lowest">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-xl font-bold text-on-surface">Dinner</h3>
+<p class="text-sm text-zinc-500">Suggested: 300-400 kcal</p>
+</div>
+<button class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+<div class="relative rounded-lg overflow-hidden h-32 bg-zinc-900 group/item">
+<img class="w-full h-full object-cover opacity-60 group-hover/item:scale-105 transition-transform duration-500" data-alt="Grilled Paneer Tikka cubes with charred edges on skewers, served with green chutney and onion rings, dark dramatic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC7PeNBXq2LvZaequSafGrzR3AT7gRb4661uyavFDrf6EhHLqZ1wmG4MrRXYcV_eIAmm83zLkiwDSzuw-U44WvyEUOPSvTEPVexPrI4jT5VgHmD2MH_9ELib0YyFP82vecum_XCmvThrEM4Ln6lZFRJZb8PRGotA__0YlAdaWZbHHgfuqamepjhXdy-WP6664zL_mqdzt_Cg5hiQphlNfSfblfj_93SpLwdG4owco09w-rc_DAE3zhVIevvXwy7mm77qUMo5LylLA"/>
+<div class="absolute inset-0 p-4 flex flex-col justify-end bg-gradient-to-t from-black/80 to-transparent">
+<span class="text-[10px] font-bold text-primary-container uppercase tracking-widest">Recommended</span>
+<h4 class="text-white font-bold">Paneer Tikka (Dry)</h4>
+</div>
+</div>
+</div>
+<!-- Water Tracking (Hydration Blue) -->
+<div class="bg-blue-50/50 border border-blue-100 rounded-xl p-6 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-secondary shadow-sm">
+<span class="material-symbols-outlined" data-icon="water_drop">water_drop</span>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">Hydration</h3>
+<p class="text-sm text-zinc-500">1.2L / 2.5L</p>
+</div>
+</div>
+<div class="flex gap-1">
+<div class="w-2 h-8 rounded-full bg-secondary"></div>
+<div class="w-2 h-8 rounded-full bg-secondary"></div>
+<div class="w-2 h-8 rounded-full bg-secondary"></div>
+<div class="w-2 h-8 rounded-full bg-blue-200"></div>
+<div class="w-2 h-8 rounded-full bg-blue-200"></div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-6 left-0 right-0 z-50 flex justify-around items-center h-20 px-4 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-2xl shadow-[0_30px_60px_rgba(0,0,0,0.06)] w-[92%] max-w-md mx-auto rounded-[3rem] border border-white/20">
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-4 hover:text-lime-500 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold text-[10px] uppercase tracking-wider mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-4 hover:text-lime-500 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold text-[10px] uppercase tracking-wider mt-1">Stats</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-4 hover:text-lime-500 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="fitness_center">fitness_center</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold text-[10px] uppercase tracking-wider mt-1">Workouts</span>
+</a>
+<!-- Active State: Meals -->
+<a class="flex flex-col items-center justify-center bg-lime-400 dark:bg-lime-500 text-zinc-900 rounded-full w-12 h-12 mb-1 shadow-lg shadow-lime-500/20 active:scale-90 duration-150 ease-out" href="#">
+<span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
+<!-- Label hidden for active state as per circle-pill design in JSON -->
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-4 hover:text-lime-500 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold text-[10px] uppercase tracking-wider mt-1">Alerts</span>
+</a>
+</nav>
+</body></html>
