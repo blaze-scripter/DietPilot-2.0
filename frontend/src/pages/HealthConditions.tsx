@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useApp } from '@/main';
 import { healthApi } from '@/services/api';
 
-
 const CONDITIONS = [
   { value: 'diabetes', label: 'Diabetes', icon: 'blood_pressure', color: '#ef4444', bg: '#fee2e2' },
   { value: 'hypertension', label: 'Hypertension', icon: 'favorite', color: '#3b82f6', bg: '#dbeafe' },
@@ -13,7 +12,7 @@ const CONDITIONS = [
 
 
 export default function HealthConditions() {
-  const { profile } = useApp();
+  const { profile, navigate } = useApp();
   const [conditions, setConditions] = useState<any[]>([]);
 
   useEffect(() => {
@@ -21,21 +20,33 @@ export default function HealthConditions() {
     setConditions(profile.health_conditions);
   }, [profile]);
 
-  const ConditionCard = ({ name }: { name: string }) => {
-    const [tips, setTips] = useState<any[]>([]);
+  const [selected, setSelected] = useState<string | null>(profile?.health_conditions?.[0] || null);
+  const [tips, setTips] = useState<Record<string, any[]>>({});
+  const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-      async function load() {
+  const userConds = profile?.health_conditions || [];
+
+  useEffect(() => {
+    async function loadAll() {
+      if (userConds.length === 0) return;
+      setLoading(true);
+      const newTips: Record<string, any[]> = {};
+      
+      for (const cond of userConds) {
         try {
-          const data = await healthApi.getTips(name);
-          setTips(data);
+          const data = await healthApi.getTips(cond);
+          newTips[cond] = data || [];
         } catch { /* ignore */ }
       }
-      load();
-    }, [name]);
-
-
-  // If no conditions selected, show an empty state
+      
+      setTips(newTips);
+      if (!selected && userConds.length > 0) {
+        setSelected(userConds[0]);
+      }
+      setLoading(false);
+    }
+    loadAll();
+  }, [profile?.health_conditions]);  // If no conditions selected, show an empty state
   if (!loading && userConds.length === 0) {
     return (
       <div className="page-container relative h-[80vh] flex flex-col items-center justify-center">
@@ -75,7 +86,7 @@ export default function HealthConditions() {
 
       {/* Conditions Tabs */}
       <div className="flex gap-3 mb-8 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide animate-slideUp" style={{ animationDelay: '0.05s' }}>
-        {userConds.map((c) => {
+        {userConds.map((c: string) => {
           const cond = CONDITIONS.find((x) => x.value === c);
           const isSelected = selected === c;
           return (

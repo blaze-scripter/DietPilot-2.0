@@ -125,11 +125,8 @@ export default function Dashboard() {
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span className="text-2xl font-display font-extrabold text-foreground">{Math.round(totals.calories)}</span>
               <span className="text-[10px] font-bold uppercase tracking-wider text-muted mt-1">/ {targets.calories} kcal</span>
-
             </div>
           </div>
-        </div>
-
 
           <div className="flex-1 space-y-4">
             {[
@@ -152,18 +149,12 @@ export default function Dashboard() {
                     }}
                   />
                 </div>
-
               </div>
-              <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                <div
-                  className={`h-full ${m.color}`}
-                  style={{ width: `${Math.min((m.val / m.tgt) * 100, 100)}%` }}
-                />
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
+
 
 
       {/* Today's Meals */}

@@ -1,0 +1,20 @@
+src/pages/HealthConditions.tsx(2,29): error TS2307: Cannot find module 'react-router-dom' or its corresponding type declarations.
+src/pages/Meals.tsx(63,58): error TS2304: Cannot find name 'slotTotals'.
+src/pages/Meals.tsx(82,22): error TS2304: Cannot find name 'slotTotals'.
+src/pages/Meals.tsx(128,25): error TS2304: Cannot find name 'getMealFoods'.
+src/pages/Meals.tsx(136,69): error TS2304: Cannot find name 'dragTarget'.
+src/pages/Meals.tsx(141,34): error TS2304: Cannot find name 'handleDragOver'.
+src/pages/Meals.tsx(142,34): error TS2304: Cannot find name 'setDragTarget'.
+src/pages/Meals.tsx(143,30): error TS2304: Cannot find name 'handleDrop'.
+src/pages/Meals.tsx(153,31): error TS2304: Cannot find name 'slotTotals'.
+src/pages/Meals.tsx(168,43): error TS2304: Cannot find name 'handleDragStart'.
+src/pages/Meals.tsx(169,34): error TS2304: Cannot find name 'handleDragEnd'.
+src/pages/Meals.tsx(233,14): error TS2304: Cannot find name 'searching'.
+src/pages/Meals.tsx(240,15): error TS2304: Cannot find name 'searching'.
+src/pages/Meals.tsx(248,15): error TS2304: Cannot find name 'searching'.
+src/pages/Meals.tsx(280,20): error TS2304: Cannot find name 'Plus'.
+src/pages/Workouts.tsx(113,30): error TS2304: Cannot find name 'difficulty'.
+src/pages/Workouts.tsx(117,30): error TS2304: Cannot find name 'setDifficulty'.
+src/pages/Workouts.tsx(142,72): error TS2304: Cannot find name 'setDifficulty'.
+src/pages/Workouts.tsx(147,34): error TS2304: Cannot find name 'expanded'.
+src/pages/Workouts.tsx(151,36): error TS2304: Cannot find name 'setExpanded'.

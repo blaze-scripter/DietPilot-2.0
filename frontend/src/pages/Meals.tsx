@@ -17,16 +17,77 @@ export default function Meals() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [showSearch, setShowSearch] = useState(false);
+  const [searching, setSearching] = useState(false);
+  const [dragTarget, setDragTarget] = useState<string | null>(null);
   const searchTimeout = useRef<any>(null);
+
+  const getMealFoods = (type: string) => {
+    return dailyLog?.meals?.find((m: any) => m.type === type)?.foods || [];
+  };
+
+  const slotTotals = (type: string) => {
+    const fds = getMealFoods(type);
+    return fds.reduce((acc: any, f: any) => ({
+      calories: acc.calories + (f.calories || 0),
+      protein: acc.protein + (f.protein_g || 0),
+      carbs: acc.carbs + (f.carbs_g || 0),
+      fat: acc.fat + (f.fat_g || 0)
+    }), { calories: 0, protein: 0, carbs: 0, fat: 0 });
+  };
+
+  const handleDragStart = (e: React.DragEvent, foodId: string, fromMeal: string) => {
+    e.dataTransfer.setData('foodId', foodId);
+    e.dataTransfer.setData('fromMeal', fromMeal);
+    (e.target as HTMLElement).classList.add('opacity-50');
+  };
+
+  const handleDragEnd = (e: React.DragEvent) => {
+    (e.target as HTMLElement).classList.remove('opacity-50');
+    setDragTarget(null);
+  };
+
+  const handleDragOver = (e: React.DragEvent, targetMeal: string) => {
+    e.preventDefault();
+    if (dragTarget !== targetMeal) setDragTarget(targetMeal);
+  };
+
+  const handleDrop = async (e: React.DragEvent, targetMeal: string) => {
+    e.preventDefault();
+    setDragTarget(null);
+    const foodId = e.dataTransfer.getData('foodId');
+    const fromMeal = e.dataTransfer.getData('fromMeal');
+    
+    if (fromMeal === targetMeal || !foodId) return;
+    
+    const meal = dailyLog?.meals?.find((m: any) => m.type === fromMeal);
+    const food = meal?.foods?.find((f: any) => f.id === foodId);
+    if (!food) return;
+
+    try {
+      const dateStr = new Date().toISOString().split('T')[0];
+      await dailyLogApi.removeFood(dateStr, fromMeal, foodId);
+      
+      const newFood = { ...food };
+      delete newFood.id;
+      
+      await dailyLogApi.addFood(dateStr, {
+        meal_type: targetMeal,
+        food: newFood,
+      });
+      await refreshLog();
+    } catch { /* ignore */ }
+  };
 
   useEffect(() => {
     if (!searchQuery.trim()) { setSearchResults([]); return; }
     if (searchTimeout.current) clearTimeout(searchTimeout.current);
+    setSearching(true);
     searchTimeout.current = setTimeout(async () => {
       try {
         const results = await foodsApi.search(searchQuery);
         setSearchResults(results);
       } catch { setSearchResults([]); }
+      finally { setSearching(false); }
     }, 300);
   }, [searchQuery]);
 
@@ -277,7 +338,6 @@ export default function Meals() {
                     </div>
 
                   </div>
-                  <Plus size={16} />
                 </button>
               ))}
             </div>

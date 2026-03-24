@@ -7,44 +7,52 @@ export default function Stats() {
   const [weeklyData, setWeeklyData] = useState<any[]>([]);
   const [weightEntries, setWeightEntries] = useState<any[]>([]);
 
+  const targets = profile?.targets || { calories: 2000, protein: 150, carbs: 200, fat: 50 };
+
+  const todayTotals = useMemo(() => {
+    let cal = 0, p = 0, c = 0, f = 0;
+    dailyLog?.meals?.forEach((m: any) => {
+      (m.foods || []).forEach((fd: any) => {
+        cal += fd.calories || 0;
+        p += fd.protein_g || 0;
+        c += fd.carbs_g || 0;
+        f += fd.fat_g || 0;
+      });
+    });
+    return { calories: cal, protein: p, carbs: c, fat: f };
+  }, [dailyLog]);
+
   useEffect(() => {
-
-    loadWeeklyData();
-    loadWeight();
-  }, []);
-
-  const loadWeeklyData = async () => {
-    const data: any[] = [];
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      const dateStr = d.toISOString().split('T')[0];
-      try {
-        const log = await dailyLogApi.get(dateStr);
-        const cals = log?.meals?.reduce((s: number, m: any) =>
-          s + (m.foods || []).reduce((fs: number, f: any) => fs + (f.calories || 0), 0), 0) || 0;
-        data.push({
-          date: dateStr,
-          day: d.toLocaleDateString('en', { weekday: 'short' }).charAt(0),
-          calories: Math.round(cals),
-          water: log?.water_glasses || 0,
-        });
-      } catch {
-        data.push({
-          date: dateStr,
-          day: d.toLocaleDateString('en', { weekday: 'short' }).charAt(0),
-          calories: 0,
-          water: 0,
-        });
-
+    const init = async () => {
+      const data: any[] = [];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const dateStr = d.toISOString().split('T')[0];
+        try {
+          const log = await dailyLogApi.get(dateStr);
+          const cals = log?.meals?.reduce((s: number, m: any) =>
+            s + (m.foods || []).reduce((fs: number, f: any) => fs + (f.calories || 0), 0), 0) || 0;
+          data.push({
+            date: dateStr,
+            day: d.toLocaleDateString('en', { weekday: 'short' }).charAt(0),
+            calories: Math.round(cals),
+            water: log?.water_glasses || 0,
+          });
+        } catch {
+          data.push({
+            date: dateStr,
+            day: d.toLocaleDateString('en', { weekday: 'short' }).charAt(0),
+            calories: 0,
+            water: 0,
+          });
+        }
       }
       setWeeklyData(data);
       try { const w = await weightApi.list(); setWeightEntries(w.slice(-7)); } catch { /* ignore */ }
-    }
+    };
     init();
   }, [dailyLog]);
-
-
   // Max calories for chart scaling
   const maxCal = Math.max(...weeklyData.map((d) => d.calories), targets.calories, 1);
 

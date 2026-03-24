@@ -28,13 +28,15 @@ export default function Workouts() {
   const [exercises, setExercises] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState('All');
+  const [difficulty, setDifficulty] = useState('All');
+  const [expanded, setExpanded] = useState<string | null>(null);
 
   useEffect(() => {
     async function load() {
       setLoading(true);
       try {
-        const data = await exercisesApi.getAll(category || undefined);
+        const data = await exercisesApi.getAll(category !== 'All' ? category : undefined);
         setExercises(data);
       } catch { /* ignore */ }
       setLoading(false);
@@ -42,10 +44,12 @@ export default function Workouts() {
     load();
   }, [category]);
 
-  const filtered = exercises.filter(ex => 
-    ex.name.toLowerCase().includes(search.toLowerCase()) ||
-    ex.muscle_group.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = exercises.filter(ex => {
+    const termsMatch = ex.name.toLowerCase().includes(search.toLowerCase()) || 
+                      (ex.muscles || '').toLowerCase().includes(search.toLowerCase());
+    const diffMatch = difficulty === 'All' || ex.difficulty === difficulty;
+    return termsMatch && diffMatch;
+  });
 
   return (
 

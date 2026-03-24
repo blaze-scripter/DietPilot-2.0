@@ -1,0 +1,5 @@
+src/pages/Dashboard.tsx(163,7): error TS1005: ')' expected.
+src/pages/Dashboard.tsx(293,5): error TS1128: Declaration or statement expected.
+src/pages/Dashboard.tsx(294,3): error TS1109: Expression expected.
+src/pages/HealthConditions.tsx(163,1): error TS1005: '}' expected.
+src/pages/Stats.tsx(45,16): error TS1005: ',' expected.
