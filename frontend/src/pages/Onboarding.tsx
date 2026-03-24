@@ -128,7 +128,13 @@ export default function Onboarding() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const profile = await profileApi.create({ ...form, targets });
+      let profile;
+      try {
+        profile = await profileApi.create({ ...form, targets });
+      } catch (err: any) {
+        // Fallback to updating if the backend already has a profile for this user
+        profile = await profileApi.update({ ...form, targets });
+      }
       setProfile(profile);
       await refreshLog();
       navigate('/dashboard');
