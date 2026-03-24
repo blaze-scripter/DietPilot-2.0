@@ -1,0 +1,124 @@
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import ReactDOM from 'react-dom/client';
+import './styles/index.css';
+import { profileApi, dailyLogApi } from '@/services/api';
+import DashboardLayout from '@/components/layout/DashboardLayout';
+import Onboarding from '@/pages/Onboarding';
+import Dashboard from '@/pages/Dashboard';
+import Stats from '@/pages/Stats';
+import Meals from '@/pages/Meals';
+import Workouts from '@/pages/Workouts';
+import Reminders from '@/pages/Reminders';
+import Profile from '@/pages/Profile';
+import HealthConditions from '@/pages/HealthConditions';
+
+// ===== APP CONTEXT =====
+interface AppContextType {
+  currentPath: string;
+  navState?: any;
+  navigate: (path: string, options?: { state?: any }) => void;
+  profile: any;
+  setProfile: (p: any) => void;
+  dailyLog: any;
+  refreshLog: () => Promise<void>;
+  loading: boolean;
+}
+
+const AppContext = createContext<AppContextType | null>(null);
+
+export function useApp() {
+  const ctx = useContext(AppContext);
+  if (!ctx) throw new Error('useApp must be inside AppProvider');
+  return ctx;
+}
+
+// ===== APP PROVIDER =====
+function AppProvider({ children }: { children: React.ReactNode }) {
+  const [currentPath, setCurrentPath] = useState('/');
+  const [navState, setNavState] = useState<any>(undefined);
+  const [profile, setProfile] = useState<any>(null);
+  const [dailyLog, setDailyLog] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  const navigate = useCallback((path: string, options?: { state?: any }) => {
+    setCurrentPath(path);
+    setNavState(options?.state);
+  }, []);
+
+  const refreshLog = useCallback(async () => {
+    try {
+      const log = await dailyLogApi.get();
+      setDailyLog(log);
+    } catch {
+      setDailyLog(null);
+    }
+  }, []);
+
+  // Initial load
+  useEffect(() => {
+    async function init() {
+      try {
+        const p = await profileApi.get();
+        setProfile(p);
+        await refreshLog();
+        setCurrentPath('/dashboard');
+      } catch {
+        setCurrentPath('/onboarding');
+      }
+      setLoading(false);
+    }
+    init();
+  }, [refreshLog]);
+
+  return (
+    <AppContext.Provider value={{ currentPath, navState, navigate, profile, setProfile, dailyLog, refreshLog, loading }}>
+      {children}
+    </AppContext.Provider>
+  );
+}
+
+// ===== ROUTER =====
+function Router() {
+  const { currentPath, loading } = useApp();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center animate-scaleIn">
+          <div className="text-5xl mb-4">🥗</div>
+          <h1 className="text-2xl font-extrabold tracking-tight" style={{ color: 'var(--foreground)' }}>DietPilot</h1>
+          <p className="text-sm mt-2" style={{ color: 'var(--muted)' }}>Loading your journey...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (currentPath === '/onboarding') {
+    return <Onboarding />;
+  }
+
+  const pageMap: Record<string, React.ReactNode> = {
+    '/dashboard': <Dashboard />,
+    '/stats': <Stats />,
+    '/workouts': <Workouts />,
+    '/meals': <Meals />,
+    '/reminders': <Reminders />,
+    '/profile': <Profile />,
+    '/health-conditions': <HealthConditions />,
+  };
+
+  return (
+    <DashboardLayout>
+      {pageMap[currentPath] || <Dashboard />}
+    </DashboardLayout>
+  );
+}
+
+// ===== MOUNT =====
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <AppProvider>
+      <Router />
+    </AppProvider>
+  </React.StrictMode>
+);
