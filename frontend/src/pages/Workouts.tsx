@@ -1,154 +1,93 @@
 import { useState, useEffect } from 'react';
+import { useApp } from '@/main';
 import { exercisesApi } from '@/services/api';
-import { Search, Filter, ChevronDown, Dumbbell } from 'lucide-react';
-
-const CATEGORIES = ['All', 'Chest', 'Back', 'Legs', 'Arms', 'Shoulders', 'Core', 'Cardio', 'Stretching'];
-const DIFFICULTIES = ['All', 'Beginner', 'Intermediate', 'Advanced'];
-
-const CATEGORY_EMOJIS: Record<string, string> = {
-  Chest: '💪', Back: '🏋️', Legs: '🦵', Arms: '💪',
-  Shoulders: '🔺', Core: '🎯', Cardio: '🏃', Stretching: '🧘',
-};
-
-const DIFFICULTY_COLORS: Record<string, string> = {
-  Beginner: '#10b981',
-  Intermediate: '#f59e0b',
-  Advanced: '#ef4444',
-};
+import { Search, Filter, Dumbbell, Clock, Zap } from 'lucide-react';
 
 export default function Workouts() {
   const [exercises, setExercises] = useState<any[]>([]);
-  const [category, setCategory] = useState('All');
-  const [difficulty, setDifficulty] = useState('All');
-  const [search, setSearch] = useState('');
-  const [expanded, setExpanded] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [category, setCategory] = useState('');
 
   useEffect(() => {
-    loadExercises();
-  }, [category, difficulty]);
+    async function load() {
+      setLoading(true);
+      try {
+        const data = await exercisesApi.getAll(category || undefined);
+        setExercises(data);
+      } catch { /* ignore */ }
+      setLoading(false);
+    }
+    load();
+  }, [category]);
 
-  const loadExercises = async () => {
-    setLoading(true);
-    try {
-      const data = await exercisesApi.getAll(
-        category === 'All' ? undefined : category,
-        difficulty === 'All' ? undefined : difficulty
-      );
-      setExercises(data);
-    } catch { setExercises([]); }
-    setLoading(false);
-  };
-
-  const filtered = exercises.filter((ex) =>
-    search ? ex.name.toLowerCase().includes(search.toLowerCase()) : true
+  const filtered = exercises.filter(ex => 
+    ex.name.toLowerCase().includes(search.toLowerCase()) ||
+    ex.muscle_group.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="page-container">
-      <h1 className="text-2xl font-extrabold tracking-tight mb-2 animate-fadeIn">Workouts 🏋️</h1>
-      <p className="text-xs mb-5" style={{ color: 'var(--muted)' }}>Browse {exercises.length} exercises</p>
+      <h1 className="text-2xl font-extrabold tracking-tight mb-6">Workouts 🏋️</h1>
 
-      {/* Search */}
-      <div className="relative mb-4 animate-fadeIn">
-        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+      <div className="relative mb-6">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search exercises..."
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-lime-400 focus:ring-2 focus:ring-lime-100"
+          placeholder="Search exercises or muscles..."
+          className="w-full pl-12 pr-4 py-3.5 rounded-2xl border-none glass-card-flat text-sm font-medium focus:ring-2 focus:ring-lime-400 transition-all"
         />
       </div>
 
-      {/* Category Filter */}
-      <div className="flex gap-2 mb-3 overflow-x-auto pb-1 animate-fadeIn">
-        {CATEGORIES.map((c) => (
+      <div className="flex gap-2 mb-8 overflow-x-auto pb-1">
+        {['', 'Strength', 'Cardio', 'Yoga', 'Stretching'].map((c) => (
           <button
             key={c}
             onClick={() => setCategory(c)}
-            className="flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
-            style={{
-              background: category === c ? 'var(--primary)' : 'white',
-              color: category === c ? '#1a2e05' : 'var(--foreground)',
-              border: `1px solid ${category === c ? 'var(--primary)' : '#e5e7eb'}`,
-            }}
+            className={`px-5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+              category === c ? 'bg-lime-400 text-lime-950 scale-105 shadow-lg shadow-lime-200' : 'bg-white text-gray-500 border border-gray-100'
+            }`}
           >
-            {c !== 'All' && <span className="mr-1">{CATEGORY_EMOJIS[c]}</span>}
-            {c}
+            {c || 'All'}
           </button>
         ))}
       </div>
 
-      {/* Difficulty Filter */}
-      <div className="flex gap-2 mb-5 animate-fadeIn">
-        {DIFFICULTIES.map((d) => (
-          <button
-            key={d}
-            onClick={() => setDifficulty(d)}
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
-            style={{
-              background: difficulty === d ? '#1f2937' : 'white',
-              color: difficulty === d ? 'white' : 'var(--foreground)',
-              border: `1px solid ${difficulty === d ? '#1f2937' : '#e5e7eb'}`,
-            }}
-          >
-            {d}
-          </button>
-        ))}
-      </div>
-
-      {/* Exercise List */}
-      {loading ? (
-        <p className="text-sm text-center py-8" style={{ color: 'var(--muted)' }}>Loading exercises...</p>
-      ) : filtered.length === 0 ? (
-        <p className="text-sm text-center py-8" style={{ color: 'var(--muted)' }}>No exercises found</p>
-      ) : (
-        <div className="space-y-3">
-          {filtered.map((ex) => (
-            <div key={ex.name} className="glass-card-flat overflow-hidden animate-fadeIn">
-              <button
-                onClick={() => setExpanded(expanded === ex.name ? null : ex.name)}
-                className="w-full flex items-center gap-3 p-4 text-left"
-              >
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'var(--primary-soft)' }}>
-                  <span className="text-lg">{CATEGORY_EMOJIS[ex.category] || '🏋️'}</span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-bold truncate">{ex.name}</div>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <span className="text-[10px]" style={{ color: 'var(--muted)' }}>{ex.category}</span>
-                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded" style={{
-                      background: `${DIFFICULTY_COLORS[ex.difficulty]}20`,
-                      color: DIFFICULTY_COLORS[ex.difficulty],
-                    }}>
-                      {ex.difficulty}
-                    </span>
+      <div className="space-y-4">
+        {loading ? (
+          <div className="text-center py-10 text-gray-400">Loading exercises...</div>
+        ) : filtered.length > 0 ? (
+          filtered.map((ex, i) => (
+            <div key={i} className="glass-card p-5 animate-fadeIn" style={{ animationDelay: `${i * 0.05}s` }}>
+              <div className="flex justify-between items-start mb-3">
+                <div>
+                  <h3 className="text-base font-extrabold mb-0.5">{ex.name}</h3>
+                  <div className="flex gap-2">
+                    <span className="badge badge-lime text-[9px] uppercase tracking-tighter">{ex.muscle_group}</span>
+                    <span className="badge bg-gray-100 text-gray-600 text-[9px] uppercase tracking-tighter">{ex.difficulty}</span>
                   </div>
                 </div>
-                <ChevronDown
-                  size={16}
-                  style={{
-                    color: 'var(--muted)',
-                    transform: expanded === ex.name ? 'rotate(180deg)' : 'rotate(0)',
-                    transition: 'transform 0.2s ease',
-                  }}
-                />
-              </button>
-              {expanded === ex.name && (
-                <div className="px-4 pb-4 animate-fadeIn">
-                  <div className="bg-gray-50 rounded-xl p-3">
-                    <div className="text-xs mb-2" style={{ color: 'var(--muted)' }}>
-                      <strong>Muscles:</strong> {ex.muscles}
-                    </div>
-                    <p className="text-xs" style={{ color: 'var(--foreground)' }}>{ex.description}</p>
-                  </div>
+                <div className="w-10 h-10 rounded-xl bg-lime-50 flex items-center justify-center">
+                  <Dumbbell size={18} className="text-lime-600" />
                 </div>
-              )}
+              </div>
+              <p className="text-xs text-gray-500 leading-relaxed mb-4">{ex.description}</p>
+              <div className="flex gap-4">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400">
+                  <Clock size={14} /> 10-15 mins
+                </div>
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400">
+                  <Zap size={14} /> {ex.calories_per_hour || 300} kcal/hr
+                </div>
+              </div>
             </div>
-          ))}
-        </div>
-      )}
+          ))
+        ) : (
+          <div className="text-center py-10 text-gray-400 italic">No exercises found.</div>
+        )}
+      </div>
     </div>
   );
 }
