@@ -75,7 +75,6 @@ export default function Onboarding() {
 
   const handleNext = async () => {
     if (step === STEPS.length - 2) {
-      // Calculate targets before showing summary
       try {
         const t = await targetsApi.calculate(form);
         setTargets(t);
@@ -99,7 +98,6 @@ export default function Onboarding() {
     setSaving(false);
   };
 
-  // ===== STEP RENDERERS =====
   const renderWelcome = () => (
     <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-6 animate-fadeIn">
       <div className="text-7xl mb-6">🥗</div>
@@ -127,7 +125,6 @@ export default function Onboarding() {
           className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-medium focus:outline-none focus:border-lime-400 focus:ring-2 focus:ring-lime-100 transition-all"
         />
       </div>
-
       <div>
         <label className="block text-sm font-semibold mb-2">
           Age: <span style={{ color: 'var(--primary-dark)' }}>{form.age}</span>
@@ -136,11 +133,7 @@ export default function Onboarding() {
           type="range" min={15} max={80} value={form.age}
           onChange={(e) => update('age', parseInt(e.target.value))}
         />
-        <div className="flex justify-between text-xs mt-1" style={{ color: 'var(--muted)' }}>
-          <span>15</span><span>80</span>
-        </div>
       </div>
-
       <div>
         <label className="block text-sm font-semibold mb-3">Gender</label>
         <div className="grid grid-cols-3 gap-3">
@@ -173,11 +166,7 @@ export default function Onboarding() {
           type="range" min={120} max={220} value={form.height_cm}
           onChange={(e) => update('height_cm', parseInt(e.target.value))}
         />
-        <div className="flex justify-between text-xs mt-1" style={{ color: 'var(--muted)' }}>
-          <span>120 cm</span><span>220 cm</span>
-        </div>
       </div>
-
       <div>
         <label className="block text-sm font-semibold mb-2">
           Weight: <span style={{ color: 'var(--primary-dark)' }}>{form.weight_kg} kg</span>
@@ -186,9 +175,6 @@ export default function Onboarding() {
           type="range" min={30} max={200} value={form.weight_kg}
           onChange={(e) => update('weight_kg', parseInt(e.target.value))}
         />
-        <div className="flex justify-between text-xs mt-1" style={{ color: 'var(--muted)' }}>
-          <span>30 kg</span><span>200 kg</span>
-        </div>
       </div>
     </div>
   );
@@ -302,20 +288,6 @@ export default function Onboarding() {
           ))}
         </div>
       </div>
-
-      <div className="glass-card p-5">
-        <h3 className="text-sm font-bold mb-3">📋 Profile Summary</h3>
-        <div className="space-y-2 text-sm">
-          <div className="flex justify-between"><span style={{ color: 'var(--muted)' }}>Name</span><span className="font-semibold">{form.name}</span></div>
-          <div className="flex justify-between"><span style={{ color: 'var(--muted)' }}>Age</span><span className="font-semibold">{form.age}</span></div>
-          <div className="flex justify-between"><span style={{ color: 'var(--muted)' }}>Gender</span><span className="font-semibold capitalize">{form.gender}</span></div>
-          <div className="flex justify-between"><span style={{ color: 'var(--muted)' }}>Height</span><span className="font-semibold">{form.height_cm} cm</span></div>
-          <div className="flex justify-between"><span style={{ color: 'var(--muted)' }}>Weight</span><span className="font-semibold">{form.weight_kg} kg</span></div>
-          <div className="flex justify-between"><span style={{ color: 'var(--muted)' }}>Activity</span><span className="font-semibold capitalize">{form.activity_level.replace('_', ' ')}</span></div>
-          <div className="flex justify-between"><span style={{ color: 'var(--muted)' }}>Goal</span><span className="font-semibold capitalize">{form.goal.replace('_', ' ')}</span></div>
-          <div className="flex justify-between"><span style={{ color: 'var(--muted)' }}>Diet</span><span className="font-semibold capitalize">{form.diet_preference}</span></div>
-        </div>
-      </div>
     </div>
   );
 
@@ -325,7 +297,6 @@ export default function Onboarding() {
 
   return (
     <div className="page-container" style={{ paddingBottom: '120px' }}>
-      {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <button onClick={() => setStep((s) => Math.max(s - 1, 0))} className="btn-icon">
           <ChevronLeft size={20} />
@@ -336,8 +307,6 @@ export default function Onboarding() {
         </div>
         <div className="w-10" />
       </div>
-
-      {/* Progress bar */}
       <div className="h-1.5 bg-gray-100 rounded-full mb-8 overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-500"
@@ -347,22 +316,7 @@ export default function Onboarding() {
           }}
         />
       </div>
-
-      {/* Step title */}
-      <h2 className="text-xl font-extrabold tracking-tight mb-6">
-        {step === 1 && "Let's get to know you"}
-        {step === 2 && 'Your body measurements'}
-        {step === 3 && 'How active are you?'}
-        {step === 4 && "What's your goal?"}
-        {step === 5 && 'Diet preference'}
-        {step === 6 && 'Any health conditions?'}
-        {step === 7 && "You're all set! 🎉"}
-      </h2>
-
-      {/* Step content */}
       {stepRenderers[step]()}
-
-      {/* Bottom actions */}
       <div
         className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full p-4"
         style={{ maxWidth: '480px', background: 'linear-gradient(transparent, var(--background) 30%)' }}
