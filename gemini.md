@@ -170,37 +170,3 @@ MACRO_SPLITS = {
 # Protein: 4 kcal/g, Carbs: 4 kcal/g, Fat: 9 kcal/g
 MIN_CALORIES = 1200
 ```
-
----
-
-## 5. API Endpoints (REST)
-
-| Method | Endpoint | Purpose |
-|--------|----------|---------|
-| POST | `/api/profile` | Create profile + calculate targets |
-| GET | `/api/profile` | Get current profile |
-| PUT | `/api/profile` | Update profile + recalculate |
-| GET | `/api/daily-log/{date?}` | Get daily log (default: today) |
-| POST | `/api/daily-log/{date}/meals` | Add food to meal slot |
-| DELETE | `/api/daily-log/{date}/meals/{meal_id}/foods/{food_id}` | Remove food |
-| PUT | `/api/daily-log/{date}/meals/move` | Move food between slots |
-| PUT | `/api/daily-log/{date}/water` | Update water intake |
-| GET | `/api/reminders` | List reminders |
-| POST | `/api/reminders` | Create reminder |
-| PUT | `/api/reminders/{id}` | Update reminder |
-| DELETE | `/api/reminders/{id}` | Delete reminder |
-| GET | `/api/weight-entries` | List weight entries |
-| POST | `/api/weight-entries` | Add weight entry |
-| GET | `/api/foods/search?q={query}` | Search bundled food DB |
-| GET | `/api/foods/suggestions` | Get meal suggestions based on remaining macros |
-| GET | `/api/exercises` | Get exercise database |
-| GET | `/api/health-tips/{condition}` | Get health do's/don'ts |
-| POST | `/api/calculate-targets` | Calculate BMR/TDEE/macros from profile data |
-
----
-
-## 6. Maintenance Log
-
-| Date | Change | Author |
-|------|--------|--------|
-| 2026-03-24 | Initial constitution created | System Pilot |
