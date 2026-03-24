@@ -1,0 +1,13 @@
+{
+  "name": "dietpilot-root",
+  "private": true,
+  "scripts": {
+    "build:web": "cd frontend && npm install && npm run build",
+    "cap:sync": "npx cap sync",
+    "cap:add-android": "npx cap add android",
+    "android:build": "npm run build:web && npm run cap:sync && cd android && ./gradlew assembleDebug"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.0.0"
+  }
+}

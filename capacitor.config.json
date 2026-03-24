@@ -1,0 +1,6 @@
+{
+  "appId": "com.dietpilot.app",
+  "appName": "DietPilot",
+  "webDir": "frontend/dist",
+  "bundledWebRuntime": false
+}
