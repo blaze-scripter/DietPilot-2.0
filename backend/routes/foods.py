@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Query, Depends
 from sqlalchemy.orm import Session
 from backend.database import get_db
 from backend.models import Profile
@@ -20,7 +20,6 @@ def suggestions(meal_type: str = Query(None), db: Session = Depends(get_db)):
     if not profile:
         return []
 
-    # For now, use zero intake as baseline (could be enhanced to read today's log)
     from backend.routes.daily_log import _get_or_create_log
     from datetime import date
     log = _get_or_create_log(db, date.today().isoformat(), profile)
