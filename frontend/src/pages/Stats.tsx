@@ -8,19 +8,7 @@ export default function Stats() {
   const [weightEntries, setWeightEntries] = useState<any[]>([]);
 
   useEffect(() => {
-<<<<<<< Updated upstream
-    async function init() {
-      const data = [];
-      for (let i = 6; i >= 0; i--) {
-        const d = new Date();
-        d.setDate(d.getDate() - i);
-        const dateStr = d.toISOString().split('T')[0];
-        try {
-          const log = await dailyLogApi.get(dateStr);
-          const cals = log?.meals?.reduce((s, m) => s + (m.foods || []).reduce((fs, f) => fs + f.calories, 0), 0) || 0;
-          data.push({ day: d.toLocaleDateString('en', { weekday: 'short' }), calories: cals });
-        } catch { data.push({ day: d.toLocaleDateString('en', { weekday: 'short' }), calories: 0 }); }
-=======
+
     loadWeeklyData();
     loadWeight();
   }, []);
@@ -48,7 +36,7 @@ export default function Stats() {
           calories: 0,
           water: 0,
         });
->>>>>>> Stashed changes
+
       }
       setWeeklyData(data);
       try { const w = await weightApi.list(); setWeightEntries(w.slice(-7)); } catch { /* ignore */ }
@@ -56,22 +44,7 @@ export default function Stats() {
     init();
   }, [dailyLog]);
 
-<<<<<<< Updated upstream
-  return (
-    <div className="page-container">
-      <h1 className="text-2xl font-extrabold tracking-tight mb-6">Stats 📊</h1>
-      
-      <div className="glass-card p-5 mb-4">
-        <h2 className="text-sm font-bold mb-4">Weekly Calories</h2>
-        <div className="flex items-end gap-2 h-32">
-          {weeklyData.map((d, i) => (
-            <div key={i} className="flex-1 flex flex-col items-center gap-2">
-              <div 
-                className="w-full bg-lime-400 rounded-t-lg transition-all duration-500"
-                style={{ height: `${Math.min((d.calories / (profile?.targets?.calories || 2000)) * 100, 100)}%` }}
-              />
-              <span className="text-[10px] font-bold text-gray-400">{d.day}</span>
-=======
+
   // Max calories for chart scaling
   const maxCal = Math.max(...weeklyData.map((d) => d.calories), targets.calories, 1);
 
@@ -195,24 +168,12 @@ export default function Stats() {
             <h3 className="text-sm font-display font-bold text-blue-900 mb-1">Weekly Hydration</h3>
             <div className="text-2xl font-extrabold text-blue-900 leading-none">
               {Math.round(weeklyData.reduce((acc, d) => acc + d.water, 0) / 7)} <span className="text-xs font-bold uppercase tracking-widest text-blue-700/70">avg</span>
->>>>>>> Stashed changes
+
             </div>
           </div>
         </div>
 
-<<<<<<< Updated upstream
-      <div className="glass-card p-5">
-        <h2 className="text-sm font-bold mb-4">Weight Trend</h2>
-        <div className="space-y-3">
-          {weightEntries.map((e, i) => (
-            <div key={i} className="flex justify-between items-center text-sm">
-              <span className="text-gray-400">{e.date}</span>
-              <span className="font-extrabold">{e.weight_kg} kg</span>
-            </div>
-          ))}
-        </div>
-      </div>
-=======
+
         {/* Weight Trend Mini Card */}
         <div className="glass-card-flat p-5 relative overflow-hidden flex flex-col justify-between h-40 group hover:border-pink-200 transition-colors" style={{ borderRadius: 24 }}>
           <div className="absolute -right-4 -bottom-4 opacity-5 transform group-hover:scale-110 transition-transform duration-700">
@@ -302,7 +263,7 @@ export default function Stats() {
           </div>
         </div>
       </div>
->>>>>>> Stashed changes
+
     </div>
   );
 }

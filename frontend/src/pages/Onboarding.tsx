@@ -138,12 +138,11 @@ export default function Onboarding() {
     setSaving(false);
   };
 
-<<<<<<< Updated upstream
-=======
+
   const animClass = direction === 'right' ? 'animate-slideInRight' : 'animate-slideInLeft';
 
   // ===== STEP RENDERERS =====
->>>>>>> Stashed changes
+
   const renderWelcome = () => (
     <div className="flex-1 flex flex-col items-center justify-center text-center relative z-10" key={animKey}>
       {/* Logo */}
@@ -198,45 +197,7 @@ export default function Onboarding() {
   );
 
   const renderBasics = () => (
-<<<<<<< Updated upstream
-    <div className="space-y-6 animate-fadeIn">
-      <div>
-        <label className="block text-sm font-semibold mb-2" style={{ color: 'var(--foreground)' }}>Your Name</label>
-        <input
-          type="text"
-          value={form.name}
-          onChange={(e) => update('name', e.target.value)}
-          placeholder="Enter your name"
-          className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-medium focus:outline-none focus:border-lime-400 focus:ring-2 focus:ring-lime-100 transition-all"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-semibold mb-2">
-          Age: <span style={{ color: 'var(--primary-dark)' }}>{form.age}</span>
-        </label>
-        <input
-          type="range" min={15} max={80} value={form.age}
-          onChange={(e) => update('age', parseInt(e.target.value))}
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-semibold mb-3">Gender</label>
-        <div className="grid grid-cols-3 gap-3">
-          {(['male', 'female', 'other'] as const).map((g) => (
-            <button
-              key={g}
-              onClick={() => update('gender', g)}
-              className="py-3 rounded-xl text-sm font-semibold transition-all border"
-              style={{
-                background: form.gender === g ? 'var(--primary-soft)' : 'white',
-                borderColor: form.gender === g ? 'var(--primary)' : '#e5e7eb',
-                color: form.gender === g ? '#3f6212' : 'var(--foreground)',
-              }}
-            >
-              {g === 'male' ? '👨 Male' : g === 'female' ? '👩 Female' : '🧑 Other'}
-            </button>
-          ))}
-=======
+
     <div className={`space-y-6 ${animClass}`} key={animKey}>
       <div className="glass-card-stitch p-6" style={{ borderRadius: '20px' }}>
         {/* Name Field */}
@@ -300,33 +261,14 @@ export default function Onboarding() {
           <p style={{ fontSize: '0.75rem', color: '#005c3d', lineHeight: 1.5 }}>
             Your data is encrypted and used only to calculate your Metabolic Rate.
           </p>
->>>>>>> Stashed changes
+
         </div>
       </div>
     </div>
   );
 
   const renderBody = () => (
-<<<<<<< Updated upstream
-    <div className="space-y-8 animate-fadeIn">
-      <div>
-        <label className="block text-sm font-semibold mb-2">
-          Height: <span style={{ color: 'var(--primary-dark)' }}>{form.height_cm} cm</span>
-        </label>
-        <input
-          type="range" min={120} max={220} value={form.height_cm}
-          onChange={(e) => update('height_cm', parseInt(e.target.value))}
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-semibold mb-2">
-          Weight: <span style={{ color: 'var(--primary-dark)' }}>{form.weight_kg} kg</span>
-        </label>
-        <input
-          type="range" min={30} max={200} value={form.weight_kg}
-          onChange={(e) => update('weight_kg', parseInt(e.target.value))}
-        />
-=======
+
     <div className={`space-y-8 ${animClass}`} key={animKey}>
       <div className="glass-card-stitch p-6" style={{ borderRadius: '20px' }}>
         <div className="space-y-2 mb-8">
@@ -350,7 +292,7 @@ export default function Onboarding() {
             <span>30 kg</span><span>200 kg</span>
           </div>
         </div>
->>>>>>> Stashed changes
+
       </div>
     </div>
   );
@@ -528,8 +470,7 @@ export default function Onboarding() {
           ))}
         </div>
       </div>
-<<<<<<< Updated upstream
-=======
+
 
       {/* Profile Summary */}
       <div className="glass-card-stitch p-5" style={{ borderRadius: 20 }}>
@@ -555,7 +496,7 @@ export default function Onboarding() {
           ))}
         </div>
       </div>
->>>>>>> Stashed changes
+
     </div>
   );
 
@@ -593,12 +534,7 @@ export default function Onboarding() {
   }
 
   return (
-<<<<<<< Updated upstream
-    <div className="page-container" style={{ paddingBottom: '120px' }}>
-      <div className="flex items-center justify-between mb-6">
-        <button onClick={() => setStep((s) => Math.max(s - 1, 0))} className="btn-icon">
-          <ChevronLeft size={20} />
-=======
+
     <div className="onboarding-step" style={{ background: STEP_COLORS[step], paddingBottom: 140 }}>
       {/* Top Bar */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', zIndex: 10, marginBottom: 8 }}>
@@ -609,7 +545,7 @@ export default function Onboarding() {
           transition: 'all 0.2s ease',
         }}>
           <span className="material-symbols-outlined" style={{ color: 'var(--foreground)' }}>chevron_left</span>
->>>>>>> Stashed changes
+
         </button>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '0.7rem', fontWeight: 700, fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--muted)' }}>
@@ -621,22 +557,7 @@ export default function Onboarding() {
           DietPilot
         </div>
       </div>
-<<<<<<< Updated upstream
-      <div className="h-1.5 bg-gray-100 rounded-full mb-8 overflow-hidden">
-        <div
-          className="h-full rounded-full transition-all duration-500"
-          style={{
-            width: `${(step / (STEPS.length - 1)) * 100}%`,
-            background: 'linear-gradient(90deg, var(--primary), var(--primary-dark))',
-          }}
-        />
-      </div>
-      {stepRenderers[step]()}
-      <div
-        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full p-4"
-        style={{ maxWidth: '480px', background: 'linear-gradient(transparent, var(--background) 30%)' }}
-      >
-=======
+
 
       {/* Progress Bar */}
       <div style={{ height: 5, background: 'rgba(0,0,0,0.06)', borderRadius: 999, marginBottom: 28, overflow: 'hidden', position: 'relative', zIndex: 10 }}>
@@ -687,7 +608,7 @@ export default function Onboarding() {
         backdropFilter: 'blur(8px)',
         zIndex: 20,
       }}>
->>>>>>> Stashed changes
+
         {step === STEPS.length - 1 ? (
           <button className="btn-primary" onClick={handleSave} disabled={saving}
             style={{ width: '100%', padding: '18px', fontSize: '1.05rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>

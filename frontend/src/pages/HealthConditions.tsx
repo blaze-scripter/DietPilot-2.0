@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useApp } from '@/main';
 import { healthApi } from '@/services/api';
-<<<<<<< Updated upstream
-import { Heart, CheckCircle2, AlertCircle } from 'lucide-react';
-=======
+
 
 const CONDITIONS = [
   { value: 'diabetes', label: 'Diabetes', icon: 'blood_pressure', color: '#ef4444', bg: '#fee2e2' },
@@ -12,7 +10,7 @@ const CONDITIONS = [
   { value: 'high_cholesterol', label: 'High Cholesterol', icon: 'monitor_heart', color: '#f59e0b', bg: '#fef3c7' },
   { value: 'thyroid', label: 'Thyroid', icon: 'prescriptions', color: '#10b981', bg: '#d1fae5' },
 ];
->>>>>>> Stashed changes
+
 
 export default function HealthConditions() {
   const { profile } = useApp();
@@ -36,38 +34,7 @@ export default function HealthConditions() {
       load();
     }, [name]);
 
-<<<<<<< Updated upstream
-    return (
-      <div className="glass-card p-5 mb-6">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-red-500">
-            <Heart size={20} fill="currentColor" />
-          </div>
-          <h2 className="text-base font-extrabold capitalize">{name.replace('_', ' ')} Guidance</h2>
-        </div>
 
-        <div className="space-y-4">
-          <div>
-            <h4 className="text-[10px] font-bold uppercase tracking-widest text-emerald-600 mb-2">Do's</h4>
-            <div className="space-y-2">
-              {tips.filter(t => t.type === 'do').map((t, i) => (
-                <div key={i} className="flex gap-2 text-xs font-medium text-gray-600">
-                  <CheckCircle2 size={14} className="text-emerald-500 shrink-0" /> {t.tip}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="pt-2 border-t border-gray-50">
-            <h4 className="text-[10px] font-bold uppercase tracking-widest text-red-600 mb-2">Don'ts</h4>
-            <div className="space-y-2">
-              {tips.filter(t => t.type === 'dont').map((t, i) => (
-                <div key={i} className="flex gap-2 text-xs font-medium text-gray-600">
-                  <AlertCircle size={14} className="text-red-500 shrink-0" /> {t.tip}
-                </div>
-              ))}
-            </div>
-          </div>
-=======
   // If no conditions selected, show an empty state
   if (!loading && userConds.length === 0) {
     return (
@@ -77,7 +44,7 @@ export default function HealthConditions() {
         </button>
         <div className="w-24 h-24 rounded-full bg-primary-container text-primary-dark flex items-center justify-center mb-6 animate-scaleIn">
           <span className="material-symbols-outlined" style={{ fontSize: 48, fontVariationSettings: "'FILL' 1" }}>check_circle</span>
->>>>>>> Stashed changes
+
         </div>
         <h2 className="text-2xl font-display font-extrabold text-foreground mb-2 animate-slideUp">You're All Clear!</h2>
         <p className="text-sm font-medium text-muted text-center max-w-[250px] animate-slideUp" style={{ animationDelay: '0.1s' }}>
@@ -91,19 +58,7 @@ export default function HealthConditions() {
   };
 
   return (
-<<<<<<< Updated upstream
-    <div className="page-container">
-      <h1 className="text-2xl font-extrabold tracking-tight mb-6">Health Insights 🩺</h1>
-      {conditions.length > 0 ? (
-        conditions.map(c => <ConditionCard key={c} name={c} />)
-      ) : (
-        <div className="glass-card p-10 text-center text-gray-400">
-          <CheckCircle2 size={40} className="mx-auto mb-4 text-lime-400" />
-          <p className="text-sm font-bold">No chronic conditions listed.</p>
-          <p className="text-xs">You're all clear! Keep up the healthy habits.</p>
-        </div>
-      )}
-=======
+
     <div className="page-container relative">
       <div className="absolute top-[-5%] right-[-10%] w-[300px] h-[300px] bg-rose-500/10 rounded-full blur-[80px] pointer-events-none -z-10"></div>
       
@@ -201,7 +156,7 @@ export default function HealthConditions() {
           </div>
         )}
       </div>
->>>>>>> Stashed changes
+
     </div>
   );
 }

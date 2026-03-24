@@ -1,10 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useApp } from '@/main';
 import { foodsApi, dailyLogApi } from '@/services/api';
-<<<<<<< Updated upstream
-import { Search, Plus, X, GripVertical } from 'lucide-react';
-=======
->>>>>>> Stashed changes
+
+
 
 const MEAL_TYPES = [
   { value: 'breakfast', label: 'Breakfast', icon: 'bakery_dining', color: '#fef3c7' },
@@ -60,59 +58,7 @@ export default function Meals() {
     } catch { /* ignore */ }
   };
 
-<<<<<<< Updated upstream
-  return (
-    <div className="page-container">
-      <h1 className="text-2xl font-extrabold tracking-tight mb-6">Meals 🍽️</h1>
 
-      <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
-        {MEAL_TYPES.map((mt) => (
-          <button
-            key={mt.value}
-            onClick={() => setSelectedSlot(mt.value)}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${
-              selectedSlot === mt.value ? 'bg-lime-400 border-lime-400 text-lime-950' : 'bg-white border-gray-100'
-            }`}
-          >
-            {mt.emoji} {mt.label}
-          </button>
-        ))}
-      </div>
-
-      <button onClick={() => setShowSearch(true)} className="btn-primary w-full mb-6 py-3 text-sm">
-        + Add Food to {selectedSlot}
-      </button>
-
-      <div className="space-y-4">
-        {MEAL_TYPES.map((mt) => {
-          const meal = dailyLog?.meals?.find((m: any) => m.type === mt.value);
-          const foods = meal?.foods || [];
-          if (mt.value !== selectedSlot && foods.length === 0) return null;
-
-          return (
-            <div key={mt.value} className="glass-card p-4">
-              <div className="flex justify-between items-center mb-3">
-                <h3 className="text-sm font-bold">{mt.emoji} {mt.label}</h3>
-                <span className="text-[10px] font-bold text-gray-400">
-                  {Math.round(foods.reduce((s: number, f: any) => s + f.calories, 0))} kcal
-                </span>
-              </div>
-              <div className="space-y-2">
-                {foods.map((food: any) => (
-                  <div key={food.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                    <div>
-                      <div className="text-xs font-bold">{food.name}</div>
-                      <div className="text-[9px] text-gray-400">{food.serving_size}{food.serving_unit} • P:{food.protein_g}g C:{food.carbs_g}g F:{food.fat_g}g</div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs font-extrabold">{food.calories}</span>
-                      <button onClick={() => handleRemoveFood(meal.id, food.id)} className="text-red-400"><X size={14} /></button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-=======
   // Calculate day total
   const dayTotals = MEAL_TYPES.reduce((acc, mt) => acc + slotTotals(mt.value).calories, 0);
 
@@ -161,29 +107,12 @@ export default function Meals() {
                 </div>
               </div>
             </button>
->>>>>>> Stashed changes
+
           );
         })}
       </div>
 
-<<<<<<< Updated upstream
-      {showSearch && (
-        <div className="modal-overlay" onClick={() => setShowSearch(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-extrabold">Add Food</h2>
-              <button onClick={() => setShowSearch(false)}><X /></button>
-            </div>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search foods..."
-              className="w-full p-3 rounded-xl border mb-4 text-sm"
-              autoFocus
-            />
-            <div className="space-y-2 max-h-[50vh] overflow-y-auto">
-=======
+
       {/* Add Food CTA */}
       <button
         onClick={() => setShowSearch(true)}
@@ -324,18 +253,12 @@ export default function Meals() {
             )}
 
             <div className="space-y-3 stagger-children">
->>>>>>> Stashed changes
+
               {searchResults.map((food) => (
                 <button
                   key={food.fdcId}
                   onClick={() => handleAddFood(food)}
-<<<<<<< Updated upstream
-                  className="w-full flex justify-between p-3 border rounded-xl hover:bg-lime-50"
-                >
-                  <div className="text-left">
-                    <div className="text-xs font-bold">{food.name}</div>
-                    <div className="text-[9px] text-gray-400">{food.calories} kcal • {food.servingSize}{food.servingUnit}</div>
-=======
+
                   className="w-full flex items-center justify-between p-4 rounded-2xl bg-white border border-gray-100 hover:border-primary-container hover:shadow-[0_8px_24px_rgba(163,230,53,0.15)] transition-all text-left group"
                 >
                   <div className="flex-1 min-w-0 pr-4">
@@ -352,7 +275,7 @@ export default function Meals() {
                     <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all">
                       <span className="material-symbols-outlined" style={{ fontSize: 20, fontVariationSettings: "'wght' 700" }}>add</span>
                     </div>
->>>>>>> Stashed changes
+
                   </div>
                   <Plus size={16} />
                 </button>

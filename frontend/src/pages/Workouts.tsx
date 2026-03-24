@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useApp } from '@/main';
 import { exercisesApi } from '@/services/api';
-<<<<<<< Updated upstream
-import { Search, Filter, Dumbbell, Clock, Zap } from 'lucide-react';
-=======
+
 
 const CATEGORIES = ['All', 'Chest', 'Back', 'Legs', 'Arms', 'Shoulders', 'Core', 'Cardio', 'Stretching'];
 const DIFFICULTIES = ['All', 'Beginner', 'Intermediate', 'Advanced'];
@@ -18,7 +16,7 @@ const DIFFICULTY_COLORS: Record<string, string> = {
   Intermediate: '#f59e0b',
   Advanced: '#ef4444',
 };
->>>>>>> Stashed changes
+
 
 const DIFFICULTY_BGS: Record<string, string> = {
   Beginner: '#d1fae5',
@@ -50,13 +48,7 @@ export default function Workouts() {
   );
 
   return (
-<<<<<<< Updated upstream
-    <div className="page-container">
-      <h1 className="text-2xl font-extrabold tracking-tight mb-6">Workouts 🏋️</h1>
 
-      <div className="relative mb-6">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-=======
     <div className="page-container relative bg-white min-h-screen">
       <div className="absolute top-[10%] right-[-20%] w-[400px] h-[400px] bg-slate-100 rounded-full blur-[100px] pointer-events-none -z-10"></div>
       
@@ -74,18 +66,15 @@ export default function Workouts() {
       {/* Search */}
       <div className="relative mb-6 animate-slideUp" style={{ animationDelay: '0.05s' }}>
         <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">search</span>
->>>>>>> Stashed changes
+
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-<<<<<<< Updated upstream
-          placeholder="Search exercises or muscles..."
-          className="w-full pl-12 pr-4 py-3.5 rounded-2xl border-none glass-card-flat text-sm font-medium focus:ring-2 focus:ring-lime-400 transition-all"
-=======
+
           placeholder="Search exercises..."
           className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:border-slate-400 focus:bg-white transition-all shadow-sm"
->>>>>>> Stashed changes
+
         />
         {search && (
           <button onClick={() => setSearch('')} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
@@ -94,53 +83,7 @@ export default function Workouts() {
         )}
       </div>
 
-<<<<<<< Updated upstream
-      <div className="flex gap-2 mb-8 overflow-x-auto pb-1">
-        {['', 'Strength', 'Cardio', 'Yoga', 'Stretching'].map((c) => (
-          <button
-            key={c}
-            onClick={() => setCategory(c)}
-            className={`px-5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
-              category === c ? 'bg-lime-400 text-lime-950 scale-105 shadow-lg shadow-lime-200' : 'bg-white text-gray-500 border border-gray-100'
-            }`}
-          >
-            {c || 'All'}
-          </button>
-        ))}
-      </div>
 
-      <div className="space-y-4">
-        {loading ? (
-          <div className="text-center py-10 text-gray-400">Loading exercises...</div>
-        ) : filtered.length > 0 ? (
-          filtered.map((ex, i) => (
-            <div key={i} className="glass-card p-5 animate-fadeIn" style={{ animationDelay: `${i * 0.05}s` }}>
-              <div className="flex justify-between items-start mb-3">
-                <div>
-                  <h3 className="text-base font-extrabold mb-0.5">{ex.name}</h3>
-                  <div className="flex gap-2">
-                    <span className="badge badge-lime text-[9px] uppercase tracking-tighter">{ex.muscle_group}</span>
-                    <span className="badge bg-gray-100 text-gray-600 text-[9px] uppercase tracking-tighter">{ex.difficulty}</span>
-                  </div>
-                </div>
-                <div className="w-10 h-10 rounded-xl bg-lime-50 flex items-center justify-center">
-                  <Dumbbell size={18} className="text-lime-600" />
-                </div>
-              </div>
-              <p className="text-xs text-gray-500 leading-relaxed mb-4">{ex.description}</p>
-              <div className="flex gap-4">
-                <div className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400">
-                  <Clock size={14} /> 10-15 mins
-                </div>
-                <div className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400">
-                  <Zap size={14} /> {ex.calories_per_hour || 300} kcal/hr
-                </div>
-              </div>
-            </div>
-          ))
-        ) : (
-          <div className="text-center py-10 text-gray-400 italic">No exercises found.</div>
-=======
       {/* Category Filter */}
       <div className="flex gap-2.5 mb-4 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide animate-slideUp" style={{ animationDelay: '0.1s' }}>
         {CATEGORIES.map((c) => {
@@ -251,7 +194,7 @@ export default function Workouts() {
               );
             })}
           </div>
->>>>>>> Stashed changes
+
         )}
       </div>
     </div>
