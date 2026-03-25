@@ -3,37 +3,63 @@ interface MacroBarProps {
   current: number;
   goal: number;
   color: string;
+  icon?: string;
   unit?: string;
 }
 
-const MacroBar = ({ label, current, goal, color, unit = "g" }: MacroBarProps) => {
+const MacroBar = ({ label, current, goal, color, icon, unit = "g" }: MacroBarProps) => {
   const pct = goal > 0 ? Math.min((current / goal) * 100, 100) : 0;
 
   return (
-    <div className="flex items-center gap-3">
-      <div className="w-16 text-right">
-        <span className="text-xs font-semibold" style={{ color: 'var(--on-surface)' }}>{label}</span>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      {/* Icon dot */}
+      <div style={{
+        width: 8,
+        height: 8,
+        borderRadius: '50%',
+        background: color,
+        flexShrink: 0,
+        boxShadow: `0 0 6px ${color}50`,
+      }} />
+      {/* Label */}
+      <span style={{
+        width: 52,
+        fontSize: '0.75rem',
+        fontWeight: 600,
+        color: '#1b1c18',
+        fontFamily: 'var(--font-display)',
+      }}>
+        {label}
+      </span>
+      {/* Track */}
+      <div style={{
+        flex: 1,
+        height: 6,
+        borderRadius: 100,
+        background: '#e9e9e4',
+        overflow: 'hidden',
+      }}>
+        <div style={{
+          height: '100%',
+          borderRadius: 100,
+          width: `${pct}%`,
+          minWidth: current > 0 ? 6 : 0,
+          background: `linear-gradient(90deg, ${color}cc, ${color})`,
+          transition: 'width 0.8s cubic-bezier(.22,1,.36,1)',
+          boxShadow: pct > 0 ? `0 0 8px ${color}35` : 'none',
+        }} />
       </div>
-      <div
-        className="flex-1 h-2 rounded-full overflow-hidden"
-        style={{ background: 'var(--surface-container-high)' }}
-      >
-        <div
-          className="h-full rounded-full"
-          style={{
-            width: pct > 0 ? `${pct}%` : '0%',
-            minWidth: current > 0 ? '8px' : '0',
-            backgroundColor: color,
-            transition: 'width 0.7s ease-out',
-            boxShadow: pct > 0 ? `0 0 6px ${color}40` : 'none',
-          }}
-        />
-      </div>
-      <div className="w-20 text-left">
-        <span className="text-xs tabular-nums" style={{ color: 'var(--on-surface-variant)', fontWeight: 500 }}>
-          {current}/{goal}{unit}
-        </span>
-      </div>
+      {/* Value */}
+      <span style={{
+        width: 64,
+        fontSize: '0.6875rem',
+        fontWeight: 500,
+        color: '#72796a',
+        textAlign: 'right',
+        fontVariantNumeric: 'tabular-nums',
+      }}>
+        {current}/{goal}{unit}
+      </span>
     </div>
   );
 };

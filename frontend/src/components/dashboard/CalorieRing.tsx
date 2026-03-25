@@ -1,64 +1,120 @@
+import { useEffect, useRef } from 'react';
+
 interface CalorieRingProps {
   consumed: number;
   goal: number;
 }
 
 const CalorieRing = ({ consumed, goal }: CalorieRingProps) => {
+  const progressRef = useRef<SVGCircleElement>(null);
   const percentage = Math.min((consumed / goal) * 100, 100);
   const remaining = Math.max(goal - consumed, 0);
-  const radius = 80;
+  const radius = 76;
   const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (percentage / 100) * circumference;
+  const offset = circumference - (percentage / 100) * circumference;
+
+  useEffect(() => {
+    const el = progressRef.current;
+    if (el) {
+      el.style.strokeDashoffset = String(circumference);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          el.style.strokeDashoffset = String(offset);
+        });
+      });
+    }
+  }, [circumference, offset]);
 
   return (
-    <div className="flex flex-col items-center animate-scaleIn">
-      <div className="relative" style={{ width: 192, height: 192 }}>
-        <svg viewBox="0 0 200 200" className="w-full h-full" style={{ transform: 'rotate(-90deg)' }}>
-          {/* Background ring */}
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
+      <div style={{ position: 'relative', width: 'var(--ring-size)', height: 'var(--ring-size)' }}>
+        <svg
+          viewBox="0 0 200 200"
+          style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}
+        >
+          {/* Track */}
           <circle
             cx="100" cy="100" r={radius}
             fill="none"
-            stroke="#e8e8e8"
-            strokeWidth="10"
+            stroke="#e5e5e0"
+            strokeWidth="11"
             strokeLinecap="round"
           />
-          {/* Progress ring */}
+          {/* Progress */}
           <circle
+            ref={progressRef}
             cx="100" cy="100" r={radius}
             fill="none"
-            stroke="url(#limeGradient)"
-            strokeWidth="10"
+            stroke="url(#ringGrad)"
+            strokeWidth="11"
             strokeLinecap="round"
             strokeDasharray={circumference}
-            strokeDashoffset={strokeDashoffset}
-            style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1)' }}
+            strokeDashoffset={circumference}
+            style={{
+              transition: 'stroke-dashoffset 1.2s cubic-bezier(.22,1,.36,1)',
+              filter: 'drop-shadow(0 0 6px rgba(163,230,53,0.35))',
+            }}
           />
           <defs>
-            <linearGradient id="limeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#a3e635" />
-              <stop offset="100%" stopColor="#65a30d" />
+            <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#bef264" />
+              <stop offset="50%" stopColor="#84cc16" />
+              <stop offset="100%" stopColor="#4d7c0f" />
             </linearGradient>
           </defs>
         </svg>
-        {/* Center text */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span
-            className="font-extrabold tracking-tight"
-            style={{ color: 'var(--on-surface)', fontFamily: 'var(--font-display)', fontSize: consumed > 999 ? '2rem' : '2.5rem' }}
-          >
+
+        {/* Center content */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 2,
+        }}>
+          <span style={{
+            fontSize: consumed > 999 ? '1.75rem' : '2.25rem',
+            fontWeight: 800,
+            letterSpacing: '-0.04em',
+            color: '#1b1c18',
+            fontFamily: 'var(--font-display)',
+            lineHeight: 1,
+          }}>
             {consumed.toLocaleString()}
           </span>
-          <span className="text-xs font-medium mt-0.5" style={{ color: 'var(--on-surface-variant)' }}>
+          <span style={{
+            fontSize: '0.6875rem',
+            fontWeight: 500,
+            color: '#72796a',
+            marginTop: 2,
+          }}>
             kcal eaten
           </span>
-          <div
-            className="flex items-center gap-1 mt-2 px-3 py-1 rounded-full"
-            style={{ background: 'var(--primary-soft)' }}
-          >
-            <span className="text-xs font-bold" style={{ color: 'var(--on-primary-container)' }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 4,
+            marginTop: 8,
+            padding: '4px 14px',
+            borderRadius: 100,
+            background: '#ecfccb',
+          }}>
+            <span style={{
+              fontSize: '0.75rem',
+              fontWeight: 700,
+              color: '#3f6212',
+            }}>
               {remaining.toLocaleString()}
             </span>
-            <span className="text-[10px]" style={{ color: 'var(--on-surface-variant)' }}>left</span>
+            <span style={{
+              fontSize: '0.625rem',
+              fontWeight: 500,
+              color: '#65a30d',
+            }}>
+              left
+            </span>
           </div>
         </div>
       </div>
