@@ -3,72 +3,33 @@
 @import "tailwindcss";
 
 /* ===== DESIGN SYSTEM TOKENS ===== */
-:root {
-  /* Primary Palette (Lime/Green) */
-  --primary: #446900;
-  --primary-light: #a3e635;
-  --primary-container: #a3e635;
-  --on-primary-container: #416400;
-  --primary-soft: #ecfccb;
-  --primary-glow: rgba(163, 230, 53, 0.4);
-
-  /* Secondary (Blue) */
-  --secondary: #0058be;
-  --secondary-container: #2170e4;
-  --on-secondary-container: #fefcff;
-
-  /* Tertiary (Purple) */
-  --tertiary: #784f85;
-  --tertiary-container: #f3c1ff;
-
-  /* Surface & Background */
-  --background: #f9f9f9;
-  --surface: #f9f9f9;
-  --surface-container-low: #f3f3f4;
-  --surface-container: #eeeeee;
-  --surface-container-high: #e8e8e8;
-  --surface-container-highest: #e2e2e2;
-
-  /* Text */
-  --foreground: #1a1c1c;
-  --on-surface: #1a1c1c;
-  --on-surface-variant: #5a5c5c;
-  --muted: #5a5c5c;
-  --muted-light: #9ca3af;
-  --outline: #727a64;
-  --outline-variant: #c2cab0;
-
-  /* Semantic */
-  --danger: #ba1a1a;
-  --error: #ba1a1a;
-  --error-container: #ffdad6;
-  --warning: #f59e0b;
-  --info: #3b82f6;
-  --success: #10b981;
-
-  /* Cards */
-  --card-bg: rgba(255, 255, 255, 0.7);
-  --card-border: rgba(255, 255, 255, 0.5);
-
-  /* Radii */
-  --radius: 16px;
-  --radius-sm: 12px;
-  --radius-xs: 8px;
-  --radius-full: 9999px;
-
-  /* Typography */
+@theme {
+  --color-primary: #446900;
+  --color-primary-light: #a3e635;
+  --color-primary-container: #a3e635;
+  --color-on-primary-container: #416400;
+  --color-primary-soft: #ecfccb;
+  --color-secondary: #0058be;
+  --color-secondary-container: #2170e4;
+  --color-on-secondary-container: #fefcff;
+  --color-background: #f9f9f9;
+  --color-surface: #f9f9f9;
+  --color-surface-container-low: #f3f3f4;
+  --color-surface-container: #eeeeee;
+  --color-foreground: #1a1c1c;
+  --color-on-surface: #1a1c1c;
+  --color-on-surface-variant: #5a5c5c;
+  --color-muted: #5a5c5c;
+  --color-outline: #727a64;
+  --color-outline-variant: #c2cab0;
+  --color-danger: #ba1a1a;
+  --color-error: #ba1a1a;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+  --color-success: #10b981;
+  
   --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
   --font-body: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
-
-  /* Onboarding Step Colors */
-  --step-0: #f0fdf4;
-  --step-1: #fef3c7;
-  --step-2: #e0f2fe;
-  --step-3: #fce7f3;
-  --step-4: #ecfccb;
-  --step-5: #f5f3ff;
-  --step-6: #ccfbf1;
-  --step-7: #fef9c3;
 }
 
 /* ===== BASE STYLES ===== */
