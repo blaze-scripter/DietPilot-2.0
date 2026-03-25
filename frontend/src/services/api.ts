@@ -15,7 +15,8 @@ import {
 } from './storage';
 
 // ── Flask proxy base URL (food + exercises only) ─────────────────────────────
-const FLASK_BASE = '/api';
+const BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || '';
+const FLASK_BASE = `${BASE_URL}/api`;
 
 async function flaskGet<T>(path: string): Promise<T> {
   const res = await fetch(`${FLASK_BASE}${path}`);
