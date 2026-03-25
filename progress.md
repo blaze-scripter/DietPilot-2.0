@@ -32,4 +32,22 @@
 - Pushed to GitHub: commit `996e696` on `main` branch
   - Commit message: "feat: Flask backend with USDA and Wger API proxy"
 
-### HALT — Awaiting user review before Phase 4 (UI Redesign)
+### Phase 4 — STYLIZE (Full UI Redesign) ✅
+- Created `frontend/src/services/storage.ts` — complete IndexedDB CRUD layer + BMR/TDEE calculator
+- Rewrote `frontend/src/services/api.ts` — all call signatures preserved; data → IndexedDB, food/exercises → Flask
+- Updated `main.tsx` — Material Symbols loading screen, IndexedDB profile boot
+- Redesigned `BottomNav.tsx` — glassmorphic white, Material Symbols, lime active state
+- Redesigned all 7 pages: Dashboard, Onboarding, Stats, Meals, Workouts, Profile, Reminders
+- Fixed `index.css` on-surface-variant token to `#5a5c5c`
+- TypeScript `tsc --noEmit` passed with zero errors
+- Pushed to GitHub: commit `eafd979`
+
+### Capacitor & APK Pipeline ✅
+- Installed Capacitor v7: `@capacitor/core`, `@capacitor/cli`, `@capacitor/android`
+- Initialized: App ID `com.dietpilot.app`, Web Dir `dist`
+- Added Android platform (Gradle wrapper, AndroidManifest, MainActivity all generated)
+- Created `.github/workflows/android-build.yml`:
+  - Triggers on push to main
+  - Node 20 + JDK 17 + Android SDK
+  - Builds frontend → syncs Capacitor → Gradle assembleDebug → uploads APK artifact
+- Pushed to GitHub: commit `0e50de7`
