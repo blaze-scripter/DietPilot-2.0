@@ -242,6 +242,71 @@ export default function Dashboard() {
         )}
       </div>
 
+      {/* ▸ Daily Tips — Do's & Don'ts ────────── */}
+      <div className="anim-fade-up anim-delay-4" style={{ marginBottom: 24 }}>
+        <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18', marginBottom: 12 }}>Daily Tips</h2>
+
+        {/* Do's */}
+        <div className="card" style={{ padding: '16px 18px', marginBottom: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#dcfce7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 14, color: '#16a34a', fontVariationSettings: "'wght' 700" }}>check</span>
+            </div>
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#16a34a', letterSpacing: '0.03em', fontFamily: 'var(--font-display)' }}>DO'S</span>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {(profile?.goal === 'lose_fat' ? [
+              { icon: 'water_drop', tip: 'Drink water before meals to reduce appetite' },
+              { icon: 'directions_walk', tip: 'Walk 10,000 steps daily for active calorie burn' },
+              { icon: 'egg_alt', tip: 'Eat protein-rich breakfasts to stay full longer' },
+            ] : profile?.goal === 'bulk' ? [
+              { icon: 'fitness_center', tip: 'Train each muscle group twice per week' },
+              { icon: 'restaurant', tip: 'Eat within 30 min after your workout' },
+              { icon: 'local_drink', tip: 'Consume 1g protein per pound of body weight' },
+            ] : [
+              { icon: 'schedule', tip: 'Eat meals at consistent times each day' },
+              { icon: 'self_improvement', tip: 'Practice mindful eating — slow down' },
+              { icon: 'local_drink', tip: 'Stay hydrated — aim for 8 glasses daily' },
+            ]).map((item, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 18, color: '#65a30d', flexShrink: 0 }}>{item.icon}</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#45483d', lineHeight: 1.4 }}>{item.tip}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Don'ts */}
+        <div className="card" style={{ padding: '16px 18px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 14, color: '#dc2626', fontVariationSettings: "'wght' 700" }}>close</span>
+            </div>
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#dc2626', letterSpacing: '0.03em', fontFamily: 'var(--font-display)' }}>DON'TS</span>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {(profile?.goal === 'lose_fat' ? [
+              { icon: 'bedtime', tip: 'Don\'t eat heavy meals after 8 PM' },
+              { icon: 'no_drinks', tip: 'Avoid sugary drinks — they add hidden calories' },
+              { icon: 'remove_circle', tip: 'Don\'t skip meals — it leads to overeating later' },
+            ] : profile?.goal === 'bulk' ? [
+              { icon: 'trending_down', tip: 'Don\'t skip rest days — muscles grow during recovery' },
+              { icon: 'fastfood', tip: 'Avoid relying on junk food for extra calories' },
+              { icon: 'bedtime', tip: 'Don\'t sacrifice sleep — aim for 7-9 hours' },
+            ] : [
+              { icon: 'fastfood', tip: 'Avoid excessive processed and fast food' },
+              { icon: 'trending_down', tip: 'Don\'t crash diet — it damages your metabolism' },
+              { icon: 'no_drinks', tip: 'Limit alcohol intake — it impairs recovery' },
+            ]).map((item, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 18, color: '#ef4444', flexShrink: 0 }}>{item.icon}</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#45483d', lineHeight: 1.4 }}>{item.tip}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* ▸ FAB ─────────────────────────────────── */}
       <button
         onClick={() => navigate('/meals')}
