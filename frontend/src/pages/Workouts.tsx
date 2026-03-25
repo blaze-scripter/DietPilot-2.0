@@ -43,7 +43,7 @@ export default function Workouts() {
   });
 
   return (
-    <div className="page-container relative" style={{ paddingTop: 0 }}>
+    <div className="page-container relative" style={{ paddingTop: 'env(safe-area-inset-top, 2.5rem)', paddingBottom: 'calc(100px + env(safe-area-inset-bottom, 0px))' }}>
       {/* Glow */}
       <div className="absolute top-0 right-0 w-72 h-72 rounded-full pointer-events-none -z-10" style={{ background: 'radial-gradient(circle, rgba(163,230,53,0.08) 0%, transparent 70%)', transform: 'translate(20%, -20%)' }} />
 

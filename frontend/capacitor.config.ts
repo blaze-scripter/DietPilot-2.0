@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.dietpilot.app',
-  appName: 'DietPilot',
+  appName: 'Track Bite',
   webDir: 'dist'
 };
 

@@ -58,7 +58,7 @@ export default function Dashboard() {
   const ringOffset = ringCirc - (calPct / 100) * ringCirc;
 
   return (
-    <div className="page-container relative" style={{ paddingTop: 0 }}>
+    <div className="page-container relative" style={{ paddingTop: 'env(safe-area-inset-top, 2.5rem)', paddingBottom: 'calc(100px + env(safe-area-inset-bottom, 0px))' }}>
       {/* Glassmorphic Header */}
       <div
         className="sticky top-0 z-30 px-4 pt-10 pb-4 mb-4"

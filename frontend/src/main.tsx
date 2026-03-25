@@ -91,7 +91,7 @@ function Router() {
           >
             <span className="material-symbols-outlined text-white" style={{ fontSize: 40, fontVariationSettings: "'FILL' 1" }}>restaurant</span>
           </div>
-          <h1 className="text-2xl font-extrabold tracking-tight font-headline text-on-surface">DietPilot</h1>
+          <h1 className="text-2xl font-extrabold tracking-tight font-headline text-on-surface">Track Bite</h1>
           <p className="text-sm mt-2 text-on-surface-variant">Loading your journey...</p>
         </div>
       </div>

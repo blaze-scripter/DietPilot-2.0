@@ -119,7 +119,7 @@ export default function Onboarding() {
   const renderWelcome = () => (
     <div className="flex-1 flex flex-col items-center justify-center text-center relative z-10 px-6" key={animKey}>
       <div className="absolute top-0 left-0 w-full flex justify-start px-6 pt-6">
-        <span style={{ fontFamily: 'Plus Jakarta Sans', fontWeight: 800, fontSize: '1.5rem', letterSpacing: '-0.04em', color: '#1a1c1c' }}>DietPilot</span>
+        <span style={{ fontFamily: 'Plus Jakarta Sans', fontWeight: 800, fontSize: '1.5rem', letterSpacing: '-0.04em', color: '#1a1c1c' }}>Track Bite</span>
       </div>
       <div className="animate-float mb-10 mt-20">
         <div style={{
@@ -377,7 +377,7 @@ export default function Onboarding() {
           </div>
           <div style={{ fontSize: '0.8rem', fontWeight: 800, fontFamily: 'Plus Jakarta Sans', color: '#446900', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{STEPS[step]}</div>
         </div>
-        <div style={{ fontSize: '1.25rem', fontWeight: 800, fontFamily: 'Plus Jakarta Sans', letterSpacing: '-0.04em', color: '#1a1c1c' }}>DietPilot</div>
+        <div style={{ fontSize: '1.25rem', fontWeight: 800, fontFamily: 'Plus Jakarta Sans', letterSpacing: '-0.04em', color: '#1a1c1c' }}>Track Bite</div>
       </div>
 
       {/* Progress Bar */}

@@ -1,4 +1,4 @@
-# 🧬 DietPilot — Project Constitution (`gemini.md`)
+# 🧬 Track Bite — Project Constitution (`gemini.md`)
 
 > **This file is LAW.** All schemas, rules, and architectural invariants are defined here.
 > Only update when: a schema changes, a rule is added, or architecture is modified.

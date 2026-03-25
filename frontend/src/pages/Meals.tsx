@@ -107,7 +107,7 @@ export default function Meals() {
   const dayTotals = MEAL_TYPES.reduce((acc, mt) => acc + slotTotals(mt.value).calories, 0);
 
   return (
-    <div className="page-container relative" style={{ paddingTop: 0 }}>
+    <div className="page-container relative" style={{ paddingTop: 'env(safe-area-inset-top, 2.5rem)', paddingBottom: 'calc(100px + env(safe-area-inset-bottom, 0px))' }}>
       {/* Glassmorphic Header */}
       <div
         className="sticky top-0 z-30 px-4 pt-10 pb-4"

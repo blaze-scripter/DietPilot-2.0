@@ -24,7 +24,7 @@ export default function Profile() {
   ];
 
   return (
-    <div className="page-container relative" style={{ paddingTop: 0 }}>
+    <div className="page-container relative" style={{ paddingTop: 'env(safe-area-inset-top, 2.5rem)', paddingBottom: 'calc(100px + env(safe-area-inset-bottom, 0px))' }}>
       {/* Lime glow background */}
       <div className="absolute top-0 right-0 w-96 h-96 rounded-full pointer-events-none -z-10" style={{ background: 'radial-gradient(circle, rgba(163,230,53,0.12) 0%, transparent 70%)', transform: 'translate(25%, -25%)' }} />
 
