@@ -107,7 +107,7 @@ export default function Stats() {
       {/* ▸ Header ─────────────────────────────── */}
       <header className="anim-fade-up" style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: '1.5rem' }}>Weekly Stats</h1>
-        <p style={{ fontSize: '0.75rem', fontWeight: 500, color: '#72796a', marginTop: 4 }}>{weekLabel}</p>
+        <p style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--tb-text-secondary)', marginTop: 4 }}>{weekLabel}</p>
       </header>
 
       {/* ▸ Summary Cards ──────────────────────── */}
@@ -125,11 +125,11 @@ export default function Stats() {
               fontVariationSettings: "'FILL' 1",
             }}>{c.icon}</span>
             <span style={{
-              fontSize: '1.125rem', fontWeight: 800, color: '#1b1c18',
+              fontSize: '1.125rem', fontWeight: 800, color: 'var(--tb-text)',
               fontFamily: 'var(--font-display)', lineHeight: 1,
             }}>{c.value}</span>
             <span style={{
-              fontSize: '0.5625rem', fontWeight: 600, color: '#a1a79a',
+              fontSize: '0.5625rem', fontWeight: 600, color: 'var(--tb-text-muted)',
               marginTop: 2,
             }}>{c.label}{c.unit ? ` (${c.unit})` : ''}</span>
           </div>
@@ -138,7 +138,7 @@ export default function Stats() {
 
       {/* ▸ Macro Targets vs Actuals ────────────── */}
       <div className="anim-fade-up anim-delay-2 card" style={{ padding: '18px 16px', marginBottom: 20 }}>
-        <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18', marginBottom: 16 }}>Nutrition vs Goals</h2>
+        <h2 style={{ fontSize: '0.8125rem', color: 'var(--tb-text)', marginBottom: 16 }}>Nutrition vs Goals</h2>
         {[
           { label: 'Calories', actual: avgCal, target: Math.round(targets.calories), unit: 'kcal', color: '#ef4444', bg: '#fef2f2' },
           { label: 'Protein', actual: avgProtein, target: Math.round(targets.protein), unit: 'g', color: '#65a30d', bg: '#f0fdf4' },
@@ -147,8 +147,8 @@ export default function Stats() {
         ].map((m) => (
           <div key={m.label} style={{ marginBottom: 14 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1b1c18', fontFamily: 'var(--font-display)' }}>{m.label}</span>
-              <span style={{ fontSize: '0.625rem', fontWeight: 600, color: '#72796a' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--tb-text)', fontFamily: 'var(--font-display)' }}>{m.label}</span>
+              <span style={{ fontSize: '0.625rem', fontWeight: 600, color: 'var(--tb-text-secondary)' }}>
                 {m.actual} / {m.target} {m.unit}
               </span>
             </div>
@@ -165,13 +165,13 @@ export default function Stats() {
 
       {/* ▸ Weekly Chart ───────────────────────── */}
       <div className="anim-fade-up anim-delay-3 card" style={{ padding: '18px 16px', marginBottom: 20 }}>
-        <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18', marginBottom: 14 }}>Calorie Trend</h2>
+        <h2 style={{ fontSize: '0.8125rem', color: 'var(--tb-text)', marginBottom: 14 }}>Calorie Trend</h2>
         {weeklyData.length > 0 && <WeeklyChart data={weeklyData} goal={Math.round(targets.calories)} />}
       </div>
 
       {/* ▸ Macro Donut ────────────────────────── */}
       <div className="anim-fade-up anim-delay-4 card" style={{ padding: '18px 16px', marginBottom: 20 }}>
-        <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18', marginBottom: 14 }}>Macro Breakdown</h2>
+        <h2 style={{ fontSize: '0.8125rem', color: 'var(--tb-text)', marginBottom: 14 }}>Macro Breakdown</h2>
         <MacroDonut protein={avgProtein} carbs={avgCarbs} fat={avgFat} />
       </div>
 
@@ -179,7 +179,7 @@ export default function Stats() {
       <div className="anim-fade-up anim-delay-5 card" style={{ padding: '18px 16px', marginBottom: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
           <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#2563eb', fontVariationSettings: "'FILL' 1" }}>water_drop</span>
-          <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18' }}>Hydration</h2>
+          <h2 style={{ fontSize: '0.8125rem', color: 'var(--tb-text)' }}>Hydration</h2>
         </div>
 
         {/* Avg + Total */}
@@ -191,7 +191,7 @@ export default function Stats() {
             <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#2563eb', fontFamily: 'var(--font-display)' }}>
               {avgWater}
             </div>
-            <div style={{ fontSize: '0.5625rem', fontWeight: 600, color: '#60a5fa' }}>Avg Glasses/Day</div>
+            <div style={{ fontSize: '0.5625rem', fontWeight: 600, color: 'var(--tb-blue)' }}>Avg Glasses/Day</div>
           </div>
           <div style={{
             padding: '12px', borderRadius: 14, textAlign: 'center',
@@ -200,7 +200,7 @@ export default function Stats() {
             <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#2563eb', fontFamily: 'var(--font-display)' }}>
               {(totalWater * 0.25).toFixed(1)}L
             </div>
-            <div style={{ fontSize: '0.5625rem', fontWeight: 600, color: '#60a5fa' }}>Total This Week</div>
+            <div style={{ fontSize: '0.5625rem', fontWeight: 600, color: 'var(--tb-blue)' }}>Total This Week</div>
           </div>
         </div>
 
@@ -218,7 +218,7 @@ export default function Stats() {
                   {d.water}
                 </span>
               </div>
-              <span style={{ fontSize: '0.5rem', fontWeight: 600, color: '#72796a' }}>{d.day}</span>
+              <span style={{ fontSize: '0.5rem', fontWeight: 600, color: 'var(--tb-text-secondary)' }}>{d.day}</span>
             </div>
           ))}
         </div>
@@ -229,7 +229,7 @@ export default function Stats() {
         <div className="anim-fade-up card" style={{ padding: '18px 16px', marginBottom: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
             <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#65a30d', fontVariationSettings: "'FILL' 1" }}>monitor_weight</span>
-            <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18' }}>Weight Progress</h2>
+            <h2 style={{ fontSize: '0.8125rem', color: 'var(--tb-text)' }}>Weight Progress</h2>
           </div>
 
           {/* Mini line chart via SVG */}
@@ -268,10 +268,10 @@ export default function Stats() {
           <div className="scrollbar-hide" style={{ display: 'flex', justifyContent: 'space-between', gap: 6, overflowX: 'auto' }}>
             {weightEntries.map((e: any, i: number) => (
               <div key={i} style={{ textAlign: 'center', flex: 1, minWidth: 40 }}>
-                <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#1b1c18', fontFamily: 'var(--font-display)' }}>
+                <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: 'var(--tb-text)', fontFamily: 'var(--font-display)' }}>
                   {e.weight_kg}
                 </div>
-                <div style={{ fontSize: '0.5rem', fontWeight: 600, color: '#a1a79a' }}>
+                <div style={{ fontSize: '0.5rem', fontWeight: 600, color: 'var(--tb-text-muted)' }}>
                   {new Date(e.date).toLocaleDateString('en', { month: 'short', day: 'numeric' })}
                 </div>
               </div>
@@ -282,7 +282,7 @@ export default function Stats() {
 
       {/* ▸ Daily Breakdown ────────────────────── */}
       <div className="anim-fade-up card" style={{ padding: '18px 16px', marginBottom: 20 }}>
-        <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18', marginBottom: 14 }}>Daily Breakdown</h2>
+        <h2 style={{ fontSize: '0.8125rem', color: 'var(--tb-text)', marginBottom: 14 }}>Daily Breakdown</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {weeklyData.slice().reverse().map((d, i) => {
             const isToday = i === 0;
@@ -290,26 +290,26 @@ export default function Stats() {
               <div key={i} style={{
                 display: 'flex', alignItems: 'center', gap: 12,
                 padding: '10px 14px', borderRadius: 14,
-                background: isToday ? '#f7fee7' : '#fafaf9',
-                border: isToday ? '1px solid #d9f99d' : '1px solid transparent',
+                background: isToday ? 'var(--tb-accent-muted)' : 'var(--tb-surface)',
+                border: isToday ? '1px solid var(--tb-accent)' : '1px solid transparent',
               }}>
                 <div style={{
                   width: 36, height: 36, borderRadius: 10,
-                  background: isToday ? '#a3e635' : '#e5e5e0',
+                  background: isToday ? 'var(--tb-accent)' : 'var(--tb-input-bg)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   flexShrink: 0,
                 }}>
                   <span style={{
                     fontSize: '0.625rem', fontWeight: 800,
-                    color: isToday ? '#1a2e05' : '#72796a',
+                    color: isToday ? '#1a2e05' : 'var(--tb-text-secondary)',
                     fontFamily: 'var(--font-display)',
                   }}>{d.day}</span>
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1b1c18', fontFamily: 'var(--font-display)' }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--tb-text)', fontFamily: 'var(--font-display)' }}>
                     {d.calories} kcal {isToday && <span style={{ fontSize: '0.5rem', color: '#65a30d' }}>TODAY</span>}
                   </div>
-                  <div style={{ fontSize: '0.5625rem', color: '#72796a', marginTop: 2 }}>
+                  <div style={{ fontSize: '0.5625rem', color: 'var(--tb-text-secondary)', marginTop: 2 }}>
                     P: {d.protein}g · C: {d.carbs}g · F: {d.fat}g · 💧{d.water}
                   </div>
                 </div>

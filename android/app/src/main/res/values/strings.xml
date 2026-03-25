@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">DietPilot</string>
-    <string name="title_activity_main">DietPilot</string>
-    <string name="package_name">com.dietpilot.app</string>
-    <string name="custom_url_scheme">com.dietpilot.app</string>
+    <string name="app_name">Track Bite</string>
+    <string name="title_activity_main">Track Bite</string>
+    <string name="package_name">com.trackbite.app</string>
+    <string name="custom_url_scheme">com.trackbite.app</string>
 </resources>

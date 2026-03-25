@@ -36,7 +36,7 @@ const CalorieRing = ({ consumed, goal }: CalorieRingProps) => {
           <circle
             cx="100" cy="100" r={radius}
             fill="none"
-            stroke="#e5e5e0"
+            stroke="var(--tb-input-bg)"
             strokeWidth="11"
             strokeLinecap="round"
           />
@@ -78,7 +78,7 @@ const CalorieRing = ({ consumed, goal }: CalorieRingProps) => {
             fontSize: consumed > 999 ? '1.75rem' : '2.25rem',
             fontWeight: 800,
             letterSpacing: '-0.04em',
-            color: '#1b1c18',
+            color: 'var(--tb-text)',
             fontFamily: 'var(--font-display)',
             lineHeight: 1,
           }}>
@@ -87,7 +87,7 @@ const CalorieRing = ({ consumed, goal }: CalorieRingProps) => {
           <span style={{
             fontSize: '0.6875rem',
             fontWeight: 500,
-            color: '#72796a',
+            color: 'var(--tb-text-secondary)',
             marginTop: 2,
           }}>
             kcal eaten
@@ -99,19 +99,19 @@ const CalorieRing = ({ consumed, goal }: CalorieRingProps) => {
             marginTop: 8,
             padding: '4px 14px',
             borderRadius: 100,
-            background: '#ecfccb',
+            background: 'var(--tb-accent-pill)',
           }}>
             <span style={{
               fontSize: '0.75rem',
               fontWeight: 700,
-              color: '#3f6212',
+              color: 'var(--tb-accent-pill-text)',
             }}>
               {remaining.toLocaleString()}
             </span>
             <span style={{
               fontSize: '0.625rem',
               fontWeight: 500,
-              color: '#65a30d',
+              color: 'var(--tb-accent-dark)',
             }}>
               left
             </span>

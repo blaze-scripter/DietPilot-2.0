@@ -13,21 +13,21 @@ const MealCard = ({ name, type, calories, time, image }: MealCardProps) => {
       width: 148,
       borderRadius: 16,
       overflow: 'hidden',
-      background: 'rgba(255,255,255,0.6)',
+      background: 'var(--tb-surface)',
       backdropFilter: 'blur(20px)',
       WebkitBackdropFilter: 'blur(20px)',
-      border: '1px solid rgba(255,255,255,0.6)',
-      boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
-      transition: 'transform 0.3s cubic-bezier(.22,1,.36,1), box-shadow 0.3s cubic-bezier(.22,1,.36,1)',
+      border: 'var(--tb-border-card)',
+      boxShadow: 'var(--tb-card-shadow)',
+      transition: 'transform 0.3s cubic-bezier(.22,1,.36,1), box-shadow 0.3s cubic-bezier(.22,1,.36,1), background 0.3s ease',
       cursor: 'pointer',
     }}
     onMouseEnter={e => {
       (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
-      (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 28px rgba(0,0,0,0.08)';
+      (e.currentTarget as HTMLElement).style.boxShadow = 'var(--tb-card-shadow-elevated)';
     }}
     onMouseLeave={e => {
       (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
-      (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 12px rgba(0,0,0,0.05)';
+      (e.currentTarget as HTMLElement).style.boxShadow = 'var(--tb-card-shadow)';
     }}
     >
       <div style={{ height: 96, overflow: 'hidden', position: 'relative' }}>
@@ -42,21 +42,20 @@ const MealCard = ({ name, type, calories, time, image }: MealCardProps) => {
             transition: 'transform 0.4s ease',
           }}
         />
-        {/* Gradient overlay */}
         <div style={{
           position: 'absolute',
           bottom: 0,
           left: 0,
           right: 0,
           height: 32,
-          background: 'linear-gradient(transparent, rgba(255,255,255,0.3))',
+          background: 'linear-gradient(transparent, var(--tb-surface))',
         }} />
       </div>
       <div style={{ padding: '10px 12px 12px' }}>
         <p style={{
           fontSize: '0.5625rem',
           fontWeight: 700,
-          color: '#65a30d',
+          color: 'var(--tb-accent-dark)',
           textTransform: 'uppercase',
           letterSpacing: '0.08em',
           fontFamily: 'var(--font-display)',
@@ -64,7 +63,7 @@ const MealCard = ({ name, type, calories, time, image }: MealCardProps) => {
         <p style={{
           fontSize: '0.8125rem',
           fontWeight: 700,
-          color: '#1b1c18',
+          color: 'var(--tb-text)',
           marginTop: 3,
           lineHeight: 1.25,
           overflow: 'hidden',
@@ -81,12 +80,12 @@ const MealCard = ({ name, type, calories, time, image }: MealCardProps) => {
           <span style={{
             fontSize: '0.6875rem',
             fontWeight: 700,
-            color: '#1b1c18',
+            color: 'var(--tb-text)',
           }}>{calories} kcal</span>
           <span style={{
             fontSize: '0.5625rem',
             fontWeight: 500,
-            color: '#a1a79a',
+            color: 'var(--tb-text-muted)',
           }}>{time}</span>
         </div>
       </div>

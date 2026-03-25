@@ -6,7 +6,6 @@ const tabs = [
   { id: '/workouts', label: 'Workouts', icon: 'fitness_center' },
   { id: '/meals', label: 'Meals', icon: 'restaurant' },
   { id: '/reminders', label: 'Reminders', icon: 'notifications' },
-  { id: '/profile', label: 'Profile', icon: 'person' },
 ];
 
 export default function BottomNav() {
@@ -28,11 +27,12 @@ export default function BottomNav() {
         justifyContent: 'space-around',
         padding: '6px 4px',
         paddingBottom: 'max(8px, env(safe-area-inset-bottom, 8px))',
-        background: 'rgba(255,255,255,0.72)',
+        background: 'var(--tb-nav-bg)',
         backdropFilter: 'blur(40px) saturate(1.5)',
         WebkitBackdropFilter: 'blur(40px) saturate(1.5)',
-        borderTop: '1px solid rgba(255,255,255,0.5)',
-        boxShadow: '0 -2px 20px rgba(0,0,0,0.04)',
+        borderTop: '1px solid var(--tb-nav-border)',
+        boxShadow: 'var(--tb-nav-shadow)',
+        transition: 'background 0.3s ease, border-color 0.3s ease',
       }}>
         {tabs.map((tab) => {
           const isActive = currentPath === tab.id;
@@ -61,14 +61,14 @@ export default function BottomNav() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: isActive ? 'rgba(163,230,53,0.18)' : 'transparent',
+                background: isActive ? 'var(--tb-nav-active-bg)' : 'transparent',
                 transition: 'background 0.2s ease',
               }}>
                 <span
                   className="material-symbols-outlined"
                   style={{
                     fontSize: 20,
-                    color: isActive ? '#3d6a00' : '#72796a',
+                    color: isActive ? 'var(--tb-nav-active-text)' : 'var(--tb-nav-inactive-text)',
                     fontVariationSettings: isActive ? "'FILL' 1, 'wght' 600" : "'FILL' 0, 'wght' 400",
                     transition: 'color 0.2s ease, font-variation-settings 0.2s ease',
                   }}
@@ -79,7 +79,7 @@ export default function BottomNav() {
               <span style={{
                 fontSize: '0.5625rem',
                 fontWeight: isActive ? 700 : 500,
-                color: isActive ? '#3d6a00' : '#72796a',
+                color: isActive ? 'var(--tb-nav-active-text)' : 'var(--tb-nav-inactive-text)',
                 fontFamily: 'var(--font-display)',
                 letterSpacing: '0.01em',
                 transition: 'color 0.2s ease',

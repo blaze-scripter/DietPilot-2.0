@@ -21,7 +21,7 @@ const WeeklyChart = ({ data, goal }: WeeklyChartProps) => {
               alignItems: 'center', gap: 4, height: '100%', justifyContent: 'flex-end',
             }}>
               <span style={{
-                fontSize: '0.5625rem', fontWeight: 600, color: '#72796a',
+                fontSize: '0.5625rem', fontWeight: 600, color: 'var(--tb-text-secondary)',
                 fontFamily: 'var(--font-display)',
               }}>{day.calories}</span>
               <div style={{ width: '100%', display: 'flex', alignItems: 'flex-end', height: 100 }}>
@@ -37,7 +37,7 @@ const WeeklyChart = ({ data, goal }: WeeklyChartProps) => {
               </div>
               <span style={{
                 fontSize: '0.5625rem', fontWeight: isToday ? 800 : 600,
-                color: isToday ? '#3d6a00' : '#a1a79a',
+                color: isToday ? 'var(--tb-accent-dark)' : 'var(--tb-text-muted)',
                 fontFamily: 'var(--font-display)',
               }}>{day.day}</span>
             </div>

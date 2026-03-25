@@ -1,6 +1,6 @@
 {
-  "appId": "com.dietpilot.app",
-  "appName": "DietPilot",
+  "appId": "com.trackbite.app",
+  "appName": "Track Bite",
   "webDir": "frontend/dist",
   "bundledWebRuntime": false
 }

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef, useCallback } from 'react';
 import { useApp } from '@/main';
 import { dailyLogApi } from '@/services/api';
 import CalorieRing from '@/components/dashboard/CalorieRing';
@@ -11,6 +11,48 @@ const getGreeting = () => {
   if (h < 17) return 'Good Afternoon';
   return 'Good Evening';
 };
+
+/* ── Horizontal scroll with arrow buttons ── */
+function ScrollSection({ children, id }: { children: React.ReactNode; id: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [showLeft, setShowLeft] = useState(false);
+  const [showRight, setShowRight] = useState(true);
+
+  const checkScroll = useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+    setShowLeft(el.scrollLeft > 8);
+    setShowRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 8);
+  }, []);
+
+  const scroll = (dir: 'left' | 'right') => {
+    ref.current?.scrollBy({ left: dir === 'left' ? -160 : 160, behavior: 'smooth' });
+    setTimeout(checkScroll, 300);
+  };
+
+  return (
+    <div style={{ position: 'relative' }}>
+      {showLeft && (
+        <button className="scroll-arrow scroll-arrow-left" onClick={() => scroll('left')} aria-label="Scroll left">
+          <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'var(--tb-text-secondary)' }}>chevron_left</span>
+        </button>
+      )}
+      <div
+        ref={ref}
+        className="scroll-container"
+        onScroll={checkScroll}
+        style={{ display: 'flex', gap: 10, overflowX: 'auto', margin: '0 -20px', padding: '4px 20px 8px' }}
+      >
+        {children}
+      </div>
+      {showRight && (
+        <button className="scroll-arrow scroll-arrow-right" onClick={() => scroll('right')} aria-label="Scroll right">
+          <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'var(--tb-text-secondary)' }}>chevron_right</span>
+        </button>
+      )}
+    </div>
+  );
+}
 
 export default function Dashboard() {
   const { profile, dailyLog, refreshLog, navigate } = useApp();
@@ -37,12 +79,20 @@ export default function Dashboard() {
 
   /* ── Hydration ── */
   const waterGlasses = dailyLog?.water_glasses || 0;
-  const waterTarget = dailyLog?.water_target || 8;
+  const waterTarget = dailyLog?.water_target || 15;
   const waterL = (waterGlasses * 0.25).toFixed(1);
   const waterTargetL = (waterTarget * 0.25).toFixed(1);
 
   const addWater = async () => {
-    const nv = Math.min(waterGlasses + 1, 20);
+    const nv = Math.min(waterGlasses + 1, 30);
+    try {
+      await dailyLogApi.updateWater(new Date().toISOString().split('T')[0], nv);
+      await refreshLog();
+    } catch { /* */ }
+  };
+
+  const removeWater = async () => {
+    const nv = Math.max(waterGlasses - 1, 0);
     try {
       await dailyLogApi.updateWater(new Date().toISOString().split('T')[0], nv);
       await refreshLog();
@@ -89,6 +139,9 @@ export default function Dashboard() {
       }));
   }, [dailyLog]);
 
+  /* ── Water drop display count (show in rows of 5) ── */
+  const waterDisplayCount = Math.max(waterTarget, waterGlasses);
+
   /* ─────────────────── RENDER ─────────────────── */
   return (
     <div className="page-shell">
@@ -99,35 +152,12 @@ export default function Dashboard() {
         style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', paddingTop: 8, marginBottom: 24 }}
       >
         <div>
-          <p style={{ fontSize: '0.75rem', fontWeight: 500, color: '#a1a79a', letterSpacing: '0.01em' }}>{today}</p>
+          <p style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--tb-text-muted)', letterSpacing: '0.01em' }}>{today}</p>
           <h1 style={{ fontSize: '1.5rem', marginTop: 4 }}>
             {getGreeting()}, {profile?.name || 'Guest'}{' '}
             <span style={{ fontSize: '1.25rem' }}>👋</span>
           </h1>
         </div>
-        <button
-          onClick={() => navigate('/profile')}
-          style={{
-            width: 38,
-            height: 38,
-            borderRadius: '50%',
-            border: 'none',
-            background: 'linear-gradient(135deg, #bef264, #65a30d)',
-            color: '#fff',
-            fontWeight: 800,
-            fontSize: '0.8125rem',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 4px 16px rgba(101,163,13,0.3)',
-            transition: 'transform 0.25s cubic-bezier(.22,1,.36,1)',
-            flexShrink: 0,
-            marginTop: 4,
-          }}
-        >
-          {profile?.name?.charAt(0)?.toUpperCase() || 'U'}
-        </button>
       </header>
 
       {/* ▸ Calorie Ring Card ───────────────────── */}
@@ -143,11 +173,11 @@ export default function Dashboard() {
         className="card anim-fade-up anim-delay-1"
         style={{ padding: '18px 20px', marginBottom: 16 }}
       >
-        <h2 style={{ fontSize: '0.8125rem', marginBottom: 14, color: '#1b1c18' }}>Macros</h2>
+        <h2 style={{ fontSize: '0.8125rem', marginBottom: 14 }}>Macros</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <MacroBar label="Protein" current={Math.round(totals.protein)} goal={Math.round(targets.protein)} color="#0ea5e9" />
-          <MacroBar label="Carbs" current={Math.round(totals.carbs)} goal={Math.round(targets.carbs)} color="#f59e0b" />
-          <MacroBar label="Fat" current={Math.round(totals.fat)} goal={Math.round(targets.fat)} color="#ec4899" />
+          <MacroBar label="Protein" current={Math.round(totals.protein)} goal={Math.round(targets.protein)} color="var(--tb-protein)" />
+          <MacroBar label="Carbs" current={Math.round(totals.carbs)} goal={Math.round(targets.carbs)} color="var(--tb-carbs)" />
+          <MacroBar label="Fat" current={Math.round(totals.fat)} goal={Math.round(targets.fat)} color="var(--tb-fat)" />
         </div>
       </div>
 
@@ -158,13 +188,13 @@ export default function Dashboard() {
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
           <div>
-            <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18' }}>Hydration</h2>
-            <p style={{ fontSize: '0.6875rem', fontWeight: 500, color: '#72796a', marginTop: 2 }}>Goal: {waterTargetL}L</p>
+            <h2 style={{ fontSize: '0.8125rem' }}>Hydration</h2>
+            <p style={{ fontSize: '0.6875rem', fontWeight: 500, color: 'var(--tb-text-secondary)', marginTop: 2 }}>Goal: {waterTargetL}L</p>
           </div>
           <span style={{
             fontSize: '1.375rem',
             fontWeight: 800,
-            color: '#2563eb',
+            color: 'var(--tb-blue-dark)',
             letterSpacing: '-0.03em',
             fontFamily: 'var(--font-display)',
           }}>
@@ -172,15 +202,15 @@ export default function Dashboard() {
           </span>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-            {Array.from({ length: 8 }).map((_, i) => (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', flex: 1 }}>
+            {Array.from({ length: waterDisplayCount }).map((_, i) => (
               <span
                 key={i}
                 className="material-symbols-outlined"
                 style={{
-                  fontSize: 22,
-                  color: i < waterGlasses ? '#3b82f6' : '#bfdbfe',
+                  fontSize: 18,
+                  color: i < waterGlasses ? 'var(--tb-blue)' : 'var(--tb-blue-light)',
                   fontVariationSettings: i < waterGlasses ? "'FILL' 1" : "'FILL' 0",
                   transition: 'color 0.3s ease, font-variation-settings 0.3s ease',
                 }}
@@ -190,51 +220,65 @@ export default function Dashboard() {
             ))}
           </div>
 
-          <button
-            onClick={addWater}
-            style={{
-              width: 38,
-              height: 38,
-              borderRadius: '50%',
-              border: 'none',
-              background: 'linear-gradient(135deg, #60a5fa, #2563eb)',
-              color: '#fff',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 4px 16px rgba(37,99,235,0.3)',
-              transition: 'transform 0.25s cubic-bezier(.22,1,.36,1)',
-              flexShrink: 0,
-            }}
-          >
-            <span className="material-symbols-outlined" style={{ fontSize: 20, fontVariationSettings: "'wght' 600" }}>add</span>
-          </button>
+          <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+            <button
+              onClick={removeWater}
+              disabled={waterGlasses <= 0}
+              style={{
+                width: 34,
+                height: 34,
+                borderRadius: '50%',
+                border: 'none',
+                background: waterGlasses > 0 ? 'var(--tb-surface)' : 'transparent',
+                color: 'var(--tb-blue)',
+                cursor: waterGlasses > 0 ? 'pointer' : 'not-allowed',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                opacity: waterGlasses > 0 ? 1 : 0.3,
+                transition: 'all 0.25s ease',
+                flexShrink: 0,
+              }}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: 18, fontVariationSettings: "'wght' 600" }}>remove</span>
+            </button>
+            <button
+              onClick={addWater}
+              style={{
+                width: 38,
+                height: 38,
+                borderRadius: '50%',
+                border: 'none',
+                background: 'var(--tb-blue-gradient)',
+                color: '#fff',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 4px 16px rgba(37,99,235,0.3)',
+                transition: 'transform 0.25s cubic-bezier(.22,1,.36,1)',
+                flexShrink: 0,
+              }}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: 20, fontVariationSettings: "'wght' 600" }}>add</span>
+            </button>
+          </div>
         </div>
       </div>
 
       {/* ▸ Today's Meals ───────────────────────── */}
       <div className="anim-fade-up anim-delay-3" style={{ marginBottom: 24 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18' }}>Today's Meals</h2>
-          <span style={{ fontSize: '0.6875rem', fontWeight: 500, color: '#a1a79a' }}>{meals.length} logged</span>
+          <h2 style={{ fontSize: '0.8125rem' }}>Today's Meals</h2>
+          <span style={{ fontSize: '0.6875rem', fontWeight: 500, color: 'var(--tb-text-muted)' }}>{meals.length} logged</span>
         </div>
 
         {meals.length > 0 ? (
-          <div
-            className="scrollbar-hide"
-            style={{
-              display: 'flex',
-              gap: 12,
-              overflowX: 'auto',
-              margin: '0 -20px',
-              padding: '4px 20px 8px',
-            }}
-          >
+          <ScrollSection id="meals">
             {meals.map((m: any) => (
               <MealCard key={m.id} {...m} />
             ))}
-          </div>
+          </ScrollSection>
         ) : (
           <div
             className="card"
@@ -246,35 +290,24 @@ export default function Dashboard() {
               gap: 8,
             }}
           >
-            <span
-              className="material-symbols-outlined"
-              style={{ fontSize: 40, color: '#c6c8b9' }}
-            >
-              restaurant
-            </span>
-            <p style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#72796a' }}>No meals logged yet.</p>
-            <button
-              onClick={() => navigate('/meals')}
-              className="btn-lime"
-              style={{ marginTop: 4 }}
-            >
-              Log food
-            </button>
+            <span className="material-symbols-outlined" style={{ fontSize: 40, color: 'var(--tb-text-muted)' }}>restaurant</span>
+            <p style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--tb-text-secondary)' }}>No meals logged yet.</p>
+            <button onClick={() => navigate('/meals')} className="btn-lime" style={{ marginTop: 4 }}>Log food</button>
           </div>
         )}
       </div>
 
       {/* ▸ Quick Suggestions ─────────────────── */}
       <div className="anim-fade-up anim-delay-4" style={{ marginBottom: 24 }}>
-        <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18', marginBottom: 12 }}>Quick Suggestions</h2>
+        <h2 style={{ fontSize: '0.8125rem', marginBottom: 12 }}>Quick Suggestions</h2>
 
         {/* Meal suggestions */}
         <div style={{ marginBottom: 14 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#65a30d', fontVariationSettings: "'FILL' 1" }}>restaurant</span>
-            <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#65a30d', fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Meal Ideas</span>
+            <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'var(--tb-accent-dark)', fontVariationSettings: "'FILL' 1" }}>restaurant</span>
+            <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: 'var(--tb-accent-dark)', fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Meal Ideas</span>
           </div>
-          <div className="scrollbar-hide" style={{ display: 'flex', gap: 10, overflowX: 'auto', margin: '0 -20px', padding: '0 20px 6px' }}>
+          <ScrollSection id="meal-suggestions">
             {(profile?.diet_preference === 'vegan' ? [
               { name: 'Quinoa Bowl', cal: 380, icon: '🥗', why: 'High protein, plant-based', protein: 14, carbs_g: 48, fat_g: 12 },
               { name: 'Lentil Soup', cal: 250, icon: '🍲', why: 'Iron-rich, filling', protein: 12, carbs_g: 30, fat_g: 5 },
@@ -294,31 +327,31 @@ export default function Dashboard() {
             ]).map((meal, i) => (
               <div key={i} onClick={() => handleAddSuggestion(meal)} style={{
                 flexShrink: 0, width: 130, padding: '14px 12px', cursor: 'pointer',
-                borderRadius: 18, background: 'rgba(255,255,255,0.55)', backdropFilter: 'blur(30px)',
-                border: '1px solid rgba(255,255,255,0.6)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
-                position: 'relative' as const,
+                borderRadius: 18, background: 'var(--tb-surface)', backdropFilter: 'blur(30px)',
+                border: 'var(--tb-border-card)', boxShadow: 'var(--tb-card-shadow)',
+                position: 'relative' as const, transition: 'transform 0.2s ease',
               }}>
                 <span style={{ fontSize: '1.5rem', display: 'block', marginBottom: 8 }}>{meal.icon}</span>
-                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1b1c18', fontFamily: 'var(--font-display)', marginBottom: 2 }}>{meal.name}</div>
-                <div style={{ fontSize: '0.5625rem', fontWeight: 600, color: '#72796a' }}>{meal.cal} kcal · {meal.why}</div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--tb-text)', fontFamily: 'var(--font-display)', marginBottom: 2 }}>{meal.name}</div>
+                <div style={{ fontSize: '0.5625rem', fontWeight: 600, color: 'var(--tb-text-secondary)' }}>{meal.cal} kcal · {meal.why}</div>
                 <div style={{
                   position: 'absolute', top: 6, right: 6, width: 18, height: 18, borderRadius: '50%',
-                  background: '#ecfccb', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: 'var(--tb-accent-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <span className="material-symbols-outlined" style={{ fontSize: 11, color: '#3d6a00', fontVariationSettings: "'wght' 700" }}>add</span>
+                  <span className="material-symbols-outlined" style={{ fontSize: 11, color: 'var(--tb-accent-dark)', fontVariationSettings: "'wght' 700" }}>add</span>
                 </div>
               </div>
             ))}
-          </div>
+          </ScrollSection>
         </div>
 
         {/* Workout suggestions */}
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#2563eb', fontVariationSettings: "'FILL' 1" }}>fitness_center</span>
-            <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#2563eb', fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Workout Ideas</span>
+            <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'var(--tb-blue-dark)', fontVariationSettings: "'FILL' 1" }}>fitness_center</span>
+            <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: 'var(--tb-blue-dark)', fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Workout Ideas</span>
           </div>
-          <div className="scrollbar-hide" style={{ display: 'flex', gap: 10, overflowX: 'auto', margin: '0 -20px', padding: '0 20px 6px' }}>
+          <ScrollSection id="workout-suggestions">
             {((profile?.health_conditions || []).includes('diabetes') ? [
               { name: 'Walking', icon: 'directions_walk', why: 'Improves insulin sensitivity', dur: '30 min' },
               { name: 'Swimming', icon: 'pool', why: 'Low impact cardio', dur: '25 min' },
@@ -338,34 +371,35 @@ export default function Dashboard() {
             ]).map((w, i) => (
               <div key={i} onClick={() => navigate('/workouts')} style={{
                 flexShrink: 0, width: 130, padding: '14px 12px', cursor: 'pointer',
-                borderRadius: 18, background: 'rgba(255,255,255,0.55)', backdropFilter: 'blur(30px)',
-                border: '1px solid rgba(255,255,255,0.6)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
+                borderRadius: 18, background: 'var(--tb-surface)', backdropFilter: 'blur(30px)',
+                border: 'var(--tb-border-card)', boxShadow: 'var(--tb-card-shadow)',
+                transition: 'transform 0.2s ease',
               }}>
                 <div style={{
-                  width: 32, height: 32, borderRadius: 10, background: '#dbeafe',
+                  width: 32, height: 32, borderRadius: 10, background: 'var(--tb-blue-subtle)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8,
                 }}>
-                  <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#2563eb', fontVariationSettings: "'FILL' 1" }}>{w.icon}</span>
+                  <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'var(--tb-blue-dark)', fontVariationSettings: "'FILL' 1" }}>{w.icon}</span>
                 </div>
-                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1b1c18', fontFamily: 'var(--font-display)', marginBottom: 2 }}>{w.name}</div>
-                <div style={{ fontSize: '0.5625rem', fontWeight: 600, color: '#72796a' }}>{w.dur} · {w.why}</div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--tb-text)', fontFamily: 'var(--font-display)', marginBottom: 2 }}>{w.name}</div>
+                <div style={{ fontSize: '0.5625rem', fontWeight: 600, color: 'var(--tb-text-secondary)' }}>{w.dur} · {w.why}</div>
               </div>
             ))}
-          </div>
+          </ScrollSection>
         </div>
       </div>
 
       {/* ▸ Daily Tips — Do's & Don'ts ────────── */}
       <div className="anim-fade-up anim-delay-4" style={{ marginBottom: 24 }}>
-        <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18', marginBottom: 12 }}>Daily Tips</h2>
+        <h2 style={{ fontSize: '0.8125rem', marginBottom: 12 }}>Daily Tips</h2>
 
         {/* Do's */}
         <div className="card" style={{ padding: '16px 18px', marginBottom: 10 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#dcfce7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: 14, color: '#16a34a', fontVariationSettings: "'wght' 700" }}>check</span>
+            <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'var(--tb-success-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 14, color: 'var(--tb-success)', fontVariationSettings: "'wght' 700" }}>check</span>
             </div>
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#16a34a', letterSpacing: '0.03em', fontFamily: 'var(--font-display)' }}>DO'S</span>
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--tb-success)', letterSpacing: '0.03em', fontFamily: 'var(--font-display)' }}>DO'S</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {(profile?.goal === 'lose_fat' ? [
@@ -382,8 +416,8 @@ export default function Dashboard() {
               { icon: 'local_drink', tip: 'Stay hydrated — aim for 8 glasses daily' },
             ]).map((item, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <span className="material-symbols-outlined" style={{ fontSize: 18, color: '#65a30d', flexShrink: 0 }}>{item.icon}</span>
-                <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#45483d', lineHeight: 1.4 }}>{item.tip}</span>
+                <span className="material-symbols-outlined" style={{ fontSize: 18, color: 'var(--tb-accent-dark)', flexShrink: 0 }}>{item.icon}</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--tb-text-secondary)', lineHeight: 1.4 }}>{item.tip}</span>
               </div>
             ))}
           </div>
@@ -392,10 +426,10 @@ export default function Dashboard() {
         {/* Don'ts */}
         <div className="card" style={{ padding: '16px 18px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: 14, color: '#dc2626', fontVariationSettings: "'wght' 700" }}>close</span>
+            <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'var(--tb-error-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 14, color: 'var(--tb-error)', fontVariationSettings: "'wght' 700" }}>close</span>
             </div>
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#dc2626', letterSpacing: '0.03em', fontFamily: 'var(--font-display)' }}>DON'TS</span>
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--tb-error)', letterSpacing: '0.03em', fontFamily: 'var(--font-display)' }}>DON'TS</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {(profile?.goal === 'lose_fat' ? [
@@ -412,8 +446,8 @@ export default function Dashboard() {
               { icon: 'no_drinks', tip: 'Limit alcohol intake — it impairs recovery' },
             ]).map((item, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <span className="material-symbols-outlined" style={{ fontSize: 18, color: '#ef4444', flexShrink: 0 }}>{item.icon}</span>
-                <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#45483d', lineHeight: 1.4 }}>{item.tip}</span>
+                <span className="material-symbols-outlined" style={{ fontSize: 18, color: 'var(--tb-error)', flexShrink: 0 }}>{item.icon}</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--tb-text-secondary)', lineHeight: 1.4 }}>{item.tip}</span>
               </div>
             ))}
           </div>

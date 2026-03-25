@@ -153,7 +153,7 @@ export default function HealthConditions() {
                       <div className="flex items-center gap-2 mb-1.5">
                         <span className="text-base font-display font-bold text-foreground leading-tight">{tip.title}</span>
                       </div>
-                      <p className="text-sm leading-relaxed text-slate-600 font-medium">{tip.text}</p>
+                      <p className="text-sm leading-relaxed text-on-surface-variant font-medium">{tip.text}</p>
                     </div>
                   </div>
                 </div>

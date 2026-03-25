@@ -48,7 +48,7 @@ export default function Reminders() {
       }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', lineHeight: 1.1 }}>Reminders</h1>
-          <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#72796a', marginTop: 4 }}>
+          <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: 'var(--tb-text-secondary)', marginTop: 4 }}>
             {reminders.filter(r => r.enabled).length} active schedules
           </p>
         </div>
@@ -72,13 +72,13 @@ export default function Reminders() {
           display: 'flex', flexDirection: 'column', alignItems: 'center',
         }}>
           <div style={{
-            width: 72, height: 72, borderRadius: '50%', background: '#f0f0eb',
+            width: 72, height: 72, borderRadius: '50%', background: 'var(--tb-input-bg)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16,
           }}>
             <span className="material-symbols-outlined" style={{ fontSize: 32, color: '#c6c8b9', fontVariationSettings: "'FILL' 1" }}>notifications_off</span>
           </div>
-          <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1b1c18', fontFamily: 'var(--font-display)' }}>No reminders yet</p>
-          <p style={{ fontSize: '0.75rem', color: '#a1a79a', marginTop: 4 }}>Tap + to add your first reminder</p>
+          <p style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--tb-text)', fontFamily: 'var(--font-display)' }}>No reminders yet</p>
+          <p style={{ fontSize: '0.75rem', color: 'var(--tb-text-muted)', marginTop: 4 }}>Tap + to add your first reminder</p>
         </div>
       )}
 
@@ -95,7 +95,7 @@ export default function Reminders() {
             }}>
               <div style={{
                 width: 42, height: 42, borderRadius: 14,
-                background: rem.enabled ? cfg.bg : '#f0f0eb',
+                background: rem.enabled ? cfg.bg : 'var(--tb-input-bg)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
               }}>
                 <span className="material-symbols-outlined" style={{
@@ -106,11 +106,11 @@ export default function Reminders() {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{
                   fontWeight: 700, fontSize: '0.8125rem', fontFamily: 'var(--font-display)',
-                  color: '#1b1c18', textDecoration: !rem.enabled ? 'line-through' : 'none',
+                  color: 'var(--tb-text)', textDecoration: !rem.enabled ? 'line-through' : 'none',
                   overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                 }}>{rem.label || rem.type}</div>
                 <div style={{
-                  fontSize: '0.6875rem', color: '#72796a',
+                  fontSize: '0.6875rem', color: 'var(--tb-text-secondary)',
                   display: 'flex', alignItems: 'center', gap: 4, marginTop: 3,
                 }}>
                   <span className="material-symbols-outlined" style={{ fontSize: 12 }}>schedule</span>
@@ -123,7 +123,7 @@ export default function Reminders() {
                   onClick={() => toggleReminder(rem)}
                   style={{
                     width: 42, height: 24, borderRadius: 999, border: 'none', cursor: 'pointer',
-                    background: rem.enabled ? '#a3e635' : '#e9e9e4', position: 'relative',
+                    background: rem.enabled ? 'var(--tb-accent)' : 'var(--tb-input-bg)', position: 'relative',
                     transition: 'background 0.3s ease', flexShrink: 0,
                   }}
                 >
@@ -136,11 +136,11 @@ export default function Reminders() {
                 </button>
                 <button onClick={() => handleDelete(rem.id)} style={{
                   width: 28, height: 28, borderRadius: '50%', border: 'none',
-                  background: '#fee2e2', cursor: 'pointer',
+                  background: 'var(--tb-error-bg)', cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   flexShrink: 0,
                 }}>
-                  <span className="material-symbols-outlined" style={{ fontSize: 14, color: '#ef4444' }}>close</span>
+                  <span className="material-symbols-outlined" style={{ fontSize: 14, color: 'var(--tb-error)' }}>close</span>
                 </button>
               </div>
             </div>
@@ -161,27 +161,27 @@ export default function Reminders() {
           <div
             style={{
               width: '100%', maxWidth: 430,
-              background: '#fff', borderRadius: '28px 28px 0 0',
+              background: 'var(--tb-surface-elevated)', borderRadius: '28px 28px 0 0',
               padding: '20px 24px calc(80px + env(safe-area-inset-bottom, 16px))',
             }}
             onClick={(e) => e.stopPropagation()}
             className="animate-slideUp"
           >
-            <div style={{ width: 40, height: 4, background: '#e9e9e4', borderRadius: 999, margin: '0 auto 20px' }} />
-            <h2 style={{ fontSize: '1.125rem', fontWeight: 800, color: '#1b1c18', fontFamily: 'var(--font-display)', marginBottom: 20 }}>New Reminder</h2>
+            <div style={{ width: 40, height: 4, background: 'var(--tb-input-bg)', borderRadius: 999, margin: '0 auto 20px' }} />
+            <h2 style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--tb-text)', fontFamily: 'var(--font-display)', marginBottom: 20 }}>New Reminder</h2>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {/* Label */}
               <div>
-                <label style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#72796a', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: 8 }}>Label</label>
+                <label style={{ fontSize: '0.5625rem', fontWeight: 700, color: 'var(--tb-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: 8 }}>Label</label>
                 <input
                   type="text" value={newReminder.label}
                   onChange={(e) => setNewReminder({ ...newReminder, label: e.target.value })}
                   placeholder="e.g. Morning Hydration"
                   style={{
                     width: '100%', padding: '14px 16px', borderRadius: 14,
-                    border: 'none', background: '#f0f0eb', fontSize: '0.875rem',
-                    fontFamily: 'var(--font-display)', color: '#1b1c18', outline: 'none',
+                    border: 'none', background: 'var(--tb-input-bg)', fontSize: '0.875rem',
+                    fontFamily: 'var(--font-display)', color: 'var(--tb-text)', outline: 'none',
                     boxSizing: 'border-box',
                   }}
                 />
@@ -190,14 +190,14 @@ export default function Reminders() {
               {/* Type + Time row */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 <div>
-                  <label style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#72796a', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: 8 }}>Type</label>
+                  <label style={{ fontSize: '0.5625rem', fontWeight: 700, color: 'var(--tb-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: 8 }}>Type</label>
                   <select
                     value={newReminder.type}
                     onChange={(e) => setNewReminder({ ...newReminder, type: e.target.value })}
                     style={{
                       width: '100%', padding: '14px 12px', borderRadius: 14,
-                      border: 'none', background: '#f0f0eb', fontSize: '0.8125rem',
-                      fontFamily: 'var(--font-display)', color: '#1b1c18', outline: 'none',
+                      border: 'none', background: 'var(--tb-input-bg)', fontSize: '0.8125rem',
+                      fontFamily: 'var(--font-display)', color: 'var(--tb-text)', outline: 'none',
                       WebkitAppearance: 'none', appearance: 'none',
                       boxSizing: 'border-box',
                     }}
@@ -208,14 +208,14 @@ export default function Reminders() {
                   </select>
                 </div>
                 <div>
-                  <label style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#72796a', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: 8 }}>Time</label>
+                  <label style={{ fontSize: '0.5625rem', fontWeight: 700, color: 'var(--tb-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: 8 }}>Time</label>
                   <input
                     type="time" value={newReminder.time}
                     onChange={(e) => setNewReminder({ ...newReminder, time: e.target.value })}
                     style={{
                       width: '100%', padding: '14px 12px', borderRadius: 14,
-                      border: 'none', background: '#f0f0eb', fontSize: '0.8125rem',
-                      fontFamily: 'var(--font-display)', color: '#1b1c18', outline: 'none',
+                      border: 'none', background: 'var(--tb-input-bg)', fontSize: '0.8125rem',
+                      fontFamily: 'var(--font-display)', color: 'var(--tb-text)', outline: 'none',
                       boxSizing: 'border-box',
                     }}
                   />

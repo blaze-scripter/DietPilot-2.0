@@ -1,5 +1,5 @@
 {
-  "name": "dietpilot-root",
+  "name": "trackbite",
   "private": true,
   "scripts": {
     "build:web": "cd frontend && npm install && npm run build",

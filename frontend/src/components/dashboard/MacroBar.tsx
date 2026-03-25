@@ -26,7 +26,7 @@ const MacroBar = ({ label, current, goal, color, icon, unit = "g" }: MacroBarPro
         width: 52,
         fontSize: '0.75rem',
         fontWeight: 600,
-        color: '#1b1c18',
+        color: 'var(--tb-text)',
         fontFamily: 'var(--font-display)',
       }}>
         {label}
@@ -36,7 +36,7 @@ const MacroBar = ({ label, current, goal, color, icon, unit = "g" }: MacroBarPro
         flex: 1,
         height: 6,
         borderRadius: 100,
-        background: '#e9e9e4',
+        background: 'var(--tb-input-bg)',
         overflow: 'hidden',
       }}>
         <div style={{
@@ -54,7 +54,7 @@ const MacroBar = ({ label, current, goal, color, icon, unit = "g" }: MacroBarPro
         width: 64,
         fontSize: '0.6875rem',
         fontWeight: 500,
-        color: '#72796a',
+        color: 'var(--tb-text-secondary)',
         textAlign: 'right',
         fontVariantNumeric: 'tabular-nums',
       }}>

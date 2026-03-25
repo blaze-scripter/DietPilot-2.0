@@ -1,5 +1,5 @@
 /**
- * DietPilot 2.0 — API Service Layer
+ * Track Bite — API Service Layer
  *
  * - User data (profile, logs, weight, reminders) → IndexedDB via storage.ts
  * - Food search → Flask /api/food (USDA proxy)

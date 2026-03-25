@@ -132,7 +132,7 @@ export default function Onboarding() {
         </div>
       </div>
       <h1 style={{ fontFamily: 'Plus Jakarta Sans', fontWeight: 800, fontSize: '2.75rem', lineHeight: 0.95, letterSpacing: '-0.04em', marginBottom: '1rem', color: '#1a1c1c' }}>
-        Your Personal<br /><span style={{ color: '#446900' }}>Diet Pilot.</span>
+        Your Personal<br /><span style={{ color: '#446900' }}>Track Bite.</span>
       </h1>
       <p style={{ color: '#5a5c5c', fontSize: '1rem', maxWidth: '300px', lineHeight: 1.6, marginBottom: '2.5rem' }}>
         High-performance nutrition tracking tailored for the modern lifestyle.

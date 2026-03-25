@@ -83,7 +83,7 @@ export default function Workouts() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
             <h1 style={{ fontSize: '1.5rem', lineHeight: 1.1 }}>Workouts</h1>
-            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#72796a', marginTop: 4 }}>
+            <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: 'var(--tb-text-secondary)', marginTop: 4 }}>
               {exercises.length} exercises · {conditions.length > 0 ? conditions.join(', ') : 'All conditions'}
             </p>
           </div>
@@ -100,27 +100,27 @@ export default function Workouts() {
 
       {/* ▸ Recommended for You ────────────────── */}
       <div className="anim-fade-up anim-delay-1" style={{ marginBottom: 22 }}>
-        <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18', marginBottom: 12 }}>
+        <h2 style={{ fontSize: '0.8125rem', color: 'var(--tb-text)', marginBottom: 12 }}>
           Recommended for You
         </h2>
         <div style={{ display: 'flex', gap: 10, overflowX: 'auto', margin: '0 -20px', padding: '0 20px 6px' }} className="scrollbar-hide">
           {suggestions.map((s, i) => (
             <div key={i} style={{
               flexShrink: 0, width: 140, padding: '16px 14px',
-              borderRadius: 20, border: '1px solid rgba(255,255,255,0.6)',
-              background: 'rgba(255,255,255,0.55)', backdropFilter: 'blur(30px)',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+              borderRadius: 20, border: 'var(--tb-border-card)',
+              background: 'var(--tb-surface)', backdropFilter: 'blur(30px)',
+              boxShadow: 'var(--tb-card-shadow)',
             }}>
               <div style={{
                 width: 36, height: 36, borderRadius: 12,
-                background: '#ecfccb',
+                background: 'var(--tb-accent-pill)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 marginBottom: 10,
               }}>
                 <span className="material-symbols-outlined" style={{ fontSize: 18, color: '#3d6a00', fontVariationSettings: "'FILL' 1" }}>{s.icon}</span>
               </div>
-              <div style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#1b1c18', fontFamily: 'var(--font-display)', marginBottom: 4 }}>{s.name}</div>
-              <div style={{ fontSize: '0.625rem', fontWeight: 500, color: '#72796a', lineHeight: 1.4 }}>{s.why}</div>
+              <div style={{ fontSize: '0.8125rem', fontWeight: 700, color: 'var(--tb-text)', fontFamily: 'var(--font-display)', marginBottom: 4 }}>{s.name}</div>
+              <div style={{ fontSize: '0.625rem', fontWeight: 500, color: 'var(--tb-text-secondary)', lineHeight: 1.4 }}>{s.why}</div>
             </div>
           ))}
         </div>
@@ -129,7 +129,7 @@ export default function Workouts() {
       {/* ▸ Search ─────────────────────────────── */}
       <div className="anim-fade-up anim-delay-2" style={{ position: 'relative', marginBottom: 14 }}>
         <span className="material-symbols-outlined" style={{
-          position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', fontSize: 18, color: '#72796a',
+          position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', fontSize: 18, color: 'var(--tb-text-secondary)',
         }}>search</span>
         <input
           type="text" value={search} onChange={(e) => setSearch(e.target.value)}
@@ -137,8 +137,8 @@ export default function Workouts() {
           style={{
             width: '100%', padding: '13px 40px 13px 44px',
             borderRadius: 100, border: '1px solid rgba(198,200,185,0.25)',
-            background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(8px)',
-            fontSize: '0.8125rem', fontFamily: 'var(--font-display)', color: '#1b1c18', outline: 'none',
+            background: 'var(--tb-surface)', backdropFilter: 'blur(8px)',
+            fontSize: '0.8125rem', fontFamily: 'var(--font-display)', color: 'var(--tb-text)', outline: 'none',
           }}
         />
         {search && (
@@ -146,7 +146,7 @@ export default function Workouts() {
             position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)',
             background: 'none', border: 'none', cursor: 'pointer', padding: 0,
           }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#72796a' }}>close</span>
+            <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'var(--tb-text-secondary)' }}>close</span>
           </button>
         )}
       </div>
@@ -162,8 +162,8 @@ export default function Workouts() {
             <button key={c} onClick={() => setCategory(c)} style={{
               flexShrink: 0, display: 'flex', alignItems: 'center', gap: 6,
               padding: isActive ? '7px 14px 7px 7px' : '8px 14px', borderRadius: 100, border: 'none',
-              background: isActive ? '#1b1c18' : 'rgba(255,255,255,0.6)',
-              color: isActive ? '#fff' : '#72796a',
+              background: isActive ? 'var(--tb-text)' : 'var(--tb-surface)',
+              color: isActive ? '#fff' : 'var(--tb-text-secondary)',
               fontSize: '0.6875rem', fontWeight: 700, fontFamily: 'var(--font-display)',
               boxShadow: isActive ? '0 4px 12px rgba(27,28,24,0.15)' : '0 1px 3px rgba(0,0,0,0.04)',
               cursor: 'pointer', transition: 'all 0.25s cubic-bezier(.22,1,.36,1)',
@@ -202,14 +202,14 @@ export default function Workouts() {
       {/* ▸ Exercise Cards ─────────────────────── */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10, paddingBottom: 24 }}>
         {loading ? (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '60px 0', color: '#72796a' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '60px 0', color: 'var(--tb-text-secondary)' }}>
             <span className="material-symbols-outlined animate-spin" style={{ fontSize: 28, marginBottom: 12 }}>progress_activity</span>
             <p style={{ fontSize: '0.8125rem', fontWeight: 500 }}>Loading exercises...</p>
           </div>
         ) : filtered.length === 0 ? (
           <div className="card" style={{ padding: '48px 20px', textAlign: 'center' }}>
             <span className="material-symbols-outlined" style={{ fontSize: 40, color: '#c6c8b9', marginBottom: 8, display: 'block', fontVariationSettings: "'wght' 200" }}>search_off</span>
-            <p style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#72796a' }}>No exercises found</p>
+            <p style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--tb-text-secondary)' }}>No exercises found</p>
             <button onClick={() => { setSearch(''); setCategory('All'); setDifficulty('All'); }} style={{
               marginTop: 12, fontSize: '0.75rem', fontWeight: 700, color: '#3d6a00',
               background: '#ecfccb', border: 'none', padding: '8px 20px', borderRadius: 100, cursor: 'pointer',
@@ -237,12 +237,12 @@ export default function Workouts() {
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{
-                      fontSize: '0.8125rem', fontWeight: 700, color: '#1b1c18', fontFamily: 'var(--font-display)',
+                      fontSize: '0.8125rem', fontWeight: 700, color: 'var(--tb-text)', fontFamily: 'var(--font-display)',
                       overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                     }}>{ex.name}</div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
-                      <span style={{ fontSize: '0.625rem', fontWeight: 500, color: '#72796a' }}>{ex.category}</span>
-                      <span style={{ width: 3, height: 3, borderRadius: '50%', background: '#c6c8b9' }} />
+                      <span style={{ fontSize: '0.625rem', fontWeight: 500, color: 'var(--tb-text-secondary)' }}>{ex.category}</span>
+                      <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--tb-text-muted)' }} />
                       <span style={{
                         fontSize: '0.5625rem', fontWeight: 700, padding: '2px 8px',
                         borderRadius: 100, background: diff.bg, color: diff.text, border: `1px solid ${diff.border}`,
@@ -251,12 +251,12 @@ export default function Workouts() {
                   </div>
                   <div style={{
                     width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
-                    background: isExp ? '#a3e635' : 'rgba(0,0,0,0.04)',
+                    background: isExp ? 'var(--tb-accent)' : 'var(--tb-input-bg)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     transition: 'all 0.25s ease',
                   }}>
                     <span className="material-symbols-outlined" style={{
-                      fontSize: 16, color: isExp ? '#3d6a00' : '#72796a',
+                      fontSize: 16, color: isExp ? '#3d6a00' : 'var(--tb-text-secondary)',
                       transform: isExp ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s ease',
                     }}>keyboard_arrow_down</span>
                   </div>
@@ -267,15 +267,15 @@ export default function Workouts() {
                   transition: 'max-height 0.35s ease, opacity 0.25s ease',
                 }}>
                   <div style={{ padding: '0 16px 16px' }}>
-                    <div style={{ background: '#f8f8f3', borderRadius: 14, padding: 14 }}>
+                    <div style={{ background: 'var(--tb-bg)', borderRadius: 14, padding: 14 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
                         <span className="material-symbols-outlined" style={{ fontSize: 14, color: '#3d6a00' }}>accessibility_new</span>
                         <span style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#3d6a00', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Target Muscles</span>
                       </div>
-                      <p style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#1b1c18', marginBottom: 10, paddingLeft: 20 }}>{ex.muscles}</p>
+                      <p style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--tb-text)', marginBottom: 10, paddingLeft: 20 }}>{ex.muscles}</p>
                       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6 }}>
-                        <span className="material-symbols-outlined" style={{ fontSize: 14, color: '#72796a', marginTop: 2 }}>info</span>
-                        <p style={{ fontSize: '0.75rem', lineHeight: 1.6, color: '#45483d' }}>{ex.description}</p>
+                        <span className="material-symbols-outlined" style={{ fontSize: 14, color: 'var(--tb-text-secondary)', marginTop: 2 }}>info</span>
+                        <p style={{ fontSize: '0.75rem', lineHeight: 1.6, color: 'var(--tb-text-secondary)' }}>{ex.description}</p>
                       </div>
                     </div>
                   </div>

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { ThemeProvider } from '@/lib/ThemeContext';
 import ReactDOM from 'react-dom/client';
 import './styles/index.css';
 import { profileApi, dailyLogApi } from '@/services/api';
@@ -83,16 +84,15 @@ function Router() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-surface">
-        <div className="text-center animate-scaleIn">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: 'var(--tb-bg)' }}>
+        <div style={{ textAlign: 'center' }}>
           <div
-            className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
-            style={{ background: 'linear-gradient(135deg, #a3e635, #84cc16)', boxShadow: '0 12px 40px rgba(163,230,53,0.35)' }}
+            style={{ width: 80, height: 80, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', background: 'var(--tb-accent-gradient)', boxShadow: '0 12px 40px rgba(163,230,53,0.35)' }}
           >
-            <span className="material-symbols-outlined text-white" style={{ fontSize: 40, fontVariationSettings: "'FILL' 1" }}>restaurant</span>
+            <span className="material-symbols-outlined" style={{ fontSize: 40, color: '#fff', fontVariationSettings: "'FILL' 1" }}>restaurant</span>
           </div>
-          <h1 className="text-2xl font-extrabold tracking-tight font-headline text-on-surface">Track Bite</h1>
-          <p className="text-sm mt-2 text-on-surface-variant">Loading your journey...</p>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.035em', color: 'var(--tb-text)' }}>Track Bite</h1>
+          <p style={{ fontSize: '0.875rem', marginTop: 8, color: 'var(--tb-text-secondary)' }}>Loading your journey...</p>
         </div>
       </div>
     );
@@ -122,8 +122,10 @@ function Router() {
 // ===== MOUNT =====
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AppProvider>
-      <Router />
-    </AppProvider>
+    <ThemeProvider>
+      <AppProvider>
+        <Router />
+      </AppProvider>
+    </ThemeProvider>
   </React.StrictMode>
 );

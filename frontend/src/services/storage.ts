@@ -1,5 +1,5 @@
 /**
- * DietPilot 2.0 — IndexedDB Storage Service
+ * Track Bite — IndexedDB Storage Service
  *
  * All user data lives here. The backend stores nothing.
  * Schema: profiles, daily_logs, weight_entries, reminders
@@ -190,7 +190,7 @@ async function getOrCreateLog(date: string, profileId = 1): Promise<any> {
       { id: uuid(), type: 'dinner', time: '', foods: [] },
     ],
     water_glasses: 0,
-    water_target: 8,
+    water_target: 15,
   };
   const wdb = await openDB();
   const wt = tx(wdb, 'daily_logs', 'readwrite').objectStore('daily_logs');
