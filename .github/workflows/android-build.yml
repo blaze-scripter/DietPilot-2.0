@@ -55,12 +55,3 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dietpilot-debug-apk
-          path: frontend/android/app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 14
-
-      - name: Publish APK to GitHub Releases
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: "v1.0.${{ github.run_number }}"
-          name: "DietPilot Release v1.0.${{ github.run_number }}"
-          files: frontend/android/app/build/outputs/apk/debug/app-debug.apk
