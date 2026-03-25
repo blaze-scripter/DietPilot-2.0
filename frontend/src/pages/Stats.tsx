@@ -105,9 +105,9 @@ export default function Stats() {
     <div className="page-shell" style={{ paddingTop: 24 }}>
 
       {/* ▸ Header ─────────────────────────────── */}
-      <header className="anim-fade-up" style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: '1.5rem' }}>Weekly Stats</h1>
-        <p style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--tb-text-secondary)', marginTop: 4 }}>{weekLabel}</p>
+      <header className="anim-fade-up" style={{ marginBottom: 28 }}>
+        <h1 style={{ fontSize: '1.375rem' }}>Weekly Stats</h1>
+        <p style={{ fontSize: '0.7rem', fontWeight: 500, color: 'var(--tb-text-secondary)', marginTop: 4 }}>{weekLabel}</p>
       </header>
 
       {/* ▸ Summary Cards ──────────────────────── */}

@@ -269,7 +269,7 @@ body {
 
 #root {
   width: 100%;
-  max-width: 430px;
+  max-width: 420px;
   min-height: 100dvh;
   background: var(--tb-bg-gradient);
   position: relative;
@@ -474,9 +474,34 @@ h1, h2, h3, h4, h5, h6 {
    ========================================== */
 .page-shell {
   min-height: 100dvh;
-  padding: 0 20px 120px 20px;
-  padding-top: max(env(safe-area-inset-top, 0px), 16px);
+  padding: 0 24px 120px 24px;
+  padding-top: max(calc(env(safe-area-inset-top, 0px) + 20px), 36px);
 }
+
+/* ===== SCROLL ARROWS ===== */
+.scroll-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: var(--tb-surface-solid);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+.scroll-arrow:hover {
+  background: var(--tb-surface-hover);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.scroll-arrow-left { left: 0; }
+.scroll-arrow-right { right: 0; }
 
 /* ==========================================
    ✦ ONBOARDING

@@ -79,10 +79,10 @@ export default function Workouts() {
     <div className="page-shell" style={{ paddingTop: 24 }}>
 
       {/* ▸ Header ─────────────────────────────── */}
-      <header className="anim-fade-up" style={{ marginBottom: 20 }}>
+      <header className="anim-fade-up" style={{ marginBottom: 28 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <h1 style={{ fontSize: '1.5rem', lineHeight: 1.1 }}>Workouts</h1>
+            <h1 style={{ fontSize: '1.375rem', lineHeight: 1.1 }}>Workouts</h1>
             <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: 'var(--tb-text-secondary)', marginTop: 4 }}>
               {exercises.length} exercises · {conditions.length > 0 ? conditions.join(', ') : 'All conditions'}
             </p>

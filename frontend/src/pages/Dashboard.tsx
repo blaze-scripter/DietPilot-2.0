@@ -149,21 +149,34 @@ export default function Dashboard() {
       {/* ▸ Header ──────────────────────────────── */}
       <header
         className="anim-fade-up"
-        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', paddingTop: 8, marginBottom: 24 }}
+        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 8, marginBottom: 28 }}
       >
         <div>
-          <p style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--tb-text-muted)', letterSpacing: '0.01em' }}>{today}</p>
-          <h1 style={{ fontSize: '1.5rem', marginTop: 4 }}>
+          <p style={{ fontSize: '0.7rem', fontWeight: 500, color: 'var(--tb-text-muted)', letterSpacing: '0.01em' }}>{today}</p>
+          <h1 style={{ fontSize: '1.375rem', marginTop: 4 }}>
             {getGreeting()}, {profile?.name || 'Guest'}{' '}
-            <span style={{ fontSize: '1.25rem' }}>👋</span>
+            <span style={{ fontSize: '1.125rem' }}>👋</span>
           </h1>
         </div>
+        <button
+          onClick={() => navigate('/profile')}
+          aria-label="Profile"
+          style={{
+            width: 38, height: 38, borderRadius: '50%', border: 'none', flexShrink: 0,
+            background: 'var(--tb-avatar-gradient)', color: '#fff',
+            fontWeight: 800, fontSize: '0.8rem', fontFamily: 'var(--font-display)',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 4px 16px rgba(101,163,13,0.25)',
+          }}
+        >
+          {profile?.name?.charAt(0)?.toUpperCase() || 'U'}
+        </button>
       </header>
 
       {/* ▸ Calorie Ring Card ───────────────────── */}
       <div
         className="card-elevated anim-scale-up"
-        style={{ padding: '28px 20px 24px', marginBottom: 16 }}
+        style={{ padding: '28px 20px 24px', marginBottom: 20 }}
       >
         <CalorieRing consumed={Math.round(totals.calories)} goal={Math.round(targets.calories)} />
       </div>
@@ -171,9 +184,9 @@ export default function Dashboard() {
       {/* ▸ Macros Card ─────────────────────────── */}
       <div
         className="card anim-fade-up anim-delay-1"
-        style={{ padding: '18px 20px', marginBottom: 16 }}
+        style={{ padding: '20px', marginBottom: 20 }}
       >
-        <h2 style={{ fontSize: '0.8125rem', marginBottom: 14 }}>Macros</h2>
+        <h2 style={{ fontSize: '0.8125rem', fontWeight: 700, marginBottom: 14 }}>Macros</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <MacroBar label="Protein" current={Math.round(totals.protein)} goal={Math.round(targets.protein)} color="var(--tb-protein)" />
           <MacroBar label="Carbs" current={Math.round(totals.carbs)} goal={Math.round(targets.carbs)} color="var(--tb-carbs)" />
@@ -184,7 +197,7 @@ export default function Dashboard() {
       {/* ▸ Hydration Card ──────────────────────── */}
       <div
         className="card-blue anim-fade-up anim-delay-2"
-        style={{ padding: '18px 20px', marginBottom: 16 }}
+        style={{ padding: '20px', marginBottom: 20 }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
           <div>
@@ -267,8 +280,8 @@ export default function Dashboard() {
       </div>
 
       {/* ▸ Today's Meals ───────────────────────── */}
-      <div className="anim-fade-up anim-delay-3" style={{ marginBottom: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+      <div className="anim-fade-up anim-delay-3" style={{ marginBottom: 28 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
           <h2 style={{ fontSize: '0.8125rem' }}>Today's Meals</h2>
           <span style={{ fontSize: '0.6875rem', fontWeight: 500, color: 'var(--tb-text-muted)' }}>{meals.length} logged</span>
         </div>
@@ -298,8 +311,8 @@ export default function Dashboard() {
       </div>
 
       {/* ▸ Quick Suggestions ─────────────────── */}
-      <div className="anim-fade-up anim-delay-4" style={{ marginBottom: 24 }}>
-        <h2 style={{ fontSize: '0.8125rem', marginBottom: 12 }}>Quick Suggestions</h2>
+      <div className="anim-fade-up anim-delay-4" style={{ marginBottom: 28 }}>
+        <h2 style={{ fontSize: '0.8125rem', marginBottom: 14 }}>Quick Suggestions</h2>
 
         {/* Meal suggestions */}
         <div style={{ marginBottom: 14 }}>

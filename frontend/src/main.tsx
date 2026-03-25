@@ -13,6 +13,8 @@ import Reminders from '@/pages/Reminders';
 import Profile from '@/pages/Profile';
 import HealthConditions from '@/pages/HealthConditions';
 
+import Logo from '@/components/ui/Logo';
+
 // ===== APP CONTEXT =====
 interface AppContextType {
   currentPath: string;
@@ -86,11 +88,7 @@ function Router() {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: 'var(--tb-bg)' }}>
         <div style={{ textAlign: 'center' }}>
-          <div
-            style={{ width: 80, height: 80, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', background: 'var(--tb-accent-gradient)', boxShadow: '0 12px 40px rgba(163,230,53,0.35)' }}
-          >
-            <span className="material-symbols-outlined" style={{ fontSize: 40, color: '#fff', fontVariationSettings: "'FILL' 1" }}>restaurant</span>
-          </div>
+          <Logo className="animate-float" style={{ width: 80, height: 80, margin: '0 auto 24px' }} />
           <h1 style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.035em', color: 'var(--tb-text)' }}>Track Bite</h1>
           <p style={{ fontSize: '0.875rem', marginTop: 8, color: 'var(--tb-text-secondary)' }}>Loading your journey...</p>
         </div>

@@ -19,6 +19,21 @@ export default function Meals() {
   const [dragTarget, setDragTarget] = useState<string | null>(null);
   const searchTimeout = useRef<any>(null);
 
+  // ── Tab scroll state ──
+  const tabScrollRef = useRef<HTMLDivElement>(null);
+  const [showTabLeft, setShowTabLeft] = useState(false);
+  const [showTabRight, setShowTabRight] = useState(true);
+  const checkTabScroll = useCallback(() => {
+    const el = tabScrollRef.current;
+    if (!el) return;
+    setShowTabLeft(el.scrollLeft > 8);
+    setShowTabRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 8);
+  }, []);
+  const scrollTabs = (dir: 'left' | 'right') => {
+    tabScrollRef.current?.scrollBy({ left: dir === 'left' ? -140 : 140, behavior: 'smooth' });
+    setTimeout(checkTabScroll, 300);
+  };
+
   // ── Touch drag state ──
   const touchState = useRef<{
     foodId: string; fromMeal: string; el: HTMLElement | null;
@@ -184,12 +199,12 @@ export default function Meals() {
     <div className="page-shell" style={{ paddingTop: 24 }}>
 
       {/* ▸ Header ─────────────────────────────── */}
-      <header className="anim-fade-up" style={{ marginBottom: 24 }}>
+      <header className="anim-fade-up" style={{ marginBottom: 28 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <h1 style={{ fontSize: '1.5rem' }}>Diet Log</h1>
+          <h1 style={{ fontSize: '1.375rem' }}>Diet Log</h1>
           <div style={{
             background: 'var(--tb-accent-pill)', color: 'var(--tb-accent-pill-text)', borderRadius: 100,
-            padding: '6px 16px', fontSize: '0.75rem', fontWeight: 700,
+            padding: '6px 16px', fontSize: '0.7rem', fontWeight: 700,
             fontFamily: 'var(--font-display)',
           }}>
             {Math.round(dayTotals)} kcal
@@ -198,14 +213,21 @@ export default function Meals() {
       </header>
 
       {/* ▸ Meal Type Tabs ─────────────────────── */}
-      <div
-        className="scroll-container anim-fade-up anim-delay-1"
-        style={{
-          display: 'flex', gap: 10, overflowX: 'auto',
-          margin: '0 -20px', padding: '0 20px 4px',
-          marginBottom: 20,
-        }}
-      >
+      <div className="anim-fade-up anim-delay-1" style={{ position: 'relative', marginBottom: 20 }}>
+        {showTabLeft && (
+          <button className="scroll-arrow scroll-arrow-left" onClick={() => scrollTabs('left')} aria-label="Scroll left">
+            <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'var(--tb-text-secondary)' }}>chevron_left</span>
+          </button>
+        )}
+        <div
+          ref={tabScrollRef}
+          className="scroll-container"
+          onScroll={checkTabScroll}
+          style={{
+            display: 'flex', gap: 10, overflowX: 'auto',
+            margin: '0 -20px', padding: '0 20px 4px',
+          }}
+        >
         {MEAL_TYPES.map((mt) => {
           const st = slotTotals(mt.value);
           const isSelected = selectedSlot === mt.value;
@@ -246,6 +268,12 @@ export default function Meals() {
             </button>
           );
         })}
+        </div>
+        {showTabRight && (
+          <button className="scroll-arrow scroll-arrow-right" onClick={() => scrollTabs('right')} aria-label="Scroll right">
+            <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'var(--tb-text-secondary)' }}>chevron_right</span>
+          </button>
+        )}
       </div>
 
       {/* ▸ Log Food Button ────────────────────── */}

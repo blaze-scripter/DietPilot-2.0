@@ -44,10 +44,10 @@ export default function Reminders() {
       {/* ▸ Header ─────────────────────────────── */}
       <header className="anim-fade-up" style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        marginBottom: 24,
+        marginBottom: 28,
       }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', lineHeight: 1.1 }}>Reminders</h1>
+          <h1 style={{ fontSize: '1.375rem', lineHeight: 1.1 }}>Reminders</h1>
           <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: 'var(--tb-text-secondary)', marginTop: 4 }}>
             {reminders.filter(r => r.enabled).length} active schedules
           </p>
