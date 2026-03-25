@@ -1,32 +1,30 @@
-# DietPilot 2.0 Task Plan
+# DietPilot 2.0 — B.L.A.S.T. Protocol Task Plan
 
-## Phase 1: Backend Foundation [COMPLETED]
-- [x] Initial FastAPI Scaffold
-- [x] Database Models (Profile, DailyLog, Meal, FoodEntry, Reminder, WeightEntry)
-- [x] Diet Engine (Mifflin-St Jeor)
-- [x] Bundled Data (Indian Foods, Exercises, Health Tips)
+## Phase 0 — UPDATE MEMORY FILES ✅
+- [x] Rewrite gemini.md with new constitution
+- [x] Update task_plan.md
+- [x] Update progress.md
 
-## Phase 2: Core API Routes [COMPLETED]
-- [x] Profile Management
-- [x] Daily Log & Meal Slots
-- [x] Food Search & Suggestions
-- [x] Weight & Reminders
+## Phase 2 — LINK (API Testing)
+- [ ] Create .env with placeholder API keys
+- [ ] Create tools/test_usda.py
+- [ ] Create tools/test_wger.py
+- [ ] Verify both APIs return 200 OK
 
-## Phase 3: Frontend Scaffold [COMPLETED]
-- [x] Vite + React + TS Setup
-- [x] Tailwind v4 + Design System
-- [x] AppContext & API Client
+## Phase 3 — ARCHITECT (Flask Backend)
+- [ ] Create backend/requirements.txt
+- [ ] Create backend/app.py (Flask proxy)
+- [ ] Delete old FastAPI backend files
+- [ ] Update Vite proxy to port 5000
+- [ ] Test endpoints
+- [ ] Push to GitHub
 
-## Phase 4: Page Implementations [COMPLETED]
-- [x] Onboarding Flow
-- [x] Dashboard (Cards, Progress, Water)
-- [x] Meal Logger & Search
-- [x] Stats & Trends
-- [x] Workouts & Exercises
-- [x] Reminders & Health
+## Phase 4 — STYLIZE (UI Redesign) — HALT before starting
+- [ ] Splash page
+- [ ] Onboarding wizard
+- [ ] Home/Dashboard
+- [ ] Stats, Workouts, Meals, Reminders, Profile
 
-## Phase 5: Deployment & Handover [IN PROGRESS]
-- [x] GitHub Initialization
-- [x] Source Code Push
-- [/] Project Memory Push
-- [ ] User Walkthrough
+## Phase 5 — TRIGGER (Push & Document)
+- [ ] Push frontend changes
+- [ ] Log completion in progress.md

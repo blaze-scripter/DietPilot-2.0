@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DietPilot - Onboarding Step 2</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Fonts: Plus Jakarta Sans & Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary-container": "#3d5e00",
+              "on-background": "#2d2f2f",
+              "error-container": "#f95630",
+              "on-surface": "#2d2f2f",
+              "surface-container-high": "#e1e3e3",
+              "on-secondary-fixed-variant": "#3f6600",
+              "inverse-on-surface": "#9c9d9d",
+              "tertiary": "#006947",
+              "primary-fixed-dim": "#aaee3d",
+              "on-tertiary-fixed-variant": "#006544",
+              "on-secondary-fixed": "#2a4700",
+              "error-dim": "#b92902",
+              "on-primary-fixed": "#304a00",
+              "on-error": "#ffefec",
+              "on-secondary-container": "#375b00",
+              "outline-variant": "#acadad",
+              "secondary-fixed-dim": "#9ee939",
+              "secondary": "#3f6600",
+              "primary-dim": "#395800",
+              "on-tertiary-container": "#005a3c",
+              "surface-tint": "#426500",
+              "outline": "#767777",
+              "secondary-dim": "#365900",
+              "on-surface-variant": "#5a5c5c",
+              "surface-dim": "#d3d5d5",
+              "tertiary-container": "#69f6b8",
+              "inverse-surface": "#0c0f0f",
+              "surface-bright": "#f6f6f6",
+              "inverse-primary": "#b8fd4b",
+              "primary": "#426500",
+              "on-secondary": "#daffa9",
+              "tertiary-fixed": "#69f6b8",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-dim": "#005c3d",
+              "surface-container": "#e7e8e8",
+              "surface-variant": "#dbdddd",
+              "surface-container-low": "#f0f1f1",
+              "surface-container-highest": "#dbdddd",
+              "primary-container": "#b8fd4b",
+              "surface": "#f6f6f6",
+              "on-tertiary": "#c8ffe0",
+              "error": "#b02500",
+              "on-primary": "#dbffa3",
+              "on-primary-fixed-variant": "#456900",
+              "secondary-container": "#acf847",
+              "on-tertiary-fixed": "#00452d",
+              "primary-fixed": "#b8fd4b",
+              "secondary-fixed": "#acf847",
+              "background": "#f6f6f6",
+              "tertiary-fixed-dim": "#58e7ab",
+              "on-error-container": "#520c00"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-body text-on-background min-h-screen flex flex-col items-center">
+<!-- Progress Indicator -->
+<header class="w-full max-w-xl px-6 pt-12 pb-8">
+<div class="flex items-center justify-between mb-4">
+<span class="text-xs font-bold font-headline uppercase tracking-widest text-outline">Step 2 of 7</span>
+<span class="text-xs font-bold font-headline uppercase tracking-widest text-primary">Personal Basics</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-[28%] rounded-full transition-all duration-500"></div>
+</div>
+</header>
+<main class="w-full max-w-xl px-6 flex-grow flex flex-col">
+<!-- Headline Section -->
+<section class="mt-8 mb-12">
+<h1 class="text-5xl font-headline font-extrabold tracking-tighter text-on-background leading-tight">
+                Tell us about <br/><span class="text-primary-dim">yourself.</span>
+</h1>
+<p class="mt-4 text-on-surface-variant text-lg max-w-sm">
+                This helps us calibrate your daily energy needs with precision.
+            </p>
+</section>
+<!-- Form Section -->
+<div class="glass-card rounded-xl p-8 shadow-[0_20px_40px_rgba(45,47,47,0.06)] border border-white/20">
+<form class="space-y-8">
+<!-- Name Field -->
+<div class="space-y-2">
+<label class="block text-sm font-bold font-headline uppercase tracking-widest text-on-surface-variant ml-1" for="name">Full Name</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-4 text-lg focus:ring-2 focus:ring-primary-container transition-all placeholder:text-outline/50 text-on-surface shadow-sm" id="name" placeholder="How should we call you?" type="text"/>
+</div>
+<!-- Age & Gender Row -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-2">
+<label class="block text-sm font-bold font-headline uppercase tracking-widest text-on-surface-variant ml-1" for="age">Age</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-4 text-lg focus:ring-2 focus:ring-primary-container transition-all placeholder:text-outline/50 text-on-surface shadow-sm" id="age" placeholder="25" type="number"/>
+</div>
+<div class="space-y-2">
+<label class="block text-sm font-bold font-headline uppercase tracking-widest text-on-surface-variant ml-1">Gender</label>
+<div class="flex gap-2">
+<button class="flex-1 py-4 px-2 rounded-lg bg-secondary-container text-on-secondary-container font-bold text-sm transition-all hover:bg-primary-container active:scale-95" type="button">
+                                Male
+                            </button>
+<button class="flex-1 py-4 px-2 rounded-lg bg-surface-container-high text-on-surface-variant font-bold text-sm transition-all hover:bg-surface-variant active:scale-95" type="button">
+                                Female
+                            </button>
+</div>
+</div>
+</div>
+<!-- Subtle Tip -->
+<div class="flex items-start gap-3 p-4 bg-tertiary-container/20 rounded-lg">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'opsz' 20;">info</span>
+<p class="text-xs text-tertiary-dim leading-relaxed">
+                        Your data is encrypted and used only to calculate your Metabolic Rate.
+                    </p>
+</div>
+</form>
+</div>
+<!-- Spacer for footer button -->
+<div class="h-32"></div>
+</main>
+<!-- Fixed Bottom Action -->
+<footer class="fixed bottom-0 left-0 w-full p-6 bg-gradient-to-t from-background via-background/90 to-transparent flex justify-center">
+<div class="w-full max-w-xl">
+<button class="w-full bg-primary-container text-on-primary-container font-headline font-extrabold text-xl py-5 rounded-full shadow-[0_12px_24px_rgba(184,253,75,0.3)] transition-all hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
+                Continue
+                <span class="material-symbols-outlined" style="font-variation-settings: 'wght' 700;">arrow_forward</span>
+</button>
+</div>
+</footer>
+<!-- Decorative Element: Bio-Glass Shape -->
+<div class="fixed top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-primary-container/10 blur-[100px] -z-10"></div>
+<div class="fixed bottom-[5%] left-[-10%] w-[300px] h-[300px] rounded-full bg-tertiary-container/10 blur-[80px] -z-10"></div>
+</body></html>

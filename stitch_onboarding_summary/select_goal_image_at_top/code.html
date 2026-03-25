@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DietPilot - Goal Selection</title>
+<!-- Typography -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary-container": "#3d5e00",
+              "on-background": "#2d2f2f",
+              "error-container": "#f95630",
+              "on-surface": "#2d2f2f",
+              "surface-container-high": "#e1e3e3",
+              "on-secondary-fixed-variant": "#3f6600",
+              "inverse-on-surface": "#9c9d9d",
+              "tertiary": "#006947",
+              "primary-fixed-dim": "#aaee3d",
+              "on-tertiary-fixed-variant": "#006544",
+              "on-secondary-fixed": "#2a4700",
+              "error-dim": "#b92902",
+              "on-primary-fixed": "#304a00",
+              "on-error": "#ffefec",
+              "on-secondary-container": "#375b00",
+              "outline-variant": "#acadad",
+              "secondary-fixed-dim": "#9ee939",
+              "secondary": "#3f6600",
+              "primary-dim": "#395800",
+              "on-tertiary-container": "#005a3c",
+              "surface-tint": "#426500",
+              "outline": "#767777",
+              "secondary-dim": "#365900",
+              "on-surface-variant": "#5a5c5c",
+              "surface-dim": "#d3d5d5",
+              "tertiary-container": "#69f6b8",
+              "inverse-surface": "#0c0f0f",
+              "surface-bright": "#f6f6f6",
+              "inverse-primary": "#b8fd4b",
+              "primary": "#426500",
+              "on-secondary": "#daffa9",
+              "tertiary-fixed": "#69f6b8",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-dim": "#005c3d",
+              "surface-container": "#e7e8e8",
+              "surface-variant": "#dbdddd",
+              "surface-container-low": "#f0f1f1",
+              "surface-container-highest": "#dbdddd",
+              "primary-container": "#b8fd4b",
+              "surface": "#f6f6f6",
+              "on-tertiary": "#c8ffe0",
+              "error": "#b02500",
+              "on-primary": "#dbffa3",
+              "on-primary-fixed-variant": "#456900",
+              "secondary-container": "#acf847",
+              "on-tertiary-fixed": "#00452d",
+              "primary-fixed": "#b8fd4b",
+              "secondary-fixed": "#acf847",
+              "background": "#f6f6f6",
+              "tertiary-fixed-dim": "#58e7ab",
+              "on-error-container": "#520c00"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .selected-glow {
+            box-shadow: 0 0 25px rgba(184, 253, 75, 0.4);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased min-h-screen flex flex-col">
+<!-- Header Section (Implicit TopAppBar Structure based on JSON Brand Identity) -->
+<header class="fixed top-0 w-full z-50 bg-white/60 backdrop-blur-xl flex items-center justify-between px-6 py-6 w-full">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="chevron_left">chevron_left</span>
+<span class="font-headline font-extrabold tracking-tighter text-xl text-zinc-900">Step 5/7</span>
+</div>
+<div class="font-headline font-black tracking-tighter text-2xl text-zinc-900">DietPilot</div>
+<div class="w-10"></div> <!-- Spacer for balance -->
+</header>
+<main class="flex-1 flex flex-col px-6 pt-32 pb-40 max-w-2xl mx-auto w-full">
+<!-- Progress Bar -->
+<div class="w-full h-1.5 bg-surface-container-highest/40 rounded-full mb-12 overflow-hidden">
+<div class="h-full w-[71.4%] bg-gradient-to-r from-primary to-primary-container rounded-full"></div>
+</div>
+<!-- Headline -->
+<h1 class="font-headline text-4xl font-extrabold tracking-tight text-zinc-900 mb-4 text-center">
+            What is your primary goal?
+        </h1>
+<p class="text-on-surface-variant text-center mb-10 font-medium">
+            We'll tailor your daily macro targets based on this choice.
+        </p><div class="mt-4 mb-10 rounded-lg overflow-hidden h-48 relative shadow-lg">
+<img alt="Healthy vibrant food" class="w-full h-full object-cover" data-alt="Close-up of fresh colorful salad bowl with avocado and quinoa on a white textured background in bright natural daylight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADoZWOCL2Rjd8iWHyJ_382zF5L9bnxFKDdHEhAoy4p0fOx-eFPDX2kISwvWYTB_F9tS4vSHrHDS2NmFk6GFk0UAS90EfPgIjrzhrtF68MEJWf4m64jhhFIpf2H4RikRyqeeyF6S3pJE6txytmKVf26s1KUR06PYpR4dbtliVkMS1X9FlDm7mr_vM-KWie95wEuE3e2bAEZxSZC-WWjpXAOKI4l0R7LRl-twPKFSnBVYAUbZBef5FXOKALlTGzLUEcntSxUOtgEVpI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-zinc-900/40 to-transparent"></div>
+<div class="absolute bottom-4 left-6 right-6">
+<p class="text-white font-headline font-bold text-sm tracking-wide">"Fuel your ambition with precision."</p>
+</div>
+</div>
+<!-- Selection Grid -->
+<div class="grid grid-cols-1 gap-6">
+<!-- Option 1 (Lose Fat) -->
+<button class="glass-card group flex items-center p-6 rounded-lg border-2 border-transparent hover:border-primary-container transition-all duration-300 text-left relative overflow-hidden">
+<div class="w-16 h-16 rounded-2xl bg-primary-container/20 flex items-center justify-center mr-6 group-hover:bg-primary-container/40 transition-colors">
+<span class="material-symbols-outlined text-on-primary-container text-3xl" data-icon="trending_down">trending_down</span>
+</div>
+<div class="flex-1">
+<h3 class="font-headline font-bold text-xl text-zinc-900">Lose Fat</h3>
+<p class="text-sm text-on-surface-variant font-medium">Caloric deficit focused on lean body mass.</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Option 2 (Maintain - Selected State Demo) -->
+<button class="glass-card flex items-center p-6 rounded-lg border-2 border-primary-container bg-white/80 selected-glow transition-all duration-300 text-left relative overflow-hidden">
+<div class="absolute top-0 right-0 p-3">
+<div class="bg-primary-container rounded-full p-1 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container text-xs font-bold" data-icon="check" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+<div class="w-16 h-16 rounded-2xl bg-primary-container flex items-center justify-center mr-6">
+<span class="material-symbols-outlined text-on-primary-container text-3xl" data-icon="balance" style="font-variation-settings: 'FILL' 1;">balance</span>
+</div>
+<div class="flex-1">
+<h3 class="font-headline font-bold text-xl text-zinc-900">Maintain</h3>
+<p class="text-sm text-on-surface-variant font-medium">Equilibrium nutrition for long-term health.</p>
+</div>
+<span class="material-symbols-outlined text-primary" data-icon="radio_button_checked">radio_button_checked</span>
+</button>
+<!-- Option 3 (Bulk Up) -->
+<button class="glass-card group flex items-center p-6 rounded-lg border-2 border-transparent hover:border-primary-container transition-all duration-300 text-left relative overflow-hidden">
+<div class="w-16 h-16 rounded-2xl bg-primary-container/20 flex items-center justify-center mr-6 group-hover:bg-primary-container/40 transition-colors">
+<span class="material-symbols-outlined text-on-primary-container text-3xl" data-icon="fitness_center">fitness_center</span>
+</div>
+<div class="flex-1">
+<h3 class="font-headline font-bold text-xl text-zinc-900">Bulk Up</h3>
+<p class="text-sm text-on-surface-variant font-medium">Caloric surplus for muscle hypertrophy.</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<!-- Nutritional Photo Context (Editorial Touch) -->
+</main>
+<!-- Bottom Actions -->
+<footer class="fixed bottom-0 w-full bg-white/70 backdrop-blur-2xl px-6 pb-10 pt-6 flex flex-col gap-4">
+<button class="w-full bg-primary-container text-on-primary-container font-headline font-extrabold py-5 rounded-full text-lg shadow-[0_8px_30px_rgb(184,253,75,0.3)] hover:bg-primary-fixed-dim transition-all active:scale-95">
+            Continue
+        </button>
+<p class="text-center text-xs text-on-surface-variant font-bold uppercase tracking-widest">
+            You can change this anytime in settings
+        </p>
+</footer>
+<!-- No SideNav or BottomNavBar rendered as per "Destination Rule" (Transactional Onboarding Screen) -->
+</body></html>

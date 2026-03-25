@@ -1,18 +1,12 @@
-# DietPilot Rebuild Progress
+# DietPilot 2.0 — Progress Log
 
-## Current Status: Successfully Pushed to GitHub
-The full-stack rebuild is complete. All source code for the FastAPI backend and React frontend has been pushed to the `blaze-scripter/DietPilot-2.0` repository.
+## 2026-03-25
 
-## Done
-- Full Backend implementation with SQLite persistence.
-- Complete Frontend implementation with 8 functional pages.
-- Mobile-first, glassmorphism design system in Tailwind v4.
-- GitHub repository initialized and populated.
-
-## Errors Encountered
-- Token limit during large push: Resolved by splitting files into smaller batches.
-- Docker offline: Resolved by user (retried).
-
-## Next
-- Finalize documentation.
-- Project handover.
+### Phase 0 — UPDATE MEMORY FILES ✅
+- Rewrote `gemini.md` with new constitution:
+  - Stack: Flask (stateless proxy) + React + Vite + Tailwind v4
+  - Data: IndexedDB only (no SQLite, no cloud)
+  - APIs: USDA FoodData Central + Wger Exercise
+  - Design System: Plus Jakarta Sans, Material Symbols, full color token table
+- Updated `task_plan.md` with B.L.A.S.T. protocol phases
+- Updated `progress.md`
