@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { useApp } from '@/main';
 import { foodsApi, dailyLogApi } from '@/services/api';
 
-
-
 const MEAL_TYPES = [
   { value: 'breakfast', label: 'Breakfast', icon: 'bakery_dining', color: '#fef3c7' },
   { value: 'lunch', label: 'Lunch', icon: 'lunch_dining', color: '#e0f2fe' },
@@ -21,18 +19,20 @@ export default function Meals() {
   const [dragTarget, setDragTarget] = useState<string | null>(null);
   const searchTimeout = useRef<any>(null);
 
-  const getMealFoods = (type: string) => {
-    return dailyLog?.meals?.find((m: any) => m.type === type)?.foods || [];
-  };
+  const getMealFoods = (type: string) =>
+    dailyLog?.meals?.find((m: any) => m.type === type)?.foods || [];
 
   const slotTotals = (type: string) => {
     const fds = getMealFoods(type);
-    return fds.reduce((acc: any, f: any) => ({
-      calories: acc.calories + (f.calories || 0),
-      protein: acc.protein + (f.protein_g || 0),
-      carbs: acc.carbs + (f.carbs_g || 0),
-      fat: acc.fat + (f.fat_g || 0)
-    }), { calories: 0, protein: 0, carbs: 0, fat: 0 });
+    return fds.reduce(
+      (acc: any, f: any) => ({
+        calories: acc.calories + (f.calories || 0),
+        protein: acc.protein + (f.protein_g || 0),
+        carbs: acc.carbs + (f.carbs_g || 0),
+        fat: acc.fat + (f.fat_g || 0),
+      }),
+      { calories: 0, protein: 0, carbs: 0, fat: 0 }
+    );
   };
 
   const handleDragStart = (e: React.DragEvent, foodId: string, fromMeal: string) => {
@@ -40,40 +40,28 @@ export default function Meals() {
     e.dataTransfer.setData('fromMeal', fromMeal);
     (e.target as HTMLElement).classList.add('opacity-50');
   };
-
   const handleDragEnd = (e: React.DragEvent) => {
     (e.target as HTMLElement).classList.remove('opacity-50');
     setDragTarget(null);
   };
-
-  const handleDragOver = (e: React.DragEvent, targetMeal: string) => {
+  const handleDragOver = (e: React.DragEvent, target: string) => {
     e.preventDefault();
-    if (dragTarget !== targetMeal) setDragTarget(targetMeal);
+    if (dragTarget !== target) setDragTarget(target);
   };
-
   const handleDrop = async (e: React.DragEvent, targetMeal: string) => {
     e.preventDefault();
     setDragTarget(null);
     const foodId = e.dataTransfer.getData('foodId');
     const fromMeal = e.dataTransfer.getData('fromMeal');
-    
     if (fromMeal === targetMeal || !foodId) return;
-    
     const meal = dailyLog?.meals?.find((m: any) => m.type === fromMeal);
     const food = meal?.foods?.find((f: any) => f.id === foodId);
     if (!food) return;
-
     try {
       const dateStr = new Date().toISOString().split('T')[0];
       await dailyLogApi.removeFood(dateStr, fromMeal, foodId);
-      
-      const newFood = { ...food };
-      delete newFood.id;
-      
-      await dailyLogApi.addFood(dateStr, {
-        meal_type: targetMeal,
-        food: newFood,
-      });
+      const { id: _id, ...newFood } = food;
+      await dailyLogApi.addFood(dateStr, { meal_type: targetMeal, food: newFood });
       await refreshLog();
     } catch { /* ignore */ }
   };
@@ -83,10 +71,8 @@ export default function Meals() {
     if (searchTimeout.current) clearTimeout(searchTimeout.current);
     setSearching(true);
     searchTimeout.current = setTimeout(async () => {
-      try {
-        const results = await foodsApi.search(searchQuery);
-        setSearchResults(results);
-      } catch { setSearchResults([]); }
+      try { setSearchResults(await foodsApi.search(searchQuery)); }
+      catch { setSearchResults([]); }
       finally { setSearching(false); }
     }, 300);
   }, [searchQuery]);
@@ -96,7 +82,6 @@ export default function Meals() {
       await dailyLogApi.addFood(new Date().toISOString().split('T')[0], {
         meal_type: selectedSlot,
         food: {
-          fdcId: food.fdcId,
           name: food.name,
           serving_size: food.servingSize || food.serving_size,
           serving_unit: food.servingUnit || food.serving_unit || 'g',
@@ -112,33 +97,39 @@ export default function Meals() {
     } catch { /* ignore */ }
   };
 
-  const handleRemoveFood = async (mealId: string, foodId: string) => {
+  const handleRemoveFood = async (mealType: string, foodId: string) => {
     try {
-      await dailyLogApi.removeFood(new Date().toISOString().split('T')[0], mealId, foodId);
+      await dailyLogApi.removeFood(new Date().toISOString().split('T')[0], mealType, foodId);
       await refreshLog();
     } catch { /* ignore */ }
   };
 
-
-  // Calculate day total
   const dayTotals = MEAL_TYPES.reduce((acc, mt) => acc + slotTotals(mt.value).calories, 0);
 
   return (
-    <div className="page-container relative">
-      <div className="absolute top-[-5%] right-[-10%] w-[300px] h-[300px] bg-primary-container/20 rounded-full blur-3xl pointer-events-none -z-10"></div>
-      
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8 pt-4 animate-slideUp">
-        <h1 className="text-3xl font-extrabold tracking-tight font-display text-foreground leading-none">
-          Diet Log
-        </h1>
-        <div className="badge badge-lime text-sm px-3 py-1.5 shadow-sm">
-          {Math.round(dayTotals)} kcal
+    <div className="page-container relative" style={{ paddingTop: 0 }}>
+      {/* Glassmorphic Header */}
+      <div
+        className="sticky top-0 z-30 px-4 pt-10 pb-4"
+        style={{
+          background: 'rgba(255,255,255,0.6)',
+          backdropFilter: 'blur(30px)',
+          WebkitBackdropFilter: 'blur(30px)',
+          borderBottom: '1px solid rgba(194,202,176,0.15)',
+          borderRadius: '0 0 2rem 2rem',
+          marginBottom: 16,
+        }}
+      >
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-extrabold tracking-tight font-headline text-on-surface leading-none">Diet Log</h1>
+          <div style={{ background: '#ecfccb', color: '#416400', borderRadius: 999, padding: '6px 14px', fontSize: '0.8rem', fontWeight: 700 }}>
+            {Math.round(dayTotals)} kcal
+          </div>
         </div>
       </div>
 
-      {/* Meal Slot Carousel/Tabs */}
-      <div className="flex gap-3 mb-8 overflow-x-auto pb-2 animate-slideUp" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      {/* Meal Slot Tabs */}
+      <div className="flex gap-3 mb-5 overflow-x-auto pb-2 px-4 animate-slideUp" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         {MEAL_TYPES.map((mt) => {
           const st = slotTotals(mt.value);
           const isSelected = selectedSlot === mt.value;
@@ -146,112 +137,113 @@ export default function Meals() {
             <button
               key={mt.value}
               onClick={() => setSelectedSlot(mt.value)}
-              className="flex-shrink-0 flex items-center gap-2 p-1.5 pr-4 rounded-full transition-all border shadow-sm"
+              className="flex-shrink-0 flex items-center gap-2 p-1.5 pr-4 rounded-full transition-all"
               style={{
-                background: isSelected ? 'var(--primary-container)' : 'var(--surface-container-low)',
-                borderColor: isSelected ? 'var(--primary)' : 'transparent',
+                background: isSelected ? '#ecfccb' : 'rgba(255,255,255,0.8)',
+                border: `1.5px solid ${isSelected ? '#a3e635' : 'rgba(194,202,176,0.3)'}`,
+                boxShadow: isSelected ? '0 4px 16px rgba(163,230,53,0.2)' : '0 2px 8px rgba(0,0,0,0.04)',
                 transform: isSelected ? 'scale(1.02)' : 'scale(1)',
               }}
             >
-              <div 
-                className="w-10 h-10 rounded-full flex items-center justify-center bg-white shadow-sm"
-                style={{ color: isSelected ? 'var(--primary)' : 'var(--muted)' }}
-              >
-                <span className="material-symbols-outlined" style={{ fontSize: 20, fontVariationSettings: isSelected ? "'FILL' 1" : "'FILL' 0" }}>{mt.icon}</span>
+              <div style={{ width: 40, height: 40, borderRadius: 999, background: isSelected ? '#a3e635' : 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#416400', fontVariationSettings: isSelected ? "'FILL' 1" : "'FILL' 0" }}>{mt.icon}</span>
               </div>
               <div className="text-left">
-                <div className="text-sm font-display font-bold" style={{ color: isSelected ? 'var(--on-primary-container)' : 'var(--foreground)' }}>
-                  {mt.label}
-                </div>
-                <div className="text-[10px] font-bold uppercase tracking-widest" style={{ color: isSelected ? 'var(--primary)' : 'var(--muted)' }}>
-                  {Math.round(st.calories)} kcal
-                </div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 700, fontFamily: 'Plus Jakarta Sans', color: isSelected ? '#416400' : '#1a1c1c' }}>{mt.label}</div>
+                <div style={{ fontSize: '0.6rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#5a5c5c' }}>{Math.round(st.calories)} kcal</div>
               </div>
             </button>
-
           );
         })}
       </div>
 
+      {/* Log Food Button */}
+      <div className="px-4 mb-5 animate-slideUp" style={{ animationDelay: '0.05s' }}>
+        <button
+          onClick={() => setShowSearch(true)}
+          className="w-full btn-primary flex items-center justify-center gap-2"
+          style={{ padding: '16px', fontSize: '1rem', borderRadius: '999px', boxShadow: '0 8px 24px rgba(163,230,53,0.35)' }}
+        >
+          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'wght' 700" }}>add</span>
+          Log {selectedSlot.charAt(0).toUpperCase() + selectedSlot.slice(1)}
+        </button>
+      </div>
 
-      {/* Add Food CTA */}
-      <button
-        onClick={() => setShowSearch(true)}
-        className="btn-primary w-full mb-8 flex items-center justify-center gap-2 py-4 animate-slideUp shadow-[0_8px_24px_rgba(163,230,53,0.3)] transition-transform hover:scale-[1.02] active:scale-95 text-lg"
-      >
-        <span className="material-symbols-outlined" style={{ fontVariationSettings: "'wght' 700" }}>add</span>
-        Log {selectedSlot.charAt(0).toUpperCase() + selectedSlot.slice(1)}
-      </button>
-
-      {/* Meal Slots Containers */}
-      <div className="space-y-6 stagger-children animate-slideUp">
+      {/* Meal Cards */}
+      <div className="px-4 space-y-4 stagger-children animate-slideUp" style={{ animationDelay: '0.1s' }}>
         {MEAL_TYPES.map((mt) => {
           const foods = getMealFoods(mt.value);
           const isSelected = selectedSlot === mt.value;
-          
           if (!isSelected && foods.length === 0) return null;
-
           return (
             <div
               key={mt.value}
-              className={`glass-card-stitch p-5 transition-colors ${dragTarget === mt.value ? 'drag-over' : ''}`}
-              style={{ 
-                borderRadius: 24,
-                border: isSelected ? '2px solid var(--primary-container)' : '1px solid var(--card-border)'
-              }}
               onDragOver={(e) => handleDragOver(e, mt.value)}
               onDragLeave={() => setDragTarget(null)}
               onDrop={(e) => handleDrop(e, mt.value)}
+              style={{
+                background: dragTarget === mt.value ? 'rgba(163,230,53,0.08)' : 'rgba(255,255,255,0.85)',
+                backdropFilter: 'blur(12px)',
+                borderRadius: '1.5rem', padding: '18px',
+                border: `${isSelected ? '2px solid #a3e635' : '1px solid rgba(194,202,176,0.2)'}`,
+                boxShadow: '0 4px 20px rgba(45,47,47,0.06)',
+                transition: 'all 0.25s ease',
+              }}
             >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: mt.color }}>
-                    <span className="material-symbols-outlined text-foreground" style={{ fontVariationSettings: "'FILL' 1" }}>{mt.icon}</span>
+                  <div style={{ width: 42, height: 42, borderRadius: '0.875rem', background: mt.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>{mt.icon}</span>
                   </div>
-                  <h3 className="text-base font-display font-bold capitalize">{mt.label}</h3>
+                  <span className="text-base font-headline font-bold text-on-surface capitalize">{mt.label}</span>
                 </div>
-                <span className="text-sm font-extrabold font-display">
-                  {Math.round(slotTotals(mt.value).calories)} <span className="text-[10px] font-bold uppercase tracking-widest text-muted">kcal</span>
+                <span className="text-sm font-extrabold font-headline text-on-surface">
+                  {Math.round(slotTotals(mt.value).calories)} <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">kcal</span>
                 </span>
               </div>
 
               {foods.length === 0 ? (
-                <div className="text-center py-6 border-2 border-dashed border-gray-200 rounded-2xl bg-white/50">
-                  <span className="material-symbols-outlined text-muted/50 mb-2" style={{ fontSize: 32 }}>restaurant_menu</span>
-                  <p className="text-xs font-bold text-muted uppercase tracking-widest">No foods logged</p>
+                <div className="text-center py-6 border-2 border-dashed rounded-2xl" style={{ borderColor: 'rgba(194,202,176,0.4)', background: '#f9f9f9' }}>
+                  <span className="material-symbols-outlined text-on-surface-variant mb-1" style={{ fontSize: 32, fontVariationSettings: "'FILL' 0, 'wght' 300" }}>restaurant_menu</span>
+                  <p className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">No foods logged</p>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   {foods.map((food: any, idx: number) => (
                     <div
                       key={food.id}
                       draggable
                       onDragStart={(e) => handleDragStart(e, food.id, mt.value)}
                       onDragEnd={handleDragEnd}
-                      className="group flex items-center gap-3 p-4 bg-white rounded-2xl shadow-sm border border-gray-100 cursor-grab active:cursor-grabbing hover:border-primary-container transition-all"
-                      style={{ animationDelay: `${idx * 0.05}s` }}
+                      className="group flex items-center gap-3 cursor-grab active:cursor-grabbing"
+                      style={{
+                        background: 'rgba(255,255,255,0.6)', borderRadius: '1rem',
+                        padding: '12px', border: '1px solid rgba(194,202,176,0.2)',
+                        animationDelay: `${idx * 0.05}s`, transition: 'all 0.2s ease',
+                      }}
                     >
-                      <span className="material-symbols-outlined text-muted-light cursor-grab hover:text-foreground transition-colors">drag_indicator</span>
-                      
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-display font-bold text-foreground truncate">{food.name}</div>
-                        <div className="text-xs text-muted font-medium mt-0.5 flex gap-3">
-                          <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>{food.protein_g}P</span>
-                          <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>{food.carbs_g}C</span>
-                          <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>{food.fat_g}F</span>
+                      <span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: 18 }}>drag_indicator</span>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div className="text-sm font-headline font-bold text-on-surface truncate">{food.name}</div>
+                        <div className="flex gap-3 mt-0.5">
+                          {[
+                            { color: '#ef4444', val: food.protein_g, label: 'P' },
+                            { color: '#3b82f6', val: food.carbs_g, label: 'C' },
+                            { color: '#f59e0b', val: food.fat_g, label: 'F' },
+                          ].map((m) => (
+                            <span key={m.label} className="flex items-center gap-0.5 text-[10px] font-bold text-on-surface-variant">
+                              <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: m.color }} />
+                              {m.val}{m.label}
+                            </span>
+                          ))}
                         </div>
                       </div>
-                      
                       <div className="text-right">
-                        <div className="text-sm font-extrabold font-display leading-none">{Math.round(food.calories)}</div>
-                        <div className="text-[9px] font-bold text-muted uppercase tracking-widest mt-1">{food.serving_size}{food.serving_unit}</div>
+                        <div className="text-sm font-extrabold font-headline text-on-surface">{Math.round(food.calories)}</div>
+                        <div className="text-[9px] font-bold text-on-surface-variant uppercase">{food.serving_size}{food.serving_unit}</div>
                       </div>
-
-                      <button 
-                        onClick={() => handleRemoveFood(mt.value, food.id)} 
-                        className="w-8 h-8 rounded-full flex items-center justify-center text-muted-light hover:bg-red-50 hover:text-red-500 transition-colors ml-1"
-                      >
-                        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>close</span>
+                      <button onClick={() => handleRemoveFood(mt.value, food.id)} style={{ width: 30, height: 30, borderRadius: '50%', border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 18, color: '#ef4444' }}>close</span>
                       </button>
                     </div>
                   ))}
@@ -262,85 +254,84 @@ export default function Meals() {
         })}
       </div>
 
-      {/* Fullscreen Search Modal */}
+      {/* Full-Screen Search Modal */}
       {showSearch && (
-        <div className="fixed inset-0 z-50 bg-background flex flex-col animate-slideUp">
-          <div className="px-6 pt-12 pb-4 bg-white shadow-sm flex items-center gap-4 border-b border-gray-100">
-            <button onClick={() => { setShowSearch(false); setSearchQuery(''); }} className="btn-icon shadow-none bg-surface-container-low hover:bg-surface-container-high">
-              <span className="material-symbols-outlined">arrow_back</span>
+        <div className="fixed inset-0 z-50 flex flex-col animate-slideUp" style={{ background: '#f9f9f9' }}>
+          {/* Search Header */}
+          <div className="px-4 pt-10 pb-3 flex items-center gap-3" style={{ background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(194,202,176,0.15)' }}>
+            <button onClick={() => { setShowSearch(false); setSearchQuery(''); }}
+              style={{ width: 44, height: 44, borderRadius: '0.875rem', background: '#f3f3f4', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+              <span className="material-symbols-outlined" style={{ color: '#1a1c1c' }}>arrow_back</span>
             </button>
             <div className="relative flex-1">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-muted">search</span>
+              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" style={{ fontSize: 20 }}>search</span>
               <input
-                type="text"
-                value={searchQuery}
+                type="text" value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search database..."
-                className="w-full pl-12 pr-4 py-3.5 rounded-full bg-surface-container-low border-none focus:ring-2 focus:ring-primary-container text-base font-medium transition-all"
+                placeholder={`Search for ${selectedSlot}...`}
+                style={{
+                  width: '100%', paddingLeft: 44, paddingRight: 16, paddingTop: 14, paddingBottom: 14,
+                  borderRadius: '999px', border: 'none', background: '#f3f3f4',
+                  fontSize: '0.95rem', fontFamily: 'Plus Jakarta Sans', color: '#1a1c1c', outline: 'none',
+                }}
                 autoFocus
               />
             </div>
-            {searchQuery && (
-              <button 
-                onClick={() => setSearchQuery('')}
-                className="absolute right-10 top-1/2 -translate-y-1/2 text-muted hover:text-foreground"
-              >
-                <span className="material-symbols-outlined" style={{ fontSize: 20 }}>cancel</span>
-              </button>
-            )}
           </div>
 
-          <div className="flex-1 overflow-y-auto p-6 bg-surface-container-lowest">
+          {/* Results */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {searching && (
-              <div className="flex flex-col items-center justify-center py-12 text-muted">
-                <span className="material-symbols-outlined animate-spin mb-4" style={{ fontSize: 32 }}>progress_activity</span>
-                <p className="font-display font-medium text-sm">Searching nutrition database...</p>
+              <div className="flex flex-col items-center justify-center py-16 text-on-surface-variant">
+                <span className="material-symbols-outlined animate-spin mb-3" style={{ fontSize: 32 }}>progress_activity</span>
+                <p className="text-sm font-medium">Searching USDA database...</p>
               </div>
             )}
-            
             {!searching && searchQuery && searchResults.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-16 text-muted-light">
-                <span className="material-symbols-outlined mb-4" style={{ fontSize: 48 }}>search_off</span>
-                <p className="font-display font-medium text-sm">No exact matches found.</p>
-                <p className="text-xs mt-1">Try searching for generic ingredients.</p>
+              <div className="flex flex-col items-center justify-center py-20 text-on-surface-variant">
+                <span className="material-symbols-outlined mb-3" style={{ fontSize: 48, fontVariationSettings: "'FILL' 0, 'wght' 200" }}>search_off</span>
+                <p className="text-sm font-medium">No results found</p>
+                <p className="text-xs mt-1 text-on-surface-variant/70">Try broader search terms</p>
               </div>
             )}
-
-            {!searching && searchQuery === '' && (
-              <div className="flex flex-col items-center justify-center py-16 text-muted-light/60">
-                <span className="material-symbols-outlined mb-4" style={{ fontSize: 64, fontVariationSettings: "'wght' 200" }}>restaurant</span>
-                <p className="font-display font-medium text-sm">Search over 40 bundled local foods</p>
+            {!searching && !searchQuery && (
+              <div className="flex flex-col items-center justify-center py-20 text-on-surface-variant/60">
+                <span className="material-symbols-outlined mb-3" style={{ fontSize: 64, fontVariationSettings: "'FILL' 0, 'wght' 200" }}>restaurant</span>
+                <p className="text-sm font-medium">Search over 300k+ USDA foods</p>
               </div>
             )}
-
-            <div className="space-y-3 stagger-children">
-
-              {searchResults.map((food) => (
-                <button
-                  key={food.fdcId}
-                  onClick={() => handleAddFood(food)}
-
-                  className="w-full flex items-center justify-between p-4 rounded-2xl bg-white border border-gray-100 hover:border-primary-container hover:shadow-[0_8px_24px_rgba(163,230,53,0.15)] transition-all text-left group"
-                >
-                  <div className="flex-1 min-w-0 pr-4">
-                    <div className="text-base font-display font-bold truncate text-foreground group-hover:text-primary-dark transition-colors">{food.name}</div>
-                    <div className="text-xs font-medium text-muted mt-1.5 flex flex-wrap gap-x-4 gap-y-1">
-                      <span className="font-bold text-foreground bg-surface-container-high px-2 py-0.5 rounded-md">{food.servingSize || food.serving_size}{food.servingUnit || food.serving_unit || 'g'}</span>
-                      <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>{food.protein || food.protein_g}g Pro</span>
-                      <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>{food.carbs || food.carbs_g}g Crb</span>
-                      <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>{food.fat || food.fat_g}g Fat</span>
-                    </div>
+            {searchResults.map((food) => (
+              <button
+                key={food.fdcId}
+                onClick={() => handleAddFood(food)}
+                className="w-full text-left group"
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  padding: '16px', borderRadius: '1.25rem',
+                  background: 'rgba(255,255,255,0.9)', border: '1px solid rgba(194,202,176,0.2)',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.04)', cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                <div style={{ flex: 1, minWidth: 0, paddingRight: 12 }}>
+                  <div className="text-sm font-headline font-bold text-on-surface truncate">{food.name}</div>
+                  <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1.5">
+                    <span style={{ fontSize: '0.7rem', fontWeight: 700, background: '#f3f3f4', padding: '2px 8px', borderRadius: 6, color: '#1a1c1c' }}>
+                      {food.servingSize || food.serving_size}{food.servingUnit || food.serving_unit || 'g'}
+                    </span>
+                    <span style={{ fontSize: '0.7rem', color: '#ef4444', fontWeight: 700 }}>{food.protein || food.protein_g}g P</span>
+                    <span style={{ fontSize: '0.7rem', color: '#3b82f6', fontWeight: 700 }}>{food.carbs || food.carbs_g}g C</span>
+                    <span style={{ fontSize: '0.7rem', color: '#f59e0b', fontWeight: 700 }}>{food.fat || food.fat_g}g F</span>
                   </div>
-                  <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                    <span className="text-lg font-display font-extrabold text-foreground">{Math.round(food.calories)} <span className="text-[10px] font-bold text-muted uppercase tracking-widest">kcal</span></span>
-                    <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all">
-                      <span className="material-symbols-outlined" style={{ fontSize: 20, fontVariationSettings: "'wght' 700" }}>add</span>
-                    </div>
-
+                </div>
+                <div className="flex flex-col items-end gap-2">
+                  <span className="text-base font-extrabold font-headline text-on-surface">{Math.round(food.calories)} <span className="text-[9px] text-on-surface-variant uppercase">kcal</span></span>
+                  <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#a3e635', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0, transform: 'scale(0.8)', transition: 'all 0.2s' }} className="group-hover:opacity-100 group-hover:scale-100">
+                    <span className="material-symbols-outlined" style={{ fontSize: 18, color: '#416400', fontVariationSettings: "'wght' 700" }}>add</span>
                   </div>
-                </button>
-              ))}
-            </div>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
       )}

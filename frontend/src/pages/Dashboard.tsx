@@ -1,28 +1,10 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useApp } from '@/main';
-import { dailyLogApi, healthApi } from '@/services/api';
-
-
+import { dailyLogApi } from '@/services/api';
 
 export default function Dashboard() {
   const { profile, dailyLog, refreshLog, navigate } = useApp();
-  const [healthTips, setHealthTips] = useState<any[]>([]);
   const [toast, setToast] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function loadTips() {
-      if (!profile?.health_conditions?.length) return;
-      try {
-        const allTips: any[] = [];
-        for (const c of profile.health_conditions) {
-          const tips = await healthApi.getTips(c);
-          if (tips) allTips.push(...tips);
-        }
-        setHealthTips(allTips.slice(0, 4));
-      } catch { /* ignore */ }
-    }
-    loadTips();
-  }, [profile]);
 
   const totals = useMemo(() => {
     if (!dailyLog?.meals) return { calories: 0, protein: 0, carbs: 0, fat: 0 };
@@ -63,108 +45,133 @@ export default function Dashboard() {
     } catch { /* ignore */ }
   };
 
-
   const showToast = (msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(null), 2000);
   };
 
-  // ===== CALORIE RING SVG =====
-  const ringSize = 140;
-  const ringStroke = 14;
+  // Calorie ring SVG
+  const ringSize = 148;
+  const ringStroke = 13;
   const ringRadius = (ringSize - ringStroke) / 2;
   const ringCirc = 2 * Math.PI * ringRadius;
   const ringOffset = ringCirc - (calPct / 100) * ringCirc;
 
   return (
-    <div className="page-container relative">
-      {/* Decorative Blob */}
-      <div className="absolute top-[-5%] right-[-10%] w-[300px] h-[300px] bg-primary-container/20 rounded-full blur-3xl pointer-events-none -z-10"></div>
-      <div className="absolute top-[20%] left-[-10%] w-[200px] h-[200px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
-
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8 pt-4 animate-slideUp">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-widest text-muted mb-1 font-display">
-            {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
-          </p>
-          <h1 className="text-3xl font-extrabold tracking-tight font-display text-foreground leading-none">
-            Hi, {profile?.name?.split(' ')[0] || 'Pilot'} 👋
-          </h1>
-        </div>
-        <div className="w-12 h-12 rounded-full bg-surface-container-high border-2 border-white shadow-sm overflow-hidden flex items-center justify-center cursor-pointer hover:scale-105 transition-transform" onClick={() => navigate('/profile')}>
-          <span className="material-symbols-outlined text-muted" style={{ fontSize: 28 }}>person</span>
+    <div className="page-container relative" style={{ paddingTop: 0 }}>
+      {/* Glassmorphic Header */}
+      <div
+        className="sticky top-0 z-30 px-4 pt-10 pb-4 mb-4"
+        style={{
+          background: 'rgba(255,255,255,0.6)',
+          backdropFilter: 'blur(30px)',
+          WebkitBackdropFilter: 'blur(30px)',
+          borderBottom: '1px solid rgba(194,202,176,0.15)',
+          borderRadius: '0 0 2rem 2rem',
+        }}
+      >
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant mb-0.5">
+              {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
+            </p>
+            <h1 className="text-2xl font-extrabold tracking-tight font-headline text-on-surface leading-none">
+              Hi, {profile?.name?.split(' ')[0] || 'Pilot'} 👋
+            </h1>
+          </div>
+          {/* Search bar */}
+          <div
+            className="flex items-center gap-2 px-4 py-2.5 cursor-pointer"
+            onClick={() => navigate('/meals')}
+            style={{
+              background: 'rgba(255,255,255,0.4)',
+              backdropFilter: 'blur(12px)',
+              borderRadius: '999px',
+              border: '1px solid rgba(194,202,176,0.2)',
+            }}
+          >
+            <span className="material-symbols-outlined text-on-surface-variant" style={{ fontSize: 20 }}>search</span>
+            <span className="text-sm font-medium text-on-surface-variant">Log food</span>
+          </div>
         </div>
       </div>
 
       {/* Calorie Ring Card */}
-      <div className="glass-card-stitch p-6 mb-6 animate-slideUp" style={{ animationDelay: '0.05s', borderRadius: 24 }}>
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="font-display font-bold text-lg">Daily Summary</h2>
-          <div className="badge badge-lime">{profile?.goal?.replace('_', ' ') || 'Goal'}</div>
-        </div>
-        
-        <div className="flex items-center gap-6 mt-4">
-          <div className="relative flex-shrink-0 animate-scaleIn">
-            <svg width={ringSize} height={ringSize} style={{ filter: 'drop-shadow(0px 4px 8px rgba(163, 230, 53, 0.3))' }}>
-              <circle cx={ringSize / 2} cy={ringSize / 2} r={ringRadius} fill="none" stroke="var(--surface-container)" strokeWidth={ringStroke} />
-              <circle
-                cx={ringSize / 2} cy={ringSize / 2} r={ringRadius} fill="none"
-                stroke="url(#calGrad)" strokeWidth={ringStroke} strokeLinecap="round"
-                strokeDasharray={ringCirc} strokeDashoffset={ringOffset}
-                transform={`rotate(-90 ${ringSize / 2} ${ringSize / 2})`}
-                style={{ transition: 'stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1)' }}
-              />
-              <defs>
-                <linearGradient id="calGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="var(--primary-container)" />
-                  <stop offset="100%" stopColor="var(--primary)" />
-                </linearGradient>
-              </defs>
-            </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-2xl font-display font-extrabold text-foreground">{Math.round(totals.calories)}</span>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted mt-1">/ {targets.calories} kcal</span>
+      <div className="mx-4 mb-5 animate-slideUp">
+        <div
+          className="p-5"
+          style={{
+            background: 'rgba(255,255,255,0.7)',
+            backdropFilter: 'blur(20px)',
+            borderRadius: '2rem',
+            boxShadow: '0 30px 60px -12px rgba(45,47,47,0.08)',
+          }}
+        >
+          <div className="flex items-center justify-between mb-1">
+            <h2 className="font-headline font-bold text-lg text-on-surface">Daily Summary</h2>
+            <div
+              className="px-3 py-1 text-xs font-bold uppercase tracking-wider"
+              style={{ background: '#ecfccb', color: '#416400', borderRadius: '999px' }}
+            >
+              {profile?.goal?.replace('_', ' ') || 'Goal'}
             </div>
           </div>
 
-          <div className="flex-1 space-y-4">
-            {[
-              { label: 'Protein', value: totals.protein, target: targets.protein, unit: 'g', color: '#ef4444', bg: '#fee2e2' },
-              { label: 'Carbs', value: totals.carbs, target: targets.carbs, unit: 'g', color: '#3b82f6', bg: '#dbeafe' },
-              { label: 'Fat', value: totals.fat, target: targets.fat, unit: 'g', color: '#f59e0b', bg: '#fef3c7' },
-            ].map((m) => (
-              <div key={m.label}>
-                <div className="flex justify-between text-xs font-bold font-display mb-1.5">
-                  <span>{m.label}</span>
-                  <span className="text-muted">{Math.round(m.value)} <span className="text-[9px] font-medium uppercase tracking-wider">/ {m.target}{m.unit}</span></span>
-                </div>
-                <div className="h-2.5 rounded-full overflow-hidden" style={{ background: m.bg }}>
-                  <div
-                    className="h-full rounded-full transition-all duration-1000 ease-out"
-                    style={{
-                      width: `${Math.min((m.value / m.target) * 100, 100)}%`,
-                      background: m.color,
-                      boxShadow: `0 0 8px ${m.color}80`
-                    }}
-                  />
-                </div>
+          <div className="flex items-center gap-5 mt-4">
+            {/* SVG Ring */}
+            <div className="relative flex-shrink-0 animate-scaleIn">
+              <svg width={ringSize} height={ringSize} style={{ filter: 'drop-shadow(0px 4px 12px rgba(163, 230, 53, 0.25))' }}>
+                <circle cx={ringSize / 2} cy={ringSize / 2} r={ringRadius} fill="none" stroke="#eeeeee" strokeWidth={ringStroke} />
+                <circle
+                  cx={ringSize / 2} cy={ringSize / 2} r={ringRadius} fill="none"
+                  stroke="url(#calGrad2)" strokeWidth={ringStroke} strokeLinecap="round"
+                  strokeDasharray={ringCirc} strokeDashoffset={ringOffset}
+                  transform={`rotate(-90 ${ringSize / 2} ${ringSize / 2})`}
+                  style={{ transition: 'stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1)' }}
+                />
+                <defs>
+                  <linearGradient id="calGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#a3e635" />
+                    <stop offset="100%" stopColor="#446900" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-2xl font-extrabold font-headline text-on-surface">{Math.round(totals.calories)}</span>
+                <span className="text-[9px] font-bold uppercase tracking-wider text-on-surface-variant mt-0.5">/ {targets.calories} kcal</span>
               </div>
-            ))}
+            </div>
+
+            {/* Macro bars */}
+            <div className="flex-1 space-y-3.5">
+              {[
+                { label: 'Protein', value: totals.protein, target: targets.protein, unit: 'g', color: '#ef4444', bg: '#fee2e2' },
+                { label: 'Carbs', value: totals.carbs, target: targets.carbs, unit: 'g', color: '#3b82f6', bg: '#dbeafe' },
+                { label: 'Fat', value: totals.fat, target: targets.fat, unit: 'g', color: '#f59e0b', bg: '#fef3c7' },
+              ].map((m) => (
+                <div key={m.label}>
+                  <div className="flex justify-between text-xs font-bold mb-1">
+                    <span className="text-on-surface">{m.label}</span>
+                    <span className="text-on-surface-variant">{Math.round(m.value)}<span className="text-[9px] font-medium ml-0.5">/ {m.target}{m.unit}</span></span>
+                  </div>
+                  <div className="h-2 rounded-full overflow-hidden" style={{ background: m.bg }}>
+                    <div
+                      className="h-full rounded-full transition-all duration-1000 ease-out"
+                      style={{ width: `${Math.min((m.value / m.target) * 100, 100)}%`, background: m.color }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-
-
       {/* Today's Meals */}
-      <div className="mb-6 animate-slideUp stagger-children" style={{ animationDelay: '0.1s' }}>
-        <div className="flex items-center justify-between mb-4 px-1">
-          <h2 className="text-lg font-display font-bold">Today's Meals</h2>
-          <button
-            onClick={() => navigate('/meals')}
-            className="text-xs font-bold flex items-center gap-1 text-primary cursor-pointer hover:underline"
-          >
+      <div className="px-4 mb-5 animate-slideUp" style={{ animationDelay: '0.08s' }}>
+        <div className="flex items-center justify-between mb-3 px-1">
+          <h2 className="text-base font-headline font-bold text-on-surface">Today's Meals</h2>
+          <button onClick={() => navigate('/meals')} className="text-xs font-bold flex items-center gap-0.5 text-primary">
             Log Food <span className="material-symbols-outlined" style={{ fontSize: 16 }}>chevron_right</span>
           </button>
         </div>
@@ -176,45 +183,58 @@ export default function Dashboard() {
               <button
                 key={slot}
                 onClick={() => navigate('/meals', { state: { selectedMealType: slot } })}
-                className="glass-card p-4 text-left border border-white/40 hover:scale-[1.02] active:scale-95 transition-all"
-                style={{ borderRadius: 20 }}
+                className="text-left hover:scale-[1.02] active:scale-95 transition-all"
+                style={{
+                  background: 'rgba(255,255,255,0.8)',
+                  backdropFilter: 'blur(12px)',
+                  borderRadius: '1.25rem',
+                  padding: '1rem',
+                  boxShadow: '0 4px 16px rgba(45,47,47,0.06)',
+                  border: '1px solid rgba(194,202,176,0.15)',
+                }}
               >
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex items-center gap-2.5 mb-2.5">
                   <div style={{ width: 36, height: 36, borderRadius: 12, background: mealColors[slot] }} className="flex items-center justify-center">
-                    <span className="material-symbols-outlined" style={{ color: 'var(--foreground)', fontVariationSettings: "'FILL' 1" }}>{mealIcons[slot]}</span>
+                    <span className="material-symbols-outlined" style={{ color: '#1a1c1c', fontVariationSettings: "'FILL' 1", fontSize: 20 }}>{mealIcons[slot]}</span>
                   </div>
-                  <span className="text-sm font-display font-bold capitalize leading-tight">{slot}</span>
+                  <span className="text-sm font-headline font-bold capitalize text-on-surface">{slot}</span>
                 </div>
-                <div className="text-xl font-display font-extrabold">{Math.round(slotCals)}<span className="text-[10px] font-bold uppercase tracking-widest text-muted ml-1">kcal</span></div>
-                <div className="text-[10px] font-semibold text-muted mt-1">{foods.length > 0 ? `${foods.length} items logged` : 'Tap to log'}</div>
+                <div className="text-xl font-extrabold font-headline text-on-surface">{Math.round(slotCals)}<span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">kcal</span></div>
+                <div className="text-[10px] font-semibold text-on-surface-variant mt-1">{foods.length > 0 ? `${foods.length} items` : 'Tap to log'}</div>
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* Water Tracker - Blue Theme */}
-      <div className="glass-blue-card p-5 mb-6 animate-slideUp relative overflow-hidden" style={{ animationDelay: '0.15s', borderRadius: 24 }}>
-        {/* Subtle Water Waves background */}
-        <div className="absolute bottom-0 left-0 w-full h-1/2 opacity-20 pointer-events-none" style={{ background: 'linear-gradient(to top, #3b82f6, transparent)' }}></div>
-        
-        <div className="relative z-10 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-blue-500 text-white shadow-[0_8px_16px_rgba(59,130,246,0.3)]">
-              <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>water_drop</span>
+      {/* Hydration Card */}
+      <div
+        className="mx-4 mb-5 p-5 animate-slideUp"
+        style={{
+          animationDelay: '0.12s',
+          borderRadius: '1.5rem',
+          background: 'rgba(59,130,246,0.08)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(59,130,246,0.1)',
+        }}
+      >
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl flex items-center justify-center" style={{ background: '#3b82f6', boxShadow: '0 8px 16px rgba(59,130,246,0.3)' }}>
+              <span className="material-symbols-outlined text-white" style={{ fontVariationSettings: "'FILL' 1" }}>water_drop</span>
             </div>
             <div>
-              <div className="text-sm font-display font-bold text-blue-900">Hydration</div>
-              <div className="text-xs font-semibold text-blue-700/70">{waterGlasses} of {waterTarget} glasses</div>
+              <div className="text-sm font-headline font-bold text-blue-900">Hydration</div>
+              <div className="text-xs font-semibold" style={{ color: 'rgba(30,58,138,0.7)' }}>{waterGlasses} of {waterTarget} glasses</div>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 bg-white/50 backdrop-blur-md p-1.5 rounded-2xl border border-white/60 shadow-sm">
-            <button onClick={() => handleWater(-1)} className="btn-icon w-8 h-8 rounded-xl bg-white text-blue-800 hover:bg-blue-50"><span className="material-symbols-outlined" style={{ fontSize: 20 }}>remove</span></button>
-            <span className="text-base font-display font-extrabold w-8 text-center text-blue-900">{waterGlasses}</span>
-            <button onClick={() => handleWater(1)} className="btn-icon w-8 h-8 rounded-xl bg-blue-500 text-white hover:bg-blue-600 shadow-sm"><span className="material-symbols-outlined" style={{ fontSize: 20 }}>add</span></button>
+          <div className="flex items-center gap-1.5 bg-white/50 backdrop-blur-md p-1.5 rounded-2xl border border-white/60">
+            <button onClick={() => handleWater(-1)} className="w-8 h-8 rounded-xl bg-white flex items-center justify-center text-blue-800"><span className="material-symbols-outlined" style={{ fontSize: 20 }}>remove</span></button>
+            <span className="text-base font-extrabold font-headline w-7 text-center text-blue-900">{waterGlasses}</span>
+            <button onClick={() => handleWater(1)} className="w-8 h-8 rounded-xl bg-blue-500 flex items-center justify-center text-white"><span className="material-symbols-outlined" style={{ fontSize: 20 }}>add</span></button>
           </div>
         </div>
-        <div className="relative z-10 mt-4 h-2.5 bg-white/40 rounded-full overflow-hidden border border-white/20">
+        <div className="h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.2)' }}>
           <div
             className="h-full rounded-full transition-all duration-700 ease-out"
             style={{ width: `${Math.min((waterGlasses / waterTarget) * 100, 100)}%`, background: 'linear-gradient(90deg, #60a5fa, #3b82f6)' }}
@@ -222,71 +242,40 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Workout CTA - Dark Theme */}
+      {/* Workout CTA */}
       <div
-        className="animate-slideUp relative overflow-hidden group cursor-pointer"
-        style={{ animationDelay: '0.2s', borderRadius: 24, background: '#1a1c1c', boxShadow: '0 12px 32px rgba(0,0,0,0.15)' }}
+        className="mx-4 mb-5 animate-slideUp cursor-pointer group"
+        style={{
+          animationDelay: '0.16s',
+          borderRadius: '1.5rem',
+          background: '#2f3131',
+          boxShadow: '0 12px 32px rgba(0,0,0,0.15)',
+          overflow: 'hidden',
+        }}
         onClick={() => navigate('/workouts')}
       >
-        {/* Glow effect */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-primary-container rounded-full blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-        
-        <div className="p-6 relative z-10 flex items-center justify-between">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-primary-container rounded-full blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity" />
+        <div className="p-5 flex items-center justify-between relative">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-white/10 text-primary-container border border-white/10">
-              <span className="material-symbols-outlined" style={{ fontSize: 28 }}>fitness_center</span>
+            <div className="w-11 h-11 rounded-2xl flex items-center justify-center text-primary-container" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 26 }}>fitness_center</span>
             </div>
             <div>
-              <div className="text-sm font-display font-bold text-white mb-0.5">Training Center</div>
-              <div className="text-xs font-medium text-white/60 flex items-center gap-1">
-                Explore guided workouts <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_forward</span>
-              </div>
+              <div className="text-sm font-headline font-bold text-white mb-0.5">Training Center</div>
+              <div className="text-xs font-medium text-white/60 flex items-center gap-1">Explore guided workouts <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_forward</span></div>
             </div>
           </div>
-          <div className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container shadow-[0_0_16px_rgba(163,230,53,0.3)] group-hover:scale-110 transition-transform">
-             <span className="material-symbols-outlined" style={{ fontVariationSettings: "'wght' 700" }}>play_arrow</span>
+          <div
+            className="w-10 h-10 rounded-full flex items-center justify-center text-on-primary-container group-hover:scale-110 transition-transform"
+            style={{ background: '#a3e635', boxShadow: '0 0 16px rgba(163,230,53,0.3)' }}
+          >
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'wght' 700" }}>play_arrow</span>
           </div>
         </div>
       </div>
 
-      {/* Health Tips */}
-      {healthTips.length > 0 && (
-        <div className="mt-6 mb-4 animate-slideUp" style={{ animationDelay: '0.25s' }}>
-          <div className="flex items-center justify-between mb-4 px-1">
-            <h2 className="text-lg font-display font-bold flex items-center gap-2">
-              <span className="material-symbols-outlined text-rose-500" style={{ fontVariationSettings: "'FILL' 1" }}>favorite</span> 
-              Health Guidelines
-            </h2>
-            <button onClick={() => navigate('/health-conditions')} className="text-xs font-bold text-primary hover:underline">
-              See All
-            </button>
-          </div>
-          <div className="space-y-3 stagger-children">
-            {healthTips.slice(0, 2).map((tip, i) => (
-              <div key={i} className="glass-card p-4 flex items-start gap-4" style={{ borderRadius: 20 }}>
-                <div style={{
-                  width: 40, height: 40, borderRadius: 12, flexShrink: 0,
-                  background: tip.type === 'dont' ? '#fee2e2' : '#d1fae5',
-                  color: tip.type === 'dont' ? '#ef4444' : '#10b981',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center'
-                }}>
-                  <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: 20 }}>
-                    {tip.type === 'dont' ? 'block' : 'check_circle'}
-                  </span>
-                </div>
-                <div>
-                  <div className="text-sm font-display font-bold leading-tight mb-1">{tip.title}</div>
-                  <div className="text-xs text-muted leading-relaxed font-medium">{tip.text}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Toast */}
       {toast && <div className="toast">{toast}</div>}
-
     </div>
   );
 }

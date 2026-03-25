@@ -21,7 +21,7 @@ params = {
     "api_key": API_KEY,
     "query": "chicken breast",
     "pageSize": 3,
-    "dataType": ["Survey (FNDDS)"],
+    "dataType": "Survey (FNDDS)",
 }
 
 print(f"🔍 Testing USDA FoodData Central API...")

@@ -54,7 +54,7 @@ function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Initial load
+  // Initial load — reads from IndexedDB
   useEffect(() => {
     async function init() {
       try {
@@ -83,11 +83,16 @@ function Router() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-surface">
         <div className="text-center animate-scaleIn">
-          <div className="text-5xl mb-4">🥗</div>
-          <h1 className="text-2xl font-extrabold tracking-tight" style={{ color: 'var(--foreground)' }}>DietPilot</h1>
-          <p className="text-sm mt-2" style={{ color: 'var(--muted)' }}>Loading your journey...</p>
+          <div
+            className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+            style={{ background: 'linear-gradient(135deg, #a3e635, #84cc16)', boxShadow: '0 12px 40px rgba(163,230,53,0.35)' }}
+          >
+            <span className="material-symbols-outlined text-white" style={{ fontSize: 40, fontVariationSettings: "'FILL' 1" }}>restaurant</span>
+          </div>
+          <h1 className="text-2xl font-extrabold tracking-tight font-headline text-on-surface">DietPilot</h1>
+          <p className="text-sm mt-2 text-on-surface-variant">Loading your journey...</p>
         </div>
       </div>
     );

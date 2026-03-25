@@ -1,78 +1,93 @@
-// ===== API BASE =====
-const API_BASE = '/api';
+/**
+ * DietPilot 2.0 — API Service Layer
+ *
+ * - User data (profile, logs, weight, reminders) → IndexedDB via storage.ts
+ * - Food search → Flask /api/food (USDA proxy)
+ * - Exercise search → Flask /api/exercises (Wger proxy)
+ */
 
-async function request<T>(url: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_BASE}${url}`, {
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    ...options,
-  });
+import {
+  profileStorage,
+  dailyLogStorage,
+  weightStorage,
+  reminderStorage,
+  calculateTargets,
+} from './storage';
+
+// ── Flask proxy base URL (food + exercises only) ─────────────────────────────
+const FLASK_BASE = '/api';
+
+async function flaskGet<T>(path: string): Promise<T> {
+  const res = await fetch(`${FLASK_BASE}${path}`);
   if (!res.ok) {
-    const error = await res.json().catch(() => ({ detail: res.statusText }));
-    throw new Error(error.detail || 'API request failed');
+    const err = await res.json().catch(() => ({ error: res.statusText }));
+    throw new Error(err.error || 'Request failed');
   }
   return res.json();
 }
 
-// ===== PROFILE =====
+// ── Profile ──────────────────────────────────────────────────────────────────
 export const profileApi = {
-  get: () => request<any>('/profile'),
-  create: (data: any) => request<any>('/profile', { method: 'POST', body: JSON.stringify(data) }),
-  update: (data: any) => request<any>('/profile', { method: 'PUT', body: JSON.stringify(data) }),
-};
-
-// ===== DAILY LOG =====
-export const dailyLogApi = {
-  get: (date?: string) => request<any>(`/daily-log${date ? `/${date}` : ''}`),
-  addFood: (date: string, data: { meal_type: string; food: any }) =>
-    request<any>(`/daily-log/${date}/meals`, { method: 'POST', body: JSON.stringify(data) }),
-  removeFood: (date: string, mealId: string, foodId: string) =>
-    request<any>(`/daily-log/${date}/meals/${mealId}/foods/${foodId}`, { method: 'DELETE' }),
-  moveFood: (date: string, data: { food_id: string; from_meal_type: string; to_meal_type: string }) =>
-    request<any>(`/daily-log/${date}/meals/move`, { method: 'PUT', body: JSON.stringify(data) }),
-  updateWater: (date: string, glasses: number) =>
-    request<any>(`/daily-log/${date}/water`, { method: 'PUT', body: JSON.stringify({ glasses }) }),
-};
-
-// ===== FOODS =====
-export const foodsApi = {
-  search: (query: string) => request<any[]>(`/foods/search?q=${encodeURIComponent(query)}`),
-  suggestions: (mealType?: string) =>
-    request<any[]>(`/foods/suggestions${mealType ? `?meal_type=${mealType}` : ''}`),
-};
-
-// ===== EXERCISES =====
-export const exercisesApi = {
-  getAll: (category?: string, difficulty?: string) => {
-    const params = new URLSearchParams();
-    if (category) params.set('category', category);
-    if (difficulty) params.set('difficulty', difficulty);
-    const qs = params.toString();
-    return request<any[]>(`/exercises${qs ? `?${qs}` : ''}`);
+  get: () => profileStorage.get().then((p) => { if (!p) throw new Error('No profile'); return p; }),
+  create: (data: any) => {
+    const targets = calculateTargets(data);
+    return profileStorage.save({ ...data, targets });
+  },
+  update: (data: any) => {
+    const targets = calculateTargets(data);
+    return profileStorage.save({ ...data, targets });
   },
 };
 
-// ===== REMINDERS =====
+// ── Daily Log ─────────────────────────────────────────────────────────────────
+export const dailyLogApi = {
+  get: (date?: string) => dailyLogStorage.get(date),
+  addFood: (_date: string, data: { meal_type: string; food: any }) =>
+    dailyLogStorage.addFood(_date, data.meal_type, data.food),
+  removeFood: (date: string, mealType: string, foodId: string) =>
+    dailyLogStorage.removeFood(date, mealType, foodId),
+  moveFood: (date: string, data: { food_id: string; from_meal_type: string; to_meal_type: string }) =>
+    dailyLogStorage.moveFood(date, data.food_id, data.from_meal_type, data.to_meal_type),
+  updateWater: (date: string, glasses: number) => dailyLogStorage.updateWater(date, glasses),
+  getRange: (dates: string[]) => dailyLogStorage.getRange(dates),
+};
+
+// ── Foods (USDA via Flask) ───────────────────────────────────────────────────
+export const foodsApi = {
+  search: (query: string) =>
+    flaskGet<any[]>(`/food?query=${encodeURIComponent(query)}`),
+};
+
+// ── Exercises (Wger via Flask) ───────────────────────────────────────────────
+export const exercisesApi = {
+  getAll: (category?: string, _difficulty?: string) => {
+    const params = new URLSearchParams();
+    if (category && category !== 'All') params.set('category', category);
+    const qs = params.toString();
+    return flaskGet<any[]>(`/exercises${qs ? `?${qs}` : ''}`);
+  },
+};
+
+// ── Reminders ────────────────────────────────────────────────────────────────
 export const remindersApi = {
-  list: () => request<any[]>('/reminders'),
-  create: (data: any) => request<any>('/reminders', { method: 'POST', body: JSON.stringify(data) }),
-  update: (id: number, data: any) =>
-    request<any>(`/reminders/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
-  delete: (id: number) => request<any>(`/reminders/${id}`, { method: 'DELETE' }),
+  list: () => reminderStorage.list(),
+  create: (data: any) => reminderStorage.create(data),
+  update: (id: number, data: any) => reminderStorage.update(id, data),
+  delete: (id: number) => reminderStorage.delete(id),
 };
 
-// ===== WEIGHT =====
+// ── Weight ───────────────────────────────────────────────────────────────────
 export const weightApi = {
-  list: () => request<any[]>('/weight-entries'),
-  add: (data: { date: string; weight_kg: number; note?: string }) =>
-    request<any>('/weight-entries', { method: 'POST', body: JSON.stringify(data) }),
+  list: () => weightStorage.list(),
+  add: (data: { date: string; weight_kg: number; note?: string }) => weightStorage.add(data),
 };
 
-// ===== HEALTH TIPS =====
-export const healthApi = {
-  getTips: (condition: string) => request<any[]>(`/health-tips/${condition}`),
-};
-
-// ===== TARGETS =====
+// ── Targets (now computed client-side) ───────────────────────────────────────
 export const targetsApi = {
-  calculate: (data: any) => request<any>('/calculate-targets', { method: 'POST', body: JSON.stringify(data) }),
+  calculate: (data: any) => Promise.resolve(calculateTargets(data)),
+};
+
+// ── Health Tips (removed: backend gone; keep stub for compatibility) ──────────
+export const healthApi = {
+  getTips: (_condition: string): Promise<any[]> => Promise.resolve([]),
 };
