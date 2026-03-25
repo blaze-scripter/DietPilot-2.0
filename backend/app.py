@@ -134,12 +134,16 @@ def search_exercises():
         "language": 2,  # English
         "limit": limit,
         "format": "json",
+        "status": 2,    # Approved exercises only (avoids empty submissions)
     }
 
-    if category:
+    if category and category.lower() != 'all':
         cat_id = CATEGORY_MAP.get(category.lower())
         if cat_id:
             params["category"] = cat_id
+    elif not category and not search:
+        # Fallback to Chest (11) as a default set of exercises
+        params["category"] = 11
 
     if search:
         params["name"] = search

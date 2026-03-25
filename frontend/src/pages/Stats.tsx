@@ -63,7 +63,7 @@ export default function Stats() {
       <div className="absolute top-0 left-0 w-80 h-80 rounded-full pointer-events-none -z-10" style={{ background: 'radial-gradient(circle, rgba(163,230,53,0.1) 0%, transparent 70%)', transform: 'translate(-30%, -30%)' }} />
 
       {/* Header */}
-      <div className="px-4 pt-12 pb-4 animate-slideUp">
+      <div className="px-4 pt-12 pb-4 animate-slideUp" style={{ paddingTop: 'calc(16px + env(safe-area-inset-top, 30px))' }}>
         <h1 className="text-3xl font-extrabold tracking-tight font-headline text-on-surface leading-none">Weekly Stats</h1>
         <p className="text-sm text-on-surface-variant font-medium mt-1">Track your nutrition & progress</p>
       </div>

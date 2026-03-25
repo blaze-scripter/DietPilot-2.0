@@ -41,7 +41,7 @@ export default function Reminders() {
   return (
     <div className="page-container relative" style={{ paddingTop: 0 }}>
       {/* Header */}
-      <div className="px-4 pt-12 pb-4 flex items-center justify-between animate-slideUp">
+      <div className="px-4 pt-12 pb-4 flex items-center justify-between animate-slideUp" style={{ paddingTop: 'calc(16px + env(safe-area-inset-top, 30px))' }}>
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight font-headline text-on-surface leading-none">Reminders</h1>
           <p className="text-sm text-on-surface-variant font-medium mt-1">{reminders.length} active schedules</p>

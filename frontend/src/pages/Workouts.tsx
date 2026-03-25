@@ -48,7 +48,7 @@ export default function Workouts() {
       <div className="absolute top-0 right-0 w-72 h-72 rounded-full pointer-events-none -z-10" style={{ background: 'radial-gradient(circle, rgba(163,230,53,0.08) 0%, transparent 70%)', transform: 'translate(20%, -20%)' }} />
 
       {/* Header */}
-      <div className="px-4 pt-12 pb-4 animate-slideUp">
+      <div className="px-4 pt-12 pb-4 animate-slideUp" style={{ paddingTop: 'calc(16px + env(safe-area-inset-top, 30px))' }}>
         <h1 className="text-3xl font-extrabold tracking-tight font-headline text-on-surface leading-none">Training Center</h1>
         <p className="text-sm text-on-surface-variant font-medium mt-1 flex items-center gap-1">
           <span className="material-symbols-outlined" style={{ fontSize: 16 }}>library_books</span>

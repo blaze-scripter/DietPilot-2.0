@@ -118,6 +118,7 @@ export default function Meals() {
           borderBottom: '1px solid rgba(194,202,176,0.15)',
           borderRadius: '0 0 2rem 2rem',
           marginBottom: 16,
+          paddingTop: 'calc(16px + env(safe-area-inset-top, 30px))',
         }}
       >
         <div className="flex items-center justify-between">
@@ -258,7 +259,7 @@ export default function Meals() {
       {showSearch && (
         <div className="fixed inset-0 z-50 flex flex-col animate-slideUp" style={{ background: '#f9f9f9' }}>
           {/* Search Header */}
-          <div className="px-4 pt-10 pb-3 flex items-center gap-3" style={{ background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(194,202,176,0.15)' }}>
+          <div className="px-4 pt-10 pb-3 flex items-center gap-3" style={{ background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(194,202,176,0.15)', paddingTop: 'calc(16px + env(safe-area-inset-top, 30px))' }}>
             <button onClick={() => { setShowSearch(false); setSearchQuery(''); }}
               style={{ width: 44, height: 44, borderRadius: '0.875rem', background: '#f3f3f4', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
               <span className="material-symbols-outlined" style={{ color: '#1a1c1c' }}>arrow_back</span>

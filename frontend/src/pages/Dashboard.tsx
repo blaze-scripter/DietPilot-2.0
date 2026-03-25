@@ -68,6 +68,7 @@ export default function Dashboard() {
           WebkitBackdropFilter: 'blur(30px)',
           borderBottom: '1px solid rgba(194,202,176,0.15)',
           borderRadius: '0 0 2rem 2rem',
+          paddingTop: 'calc(16px + env(safe-area-inset-top, 30px))',
         }}
       >
         <div className="flex items-center justify-between">

@@ -29,7 +29,7 @@ export default function Profile() {
       <div className="absolute top-0 right-0 w-96 h-96 rounded-full pointer-events-none -z-10" style={{ background: 'radial-gradient(circle, rgba(163,230,53,0.12) 0%, transparent 70%)', transform: 'translate(25%, -25%)' }} />
 
       {/* Header */}
-      <div className="px-4 pt-12 pb-6 animate-slideUp">
+      <div className="px-4 pt-12 pb-6 animate-slideUp" style={{ paddingTop: 'calc(16px + env(safe-area-inset-top, 30px))' }}>
         <h1 className="text-3xl font-extrabold tracking-tight font-headline text-on-surface leading-none mb-1">Profile</h1>
         <p className="text-sm text-on-surface-variant font-medium">Manage your personal settings</p>
       </div>
