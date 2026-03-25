@@ -58,7 +58,6 @@ export default function Dashboard() {
     day: "numeric",
   });
 
-  // Compute actual recent meals from log data
   const actualMeals = useMemo(() => {
     if (!dailyLog?.meals || dailyLog.meals.length === 0) return [];
     return dailyLog.meals
@@ -67,20 +66,20 @@ export default function Dashboard() {
         id: m.id || Math.random().toString(),
         type: m.type.charAt(0).toUpperCase() + m.type.slice(1),
         name: m.foods[0]?.name || m.type,
-        desc: m.foods.map((f: any) => f.name).join(', '),
-        calories: m.foods.reduce((s: number, f: any) => s + (f.calories || 0), 0),
-        time: m.time || "12:00 PM"
+        calories: Math.round(m.foods.reduce((s: number, f: any) => s + (f.calories || 0), 0)),
+        time: m.time || "12:00 PM",
+        image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80&w=500"
       }));
   }, [dailyLog]);
 
   return (
     <div className="min-h-screen bg-surface pt-[max(env(safe-area-inset-top),2.5rem)] pb-[max(env(safe-area-inset-bottom),6rem)] px-5">
       
-      {/* Header with Avatar */}
-      <div className="flex justify-between items-center mb-6 animate-fade-in pt-4">
+      {/* Header */}
+      <div className="mb-6 animate-fade-in flex justify-between items-center">
         <div>
-          <p className="text-sm text-on-surface-variant font-medium">{today}</p>
-          <h1 className="text-2xl font-bold font-headline text-on-surface mt-1">
+          <p className="text-sm text-muted-foreground font-medium">{today}</p>
+          <h1 className="text-2xl font-bold text-foreground mt-1">
             {getGreeting()}, {profile?.name || 'Guest'} 👋
           </h1>
         </div>
@@ -88,31 +87,31 @@ export default function Dashboard() {
           className="w-10 h-10 rounded-full overflow-hidden cursor-pointer shrink-0 border-2 border-primary-container bg-primary flex items-center justify-center shadow-sm"
           onClick={() => navigate('/profile')}
         >
-          <span className="text-white font-bold text-sm">
+          <span className="text-primary-foreground font-bold text-sm">
             {profile?.name?.charAt(0)?.toUpperCase() || 'U'}
           </span>
         </div>
       </div>
 
       {/* Calorie Ring */}
-      <div className="glass rounded-3xl p-6 mb-5 border border-outline-variant/15 shadow-sm">
+      <div className="glass rounded-3xl p-6 mb-5">
         <CalorieRing consumed={Math.round(totals.calories)} goal={Math.round(targets.calories)} />
       </div>
 
       {/* Macro Progress */}
-      <div className="glass rounded-3xl p-5 mb-5 space-y-3 animate-fade-in border border-outline-variant/15 shadow-sm" style={{ animationDelay: "0.1s" }}>
-        <h2 className="text-sm font-bold font-headline text-on-surface mb-3">Macros</h2>
-        <MacroBar label="Protein" current={totals.protein} goal={targets.protein} color="#a3e635" />
-        <MacroBar label="Carbs" current={totals.carbs} goal={targets.carbs} color="#fbbf24" />
-        <MacroBar label="Fat" current={totals.fat} goal={targets.fat} color="#f87171" />
+      <div className="glass rounded-3xl p-5 mb-5 space-y-3 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+        <h2 className="text-sm font-bold text-foreground mb-3">Macros</h2>
+        <MacroBar label="Protein" current={Math.round(totals.protein)} goal={Math.round(targets.protein)} color="#a3e635" />
+        <MacroBar label="Carbs" current={Math.round(totals.carbs)} goal={Math.round(targets.carbs)} color="#fbbf24" />
+        <MacroBar label="Fat" current={Math.round(totals.fat)} goal={Math.round(targets.fat)} color="#f87171" />
       </div>
 
       {/* Hydration Tracker - Custom Blue Tinted Glass */}
-      <div className="rounded-3xl p-5 mb-5 space-y-4 animate-fade-in shadow-sm border border-blue-200/30 backdrop-blur-md bg-blue-500/10" style={{ animationDelay: "0.15s" }}>
+      <div className="glass rounded-3xl p-5 mb-5 space-y-4 animate-fade-in shadow-sm border border-secondary-container/30 bg-secondary-container/10" style={{ animationDelay: "0.15s" }}>
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-sm font-bold font-headline text-on-surface">Hydration</h2>
-            <p className="text-xs text-on-surface-variant mt-0.5">Goal: {waterTargetLiters}L</p>
+            <h2 className="text-sm font-bold text-foreground">Hydration</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">Goal: {waterTargetLiters}L</p>
           </div>
           <div className="text-right">
             <span className="text-xl font-black text-secondary-container tracking-tight">{waterLiters}L</span>
@@ -143,7 +142,7 @@ export default function Dashboard() {
            
            <button 
              onClick={() => handleWater(1)}
-             className="w-10 h-10 rounded-full bg-secondary-container text-white shadow-md shadow-secondary-container/30 flex items-center justify-center active:scale-95 transition-transform shrink-0"
+             className="w-10 h-10 rounded-full bg-secondary-container text-primary-foreground shadow-md shadow-secondary-container/30 flex items-center justify-center active:scale-95 transition-transform shrink-0"
             >
               <span className="material-symbols-outlined font-bold" style={{ fontSize: 20 }}>add</span>
            </button>
@@ -153,8 +152,8 @@ export default function Dashboard() {
       {/* Today's Meals */}
       <div className="animate-fade-in mb-8" style={{ animationDelay: "0.2s" }}>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-bold font-headline text-on-surface">Today's Meals</h2>
-          <span className="text-xs text-on-surface-variant">{actualMeals.length} logged</span>
+          <h2 className="text-sm font-bold text-foreground">Today's Meals</h2>
+          <span className="text-xs text-muted-foreground">{actualMeals.length} logged</span>
         </div>
         {actualMeals.length > 0 ? (
           <div className="flex gap-3 overflow-x-auto pb-4 -mx-5 px-5 scrollbar-hide">
@@ -163,24 +162,24 @@ export default function Dashboard() {
             ))}
           </div>
         ) : (
-          <div className="glass rounded-xl p-6 text-center border border-outline-variant/15 flex flex-col items-center justify-center gap-2 mt-2">
-            <span className="material-symbols-outlined text-on-surface-variant/40" style={{ fontSize: 32 }}>restaurant</span>
-            <p className="text-sm font-medium text-on-surface-variant">No meals logged yet.</p>
-            <button onClick={() => navigate('/meals')} className="mt-2 text-xs font-bold text-primary-container bg-primary px-4 py-1.5 rounded-full inline-block">Log food</button>
+          <div className="glass rounded-xl p-6 text-center flex flex-col items-center justify-center gap-2 mt-2">
+            <span className="material-symbols-outlined text-muted-foreground/40" style={{ fontSize: 32 }}>restaurant</span>
+            <p className="text-sm font-medium text-muted-foreground">No meals logged yet.</p>
+            <button onClick={() => navigate('/meals')} className="mt-2 text-xs font-bold text-primary-foreground bg-primary px-4 py-1.5 rounded-full inline-block">Log food</button>
           </div>
         )}
       </div>
 
-      {/* FAB - Using Material Icons instead of lucide-react */}
+      {/* FAB - Using Material Icons */}
       <button 
-        className="fixed bottom-24 right-5 z-40 w-14 h-14 rounded-full bg-primary text-primary-container shadow-lg shadow-primary/30 flex items-center justify-center active:scale-95 transition-transform"
+        className="fixed bottom-24 right-5 z-40 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 flex items-center justify-center active:scale-95 transition-transform"
         onClick={() => navigate('/meals')}
       >
         <span className="material-symbols-outlined" style={{ fontSize: 28, fontVariationSettings: "'wght' 600" }}>add</span>
       </button>
 
       {/* Toast */}
-      {toast && <div className="fixed top-12 left-1/2 -translate-x-1/2 bg-inverse-surface text-surface px-4 py-2 rounded-full text-sm font-medium shadow-xl z-50 animate-fade-in">{toast}</div>}
+      {toast && <div className="fixed top-12 left-1/2 -translate-x-1/2 bg-foreground text-background px-4 py-2 rounded-full text-sm font-medium shadow-xl z-50 animate-fade-in">{toast}</div>}
     </div>
   );
 }
