@@ -7,35 +7,50 @@ const WeeklyChart = ({ data, goal }: WeeklyChartProps) => {
   const max = Math.max(...data.map((d) => d.calories), goal, 1);
 
   return (
-    <div className="glass rounded-3xl p-5 border border-outline-variant/15 shadow-sm">
-      <h3 className="text-sm font-bold text-on-surface mb-4">Daily Calories</h3>
-      <div className="flex items-end gap-2 h-36">
+    <div>
+      <div style={{
+        display: 'flex', alignItems: 'flex-end', gap: 6, height: 140,
+        padding: '0 4px',
+      }}>
         {data.map((day, i) => {
           const pct = Math.min((day.calories / (max * 1.15)) * 100, 100);
           const isToday = i === data.length - 1;
           return (
-            <div key={day.day + i} className="flex-1 flex flex-col items-center gap-1">
-              <span className="text-[10px] text-on-surface-variant font-medium">{day.calories}</span>
-              <div className="w-full flex items-end" style={{ height: "100px" }}>
-                <div
-                  className={`w-full rounded-lg transition-all duration-700 ${
-                    isToday ? "bg-primary" : "bg-primary/30"
-                  }`}
-                  style={{ height: `${pct}%` }}
-                />
+            <div key={day.day + i} style={{
+              flex: 1, display: 'flex', flexDirection: 'column',
+              alignItems: 'center', gap: 4, height: '100%', justifyContent: 'flex-end',
+            }}>
+              <span style={{
+                fontSize: '0.5625rem', fontWeight: 600, color: '#72796a',
+                fontFamily: 'var(--font-display)',
+              }}>{day.calories}</span>
+              <div style={{ width: '100%', display: 'flex', alignItems: 'flex-end', height: 100 }}>
+                <div style={{
+                  width: '100%', borderRadius: 8,
+                  height: `${Math.max(pct, 4)}%`,
+                  background: isToday
+                    ? 'linear-gradient(180deg, #bef264 0%, #65a30d 100%)'
+                    : 'rgba(163,230,53,0.25)',
+                  transition: 'height 0.7s cubic-bezier(.22,1,.36,1)',
+                  boxShadow: isToday ? '0 2px 8px rgba(101,163,13,0.3)' : 'none',
+                }} />
               </div>
-              <span className={`text-[10px] font-semibold ${isToday ? "text-primary" : "text-on-surface-variant"}`}>
-                {day.day}
-              </span>
+              <span style={{
+                fontSize: '0.5625rem', fontWeight: isToday ? 800 : 600,
+                color: isToday ? '#3d6a00' : '#a1a79a',
+                fontFamily: 'var(--font-display)',
+              }}>{day.day}</span>
             </div>
           );
         })}
       </div>
-      {/* Goal line label */}
-      <div className="flex items-center gap-2 mt-3">
-        <div className="h-px flex-1 border-t border-dashed border-primary/40" />
-        <span className="text-[10px] text-primary font-medium">Goal: {goal}</span>
-        <div className="h-px flex-1 border-t border-dashed border-primary/40" />
+      {/* Goal line */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 8, marginTop: 12,
+      }}>
+        <div style={{ flex: 1, height: 1, borderTop: '1.5px dashed rgba(101,163,13,0.3)' }} />
+        <span style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#65a30d', fontFamily: 'var(--font-display)' }}>Goal: {goal}</span>
+        <div style={{ flex: 1, height: 1, borderTop: '1.5px dashed rgba(101,163,13,0.3)' }} />
       </div>
     </div>
   );

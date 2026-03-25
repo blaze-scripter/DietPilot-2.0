@@ -39,84 +39,108 @@ export default function Reminders() {
   };
 
   return (
-    <div className="page-container relative" style={{ paddingTop: 'env(safe-area-inset-top, 2.5rem)', paddingBottom: 'calc(100px + env(safe-area-inset-bottom, 0px))' }}>
-      {/* Header */}
-      <div className="px-4 pt-12 pb-4 flex items-center justify-between animate-slideUp" style={{ paddingTop: 'calc(16px + env(safe-area-inset-top, 30px))' }}>
+    <div className="page-shell" style={{ paddingTop: 24 }}>
+
+      {/* ▸ Header ─────────────────────────────── */}
+      <header className="anim-fade-up" style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        marginBottom: 24,
+      }}>
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight font-headline text-on-surface leading-none">Reminders</h1>
-          <p className="text-sm text-on-surface-variant font-medium mt-1">{reminders.length} active schedules</p>
+          <h1 style={{ fontSize: '1.5rem', lineHeight: 1.1 }}>Reminders</h1>
+          <p style={{ fontSize: '0.6875rem', fontWeight: 600, color: '#72796a', marginTop: 4 }}>
+            {reminders.filter(r => r.enabled).length} active schedules
+          </p>
         </div>
         <button
           onClick={() => setShowAdd(true)}
           style={{
-            width: 48, height: 48, borderRadius: '999px', border: 'none',
-            background: '#a3e635', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 8px 24px rgba(163,230,53,0.4)', cursor: 'pointer',
+            width: 44, height: 44, borderRadius: 14, border: 'none',
+            background: 'linear-gradient(135deg, #bef264, #4d7c0f)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 4px 16px rgba(77,124,15,0.25)', cursor: 'pointer',
           }}
         >
-          <span className="material-symbols-outlined" style={{ color: '#416400', fontVariationSettings: "'wght' 700" }}>add</span>
+          <span className="material-symbols-outlined" style={{ color: '#fff', fontSize: 20, fontVariationSettings: "'wght' 700" }}>add</span>
         </button>
-      </div>
+      </header>
 
-      {/* Empty State */}
+      {/* ▸ Empty State ────────────────────────── */}
       {reminders.length === 0 && !showAdd && (
-        <div className="flex flex-col items-center justify-center py-20 animate-slideUp" style={{ animationDelay: '0.1s' }}>
-          <div style={{ width: 80, height: 80, borderRadius: '50%', background: '#f3f3f4', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 40, color: '#c2cab0', fontVariationSettings: "'FILL' 1" }}>notifications_off</span>
+        <div className="anim-fade-up anim-delay-1 card" style={{
+          padding: '48px 24px', textAlign: 'center',
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+        }}>
+          <div style={{
+            width: 72, height: 72, borderRadius: '50%', background: '#f0f0eb',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16,
+          }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 32, color: '#c6c8b9', fontVariationSettings: "'FILL' 1" }}>notifications_off</span>
           </div>
-          <p className="text-base font-bold text-on-surface-variant">No reminders yet</p>
-          <p className="text-sm text-on-surface-variant/70 mt-1">Tap + to add your first reminder</p>
+          <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1b1c18', fontFamily: 'var(--font-display)' }}>No reminders yet</p>
+          <p style={{ fontSize: '0.75rem', color: '#a1a79a', marginTop: 4 }}>Tap + to add your first reminder</p>
         </div>
       )}
 
-      {/* Reminder Cards */}
-      <div className="px-4 space-y-3 animate-slideUp stagger-children" style={{ animationDelay: '0.08s' }}>
+      {/* ▸ Reminder Cards ─────────────────────── */}
+      <div className="stagger-children" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {reminders.map((rem) => {
           const cfg = typeConfig[rem.type] || typeConfig.water;
           return (
-            <div
-              key={rem.id}
-              style={{
-                background: rem.enabled ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.5)',
-                backdropFilter: 'blur(12px)', borderRadius: '1.25rem', padding: '16px',
-                display: 'flex', alignItems: 'center', gap: 12,
-                boxShadow: rem.enabled ? '0 4px 16px rgba(45,47,47,0.07)' : 'none',
-                border: '1px solid rgba(194,202,176,0.15)',
-                opacity: rem.enabled ? 1 : 0.55,
-                transition: 'all 0.3s ease',
-              }}
-            >
-              <div style={{ width: 48, height: 48, borderRadius: '0.875rem', background: rem.enabled ? cfg.bg : '#f3f3f4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <span className="material-symbols-outlined" style={{ color: rem.enabled ? cfg.color : '#c2cab0', fontVariationSettings: "'FILL' 1" }}>{cfg.icon}</span>
+            <div key={rem.id} className="card" style={{
+              padding: '14px 16px',
+              display: 'flex', alignItems: 'center', gap: 12,
+              opacity: rem.enabled ? 1 : 0.5,
+              transition: 'opacity 0.3s ease',
+            }}>
+              <div style={{
+                width: 42, height: 42, borderRadius: 14,
+                background: rem.enabled ? cfg.bg : '#f0f0eb',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+              }}>
+                <span className="material-symbols-outlined" style={{
+                  color: rem.enabled ? cfg.color : '#c6c8b9',
+                  fontVariationSettings: "'FILL' 1", fontSize: 20,
+                }}>{cfg.icon}</span>
               </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem', fontFamily: 'Plus Jakarta Sans', color: '#1a1c1c', textDecoration: !rem.enabled ? 'line-through' : 'none' }}>
-                  {rem.label || rem.type}
-                </div>
-                <div style={{ fontSize: '0.8rem', color: '#5a5c5c', display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
-                  <span className="material-symbols-outlined" style={{ fontSize: 14 }}>schedule</span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{
+                  fontWeight: 700, fontSize: '0.8125rem', fontFamily: 'var(--font-display)',
+                  color: '#1b1c18', textDecoration: !rem.enabled ? 'line-through' : 'none',
+                  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                }}>{rem.label || rem.type}</div>
+                <div style={{
+                  fontSize: '0.6875rem', color: '#72796a',
+                  display: 'flex', alignItems: 'center', gap: 4, marginTop: 3,
+                }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: 12 }}>schedule</span>
                   {rem.time} · Daily
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
                 {/* Toggle */}
                 <button
                   onClick={() => toggleReminder(rem)}
                   style={{
-                    width: 44, height: 26, borderRadius: 999, border: 'none', cursor: 'pointer',
-                    background: rem.enabled ? '#a3e635' : '#eeeeee', position: 'relative',
-                    transition: 'background 0.3s ease',
+                    width: 42, height: 24, borderRadius: 999, border: 'none', cursor: 'pointer',
+                    background: rem.enabled ? '#a3e635' : '#e9e9e4', position: 'relative',
+                    transition: 'background 0.3s ease', flexShrink: 0,
                   }}
                 >
                   <div style={{
-                    position: 'absolute', top: 3, width: 20, height: 20,
+                    position: 'absolute', top: 2, width: 20, height: 20,
                     borderRadius: '50%', background: 'white',
-                    boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
-                    left: rem.enabled ? 21 : 3, transition: 'left 0.3s ease',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.15)',
+                    left: rem.enabled ? 20 : 2, transition: 'left 0.3s ease',
                   }} />
                 </button>
-                <button onClick={() => handleDelete(rem.id)} style={{ padding: 4, background: 'none', border: 'none', cursor: 'pointer' }}>
-                  <span className="material-symbols-outlined" style={{ fontSize: 20, color: '#ef4444' }}>delete</span>
+                <button onClick={() => handleDelete(rem.id)} style={{
+                  width: 28, height: 28, borderRadius: '50%', border: 'none',
+                  background: '#fee2e2', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0,
+                }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: 14, color: '#ef4444' }}>close</span>
                 </button>
               </div>
             </div>
@@ -124,62 +148,87 @@ export default function Reminders() {
         })}
       </div>
 
-      {/* Add Reminder Drawer */}
+      {/* ▸ Add Reminder Drawer ────────────────── */}
       {showAdd && (
         <div
-          style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'flex-end', background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(4px)' }}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 60,
+            display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
+            background: 'rgba(0,0,0,0.35)', backdropFilter: 'blur(4px)',
+          }}
           onClick={() => setShowAdd(false)}
         >
           <div
             style={{
-              width: '100%', maxWidth: 480, margin: '0 auto',
-              background: 'white', borderRadius: '2rem 2rem 0 0',
-              padding: '20px 24px 40px',
+              width: '100%', maxWidth: 430,
+              background: '#fff', borderRadius: '28px 28px 0 0',
+              padding: '20px 24px calc(24px + env(safe-area-inset-bottom, 16px))',
             }}
             onClick={(e) => e.stopPropagation()}
             className="animate-slideUp"
           >
-            <div style={{ width: 40, height: 4, background: '#eeeeee', borderRadius: 999, margin: '0 auto 20px' }} />
-            <h2 className="text-xl font-extrabold font-headline text-on-surface mb-6">New Reminder</h2>
-            <div className="space-y-4">
+            <div style={{ width: 40, height: 4, background: '#e9e9e4', borderRadius: 999, margin: '0 auto 20px' }} />
+            <h2 style={{ fontSize: '1.125rem', fontWeight: 800, color: '#1b1c18', fontFamily: 'var(--font-display)', marginBottom: 20 }}>New Reminder</h2>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {/* Label */}
               <div>
-                <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant block mb-2">Label</label>
+                <label style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#72796a', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: 8 }}>Label</label>
                 <input
                   type="text" value={newReminder.label}
                   onChange={(e) => setNewReminder({ ...newReminder, label: e.target.value })}
                   placeholder="e.g. Morning Hydration"
-                  style={{ width: '100%', padding: '14px 16px', borderRadius: '1rem', border: 'none', background: '#f3f3f4', fontSize: '0.95rem', fontFamily: 'Plus Jakarta Sans', color: '#1a1c1c', outline: 'none' }}
+                  style={{
+                    width: '100%', padding: '14px 16px', borderRadius: 14,
+                    border: 'none', background: '#f0f0eb', fontSize: '0.875rem',
+                    fontFamily: 'var(--font-display)', color: '#1b1c18', outline: 'none',
+                    boxSizing: 'border-box',
+                  }}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-3">
+
+              {/* Type + Time row */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant block mb-2">Type</label>
+                  <label style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#72796a', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: 8 }}>Type</label>
                   <select
                     value={newReminder.type}
                     onChange={(e) => setNewReminder({ ...newReminder, type: e.target.value })}
-                    style={{ width: '100%', padding: '14px', borderRadius: '1rem', border: 'none', background: '#f3f3f4', fontSize: '0.9rem', fontFamily: 'Plus Jakarta Sans', color: '#1a1c1c', outline: 'none' }}
+                    style={{
+                      width: '100%', padding: '14px 12px', borderRadius: 14,
+                      border: 'none', background: '#f0f0eb', fontSize: '0.8125rem',
+                      fontFamily: 'var(--font-display)', color: '#1b1c18', outline: 'none',
+                      WebkitAppearance: 'none', appearance: 'none',
+                      boxSizing: 'border-box',
+                    }}
                   >
-                    <option value="water">Water 💧</option>
-                    <option value="meal">Meal 🍽️</option>
-                    <option value="medication">Medication 💊</option>
+                    <option value="water">💧 Water</option>
+                    <option value="meal">🍽️ Meal</option>
+                    <option value="medication">💊 Medication</option>
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant block mb-2">Time</label>
+                  <label style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#72796a', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: 8 }}>Time</label>
                   <input
                     type="time" value={newReminder.time}
                     onChange={(e) => setNewReminder({ ...newReminder, time: e.target.value })}
-                    style={{ width: '100%', padding: '14px', borderRadius: '1rem', border: 'none', background: '#f3f3f4', fontSize: '0.9rem', fontFamily: 'Plus Jakarta Sans', color: '#1a1c1c', outline: 'none' }}
+                    style={{
+                      width: '100%', padding: '14px 12px', borderRadius: 14,
+                      border: 'none', background: '#f0f0eb', fontSize: '0.8125rem',
+                      fontFamily: 'var(--font-display)', color: '#1b1c18', outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
                   />
                 </div>
               </div>
             </div>
+
             <button
               onClick={handleAdd}
-              className="btn-primary w-full mt-6"
-              style={{ padding: '18px', fontSize: '1rem', borderRadius: '999px' }}
+              className="btn-lime"
+              style={{ width: '100%', padding: '16px', fontSize: '0.875rem', marginTop: 20 }}
             >
-              <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>notifications_active</span>
+              <span className="material-symbols-outlined" style={{ fontSize: 18, fontVariationSettings: "'FILL' 1" }}>notifications_active</span>
               Create Reminder
             </button>
           </div>

@@ -10,7 +10,7 @@ const MEAL_TYPES = [
 ];
 
 export default function Meals() {
-  const { dailyLog, refreshLog, navState } = useApp();
+  const { profile, dailyLog, refreshLog, navState } = useApp();
   const [selectedSlot, setSelectedSlot] = useState(navState?.selectedMealType || 'breakfast');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -187,6 +187,62 @@ export default function Meals() {
           <span className="material-symbols-outlined" style={{ fontSize: 20, fontVariationSettings: "'wght' 700" }}>add</span>
           Log {selectedSlot.charAt(0).toUpperCase() + selectedSlot.slice(1)}
         </button>
+      </div>
+
+      {/* ▸ Suggested Meals ──────────────────────── */}
+      <div className="anim-fade-up anim-delay-2" style={{ marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+          <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18' }}>Suggested Meals</h2>
+          <span style={{ fontSize: '0.625rem', fontWeight: 600, color: '#72796a' }}>
+            {profile?.diet_preference ? profile.diet_preference.replace('_', ' ') : 'Any'}
+          </span>
+        </div>
+        <div className="scrollbar-hide" style={{ display: 'flex', gap: 10, overflowX: 'auto', margin: '0 -20px', padding: '0 20px 6px' }}>
+          {(profile?.diet_preference === 'vegan' ? [
+            { name: 'Quinoa Power Bowl', cal: 380, protein: 14, icon: '🥗', tag: 'High Fiber' },
+            { name: 'Chickpea Curry', cal: 320, protein: 12, icon: '🍛', tag: 'Iron Rich' },
+            { name: 'Tofu Stir Fry', cal: 290, protein: 18, icon: '🥘', tag: 'Complete Protein' },
+            { name: 'Lentil Dal', cal: 250, protein: 16, icon: '🍲', tag: 'Budget Friendly' },
+          ] : profile?.diet_preference === 'keto' ? [
+            { name: 'Avocado Eggs', cal: 340, protein: 20, icon: '🥑', tag: 'High Fat' },
+            { name: 'Butter Chicken', cal: 450, protein: 32, icon: '🍗', tag: 'Low Carb' },
+            { name: 'Salmon & Asparagus', cal: 420, protein: 35, icon: '🐟', tag: 'Omega-3' },
+            { name: 'Cheese Omelette', cal: 380, protein: 28, icon: '🧀', tag: 'Quick Prep' },
+          ] : profile?.diet_preference === 'vegetarian' ? [
+            { name: 'Greek Yogurt Bowl', cal: 280, protein: 22, icon: '🫐', tag: 'Probiotics' },
+            { name: 'Paneer Tikka', cal: 350, protein: 24, icon: '🧀', tag: 'High Protein' },
+            { name: 'Veggie Pasta', cal: 380, protein: 14, icon: '🍝', tag: 'Comfort Food' },
+            { name: 'Egg Fried Rice', cal: 340, protein: 18, icon: '🍳', tag: 'Quick Prep' },
+          ] : profile?.diet_preference === 'halal' ? [
+            { name: 'Chicken Shawarma', cal: 380, protein: 30, icon: '🌯', tag: 'High Protein' },
+            { name: 'Lamb Kebab', cal: 420, protein: 28, icon: '🍢', tag: 'Iron Rich' },
+            { name: 'Hummus & Falafel', cal: 350, protein: 14, icon: '🧆', tag: 'Fiber Rich' },
+            { name: 'Biryani Bowl', cal: 450, protein: 25, icon: '🍚', tag: 'Complete Meal' },
+          ] : [
+            { name: 'Grilled Chicken', cal: 320, protein: 34, icon: '🍗', tag: 'Lean Protein' },
+            { name: 'Salmon Bowl', cal: 450, protein: 32, icon: '🐟', tag: 'Omega-3' },
+            { name: 'Turkey Wrap', cal: 350, protein: 28, icon: '🌯', tag: 'Low Fat' },
+            { name: 'Beef Stir Fry', cal: 400, protein: 30, icon: '🥩', tag: 'Iron Rich' },
+          ]).map((meal, i) => (
+            <div key={i} style={{
+              flexShrink: 0, width: 140, padding: '14px 12px',
+              borderRadius: 18, background: 'rgba(255,255,255,0.55)', backdropFilter: 'blur(30px)',
+              border: '1px solid rgba(255,255,255,0.6)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
+            }}>
+              <span style={{ fontSize: '1.75rem', display: 'block', marginBottom: 8 }}>{meal.icon}</span>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1b1c18', fontFamily: 'var(--font-display)', marginBottom: 4 }}>{meal.name}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+                <span style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#3d6a00' }}>{meal.cal} kcal</span>
+                <span style={{ width: 3, height: 3, borderRadius: '50%', background: '#c6c8b9' }} />
+                <span style={{ fontSize: '0.5625rem', fontWeight: 600, color: '#72796a' }}>{meal.protein}g protein</span>
+              </div>
+              <span style={{
+                fontSize: '0.5rem', fontWeight: 700, color: '#65a30d', background: '#f0fdf4',
+                padding: '2px 8px', borderRadius: 100, border: '1px solid #dcfce7',
+              }}>{meal.tag}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* ▸ Meal Cards ─────────────────────────── */}

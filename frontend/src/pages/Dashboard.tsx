@@ -242,6 +242,90 @@ export default function Dashboard() {
         )}
       </div>
 
+      {/* ▸ Quick Suggestions ─────────────────── */}
+      <div className="anim-fade-up anim-delay-4" style={{ marginBottom: 24 }}>
+        <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18', marginBottom: 12 }}>Quick Suggestions</h2>
+
+        {/* Meal suggestions */}
+        <div style={{ marginBottom: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#65a30d', fontVariationSettings: "'FILL' 1" }}>restaurant</span>
+            <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#65a30d', fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Meal Ideas</span>
+          </div>
+          <div className="scrollbar-hide" style={{ display: 'flex', gap: 10, overflowX: 'auto', margin: '0 -20px', padding: '0 20px 6px' }}>
+            {(profile?.diet_preference === 'vegan' ? [
+              { name: 'Quinoa Bowl', cal: 380, icon: '🥗', why: 'High protein, plant-based' },
+              { name: 'Lentil Soup', cal: 250, icon: '🍲', why: 'Iron-rich, filling' },
+              { name: 'Tofu Stir Fry', cal: 320, icon: '🍳', why: 'Complete amino acids' },
+            ] : profile?.diet_preference === 'keto' ? [
+              { name: 'Avocado Eggs', cal: 340, icon: '🥑', why: 'High fat, low carb' },
+              { name: 'Salmon Salad', cal: 420, icon: '🐟', why: 'Omega-3 rich' },
+              { name: 'Cheese Omelette', cal: 380, icon: '🧀', why: 'Keto-friendly protein' },
+            ] : profile?.diet_preference === 'vegetarian' ? [
+              { name: 'Greek Yogurt Bowl', cal: 280, icon: '🫐', why: 'Probiotics + protein' },
+              { name: 'Paneer Tikka', cal: 350, icon: '🧀', why: 'High protein veggie' },
+              { name: 'Veggie Wrap', cal: 310, icon: '🌯', why: 'Balanced macros' },
+            ] : [
+              { name: 'Grilled Chicken', cal: 320, icon: '🍗', why: 'Lean protein source' },
+              { name: 'Salmon & Rice', cal: 450, icon: '🐟', why: 'Omega-3 + complex carbs' },
+              { name: 'Turkey Wrap', cal: 350, icon: '🌯', why: 'Low fat, high protein' },
+            ]).map((meal, i) => (
+              <div key={i} onClick={() => navigate('/meals')} style={{
+                flexShrink: 0, width: 130, padding: '14px 12px', cursor: 'pointer',
+                borderRadius: 18, background: 'rgba(255,255,255,0.55)', backdropFilter: 'blur(30px)',
+                border: '1px solid rgba(255,255,255,0.6)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
+              }}>
+                <span style={{ fontSize: '1.5rem', display: 'block', marginBottom: 8 }}>{meal.icon}</span>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1b1c18', fontFamily: 'var(--font-display)', marginBottom: 2 }}>{meal.name}</div>
+                <div style={{ fontSize: '0.5625rem', fontWeight: 600, color: '#72796a' }}>{meal.cal} kcal · {meal.why}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Workout suggestions */}
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#2563eb', fontVariationSettings: "'FILL' 1" }}>fitness_center</span>
+            <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#2563eb', fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Workout Ideas</span>
+          </div>
+          <div className="scrollbar-hide" style={{ display: 'flex', gap: 10, overflowX: 'auto', margin: '0 -20px', padding: '0 20px 6px' }}>
+            {((profile?.health_conditions || []).includes('diabetes') ? [
+              { name: 'Walking', icon: 'directions_walk', why: 'Improves insulin sensitivity', dur: '30 min' },
+              { name: 'Swimming', icon: 'pool', why: 'Low impact cardio', dur: '25 min' },
+              { name: 'Yoga', icon: 'self_improvement', why: 'Stress + sugar control', dur: '20 min' },
+            ] : (profile?.health_conditions || []).includes('hypertension') ? [
+              { name: 'Brisk Walking', icon: 'directions_walk', why: 'Lowers blood pressure', dur: '30 min' },
+              { name: 'Cycling', icon: 'pedal_bike', why: 'Heart-friendly cardio', dur: '25 min' },
+              { name: 'Stretching', icon: 'accessibility', why: 'Reduces tension', dur: '15 min' },
+            ] : profile?.goal === 'bulk' ? [
+              { name: 'Push-ups', icon: 'fitness_center', why: 'Chest & triceps builder', dur: '15 min' },
+              { name: 'Squats', icon: 'directions_run', why: 'Leg mass & strength', dur: '20 min' },
+              { name: 'Pull-ups', icon: 'sports_gymnastics', why: 'Back & biceps power', dur: '15 min' },
+            ] : [
+              { name: 'HIIT Circuit', icon: 'timer', why: 'Maximum calorie burn', dur: '20 min' },
+              { name: 'Core Planks', icon: 'self_improvement', why: 'Core stability', dur: '10 min' },
+              { name: 'Running', icon: 'directions_run', why: 'Cardio endurance', dur: '30 min' },
+            ]).map((w, i) => (
+              <div key={i} onClick={() => navigate('/workouts')} style={{
+                flexShrink: 0, width: 130, padding: '14px 12px', cursor: 'pointer',
+                borderRadius: 18, background: 'rgba(255,255,255,0.55)', backdropFilter: 'blur(30px)',
+                border: '1px solid rgba(255,255,255,0.6)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
+              }}>
+                <div style={{
+                  width: 32, height: 32, borderRadius: 10, background: '#dbeafe',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8,
+                }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#2563eb', fontVariationSettings: "'FILL' 1" }}>{w.icon}</span>
+                </div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1b1c18', fontFamily: 'var(--font-display)', marginBottom: 2 }}>{w.name}</div>
+                <div style={{ fontSize: '0.5625rem', fontWeight: 600, color: '#72796a' }}>{w.dur} · {w.why}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* ▸ Daily Tips — Do's & Don'ts ────────── */}
       <div className="anim-fade-up anim-delay-4" style={{ marginBottom: 24 }}>
         <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18', marginBottom: 12 }}>Daily Tips</h2>
