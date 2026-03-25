@@ -49,6 +49,28 @@ export default function Dashboard() {
     } catch { /* */ }
   };
 
+  /* ── Add Suggested Food ── */
+  const handleAddSuggestion = async (food: any) => {
+    try {
+      const dateStr = new Date().toISOString().split('T')[0];
+      await dailyLogApi.addFood(dateStr, {
+        meal_type: 'snack',
+        food: {
+          name: food.name,
+          serving_size: food.serving_size || 200,
+          serving_unit: food.serving_unit || 'g',
+          calories: food.calories || food.cal,
+          protein_g: food.protein_g || food.protein,
+          carbs_g: food.carbs_g || 10,
+          fat_g: food.fat_g || 5,
+        },
+      });
+      await refreshLog();
+      setToast(`✅ ${food.name} added!`);
+      setTimeout(() => setToast(null), 2000);
+    } catch { /* ignore */ }
+  };
+
   /* ── Date ── */
   const today = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
@@ -254,30 +276,37 @@ export default function Dashboard() {
           </div>
           <div className="scrollbar-hide" style={{ display: 'flex', gap: 10, overflowX: 'auto', margin: '0 -20px', padding: '0 20px 6px' }}>
             {(profile?.diet_preference === 'vegan' ? [
-              { name: 'Quinoa Bowl', cal: 380, icon: '🥗', why: 'High protein, plant-based' },
-              { name: 'Lentil Soup', cal: 250, icon: '🍲', why: 'Iron-rich, filling' },
-              { name: 'Tofu Stir Fry', cal: 320, icon: '🍳', why: 'Complete amino acids' },
+              { name: 'Quinoa Bowl', cal: 380, icon: '🥗', why: 'High protein, plant-based', protein: 14, carbs_g: 48, fat_g: 12 },
+              { name: 'Lentil Soup', cal: 250, icon: '🍲', why: 'Iron-rich, filling', protein: 12, carbs_g: 30, fat_g: 5 },
+              { name: 'Tofu Stir Fry', cal: 320, icon: '🍳', why: 'Complete amino acids', protein: 18, carbs_g: 20, fat_g: 14 },
             ] : profile?.diet_preference === 'keto' ? [
-              { name: 'Avocado Eggs', cal: 340, icon: '🥑', why: 'High fat, low carb' },
-              { name: 'Salmon Salad', cal: 420, icon: '🐟', why: 'Omega-3 rich' },
-              { name: 'Cheese Omelette', cal: 380, icon: '🧀', why: 'Keto-friendly protein' },
+              { name: 'Avocado Eggs', cal: 340, icon: '🥑', why: 'High fat, low carb', protein: 20, carbs_g: 6, fat_g: 28 },
+              { name: 'Salmon Salad', cal: 420, icon: '🐟', why: 'Omega-3 rich', protein: 32, carbs_g: 8, fat_g: 26 },
+              { name: 'Cheese Omelette', cal: 380, icon: '🧀', why: 'Keto-friendly protein', protein: 28, carbs_g: 4, fat_g: 28 },
             ] : profile?.diet_preference === 'vegetarian' ? [
-              { name: 'Greek Yogurt Bowl', cal: 280, icon: '🫐', why: 'Probiotics + protein' },
-              { name: 'Paneer Tikka', cal: 350, icon: '🧀', why: 'High protein veggie' },
-              { name: 'Veggie Wrap', cal: 310, icon: '🌯', why: 'Balanced macros' },
+              { name: 'Paneer Tikka', cal: 260, icon: '🧀', why: 'High protein veggie', protein: 16, carbs_g: 8, fat_g: 18 },
+              { name: 'Palak Paneer', cal: 280, icon: '🥬', why: 'Iron + calcium', protein: 14, carbs_g: 10, fat_g: 20 },
+              { name: 'Curd Rice', cal: 220, icon: '🍚', why: 'Easy to digest', protein: 6, carbs_g: 38, fat_g: 5 },
             ] : [
-              { name: 'Grilled Chicken', cal: 320, icon: '🍗', why: 'Lean protein source' },
-              { name: 'Salmon & Rice', cal: 450, icon: '🐟', why: 'Omega-3 + complex carbs' },
-              { name: 'Turkey Wrap', cal: 350, icon: '🌯', why: 'Low fat, high protein' },
+              { name: 'Butter Chicken', cal: 390, icon: '🍗', why: 'Rich & satisfying', protein: 28, carbs_g: 10, fat_g: 26 },
+              { name: 'Chicken Biryani', cal: 400, icon: '🍚', why: 'Complete meal', protein: 22, carbs_g: 48, fat_g: 14 },
+              { name: 'Dal Tadka', cal: 180, icon: '🍲', why: 'Protein + fiber', protein: 10, carbs_g: 24, fat_g: 5 },
             ]).map((meal, i) => (
-              <div key={i} onClick={() => navigate('/meals')} style={{
+              <div key={i} onClick={() => handleAddSuggestion(meal)} style={{
                 flexShrink: 0, width: 130, padding: '14px 12px', cursor: 'pointer',
                 borderRadius: 18, background: 'rgba(255,255,255,0.55)', backdropFilter: 'blur(30px)',
                 border: '1px solid rgba(255,255,255,0.6)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
+                position: 'relative' as const,
               }}>
                 <span style={{ fontSize: '1.5rem', display: 'block', marginBottom: 8 }}>{meal.icon}</span>
                 <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1b1c18', fontFamily: 'var(--font-display)', marginBottom: 2 }}>{meal.name}</div>
                 <div style={{ fontSize: '0.5625rem', fontWeight: 600, color: '#72796a' }}>{meal.cal} kcal · {meal.why}</div>
+                <div style={{
+                  position: 'absolute', top: 6, right: 6, width: 18, height: 18, borderRadius: '50%',
+                  background: '#ecfccb', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: 11, color: '#3d6a00', fontVariationSettings: "'wght' 700" }}>add</span>
+                </div>
               </div>
             ))}
           </div>

@@ -53,10 +53,40 @@ export const dailyLogApi = {
   getRange: (dates: string[]) => dailyLogStorage.getRange(dates),
 };
 
-// ── Foods (USDA via Flask) ───────────────────────────────────────────────────
+// ── Foods (USDA via Flask + Indian Food Library) ─────────────────────────────
+import { searchIndianFoods } from '@/data/indianFoods';
+
 export const foodsApi = {
-  search: (query: string) =>
-    flaskGet<any[]>(`/food?query=${encodeURIComponent(query)}`),
+  search: async (query: string): Promise<any[]> => {
+    // Search local Indian food DB first (instant)
+    const indianResults = searchIndianFoods(query).map((f) => ({
+      name: f.name,
+      servingSize: f.serving_size,
+      servingUnit: f.serving_unit,
+      serving_size: f.serving_size,
+      serving_unit: f.serving_unit,
+      calories: f.calories,
+      protein: f.protein_g,
+      protein_g: f.protein_g,
+      carbs: f.carbs_g,
+      carbs_g: f.carbs_g,
+      fat: f.fat_g,
+      fat_g: f.fat_g,
+      source: 'indian',
+      category: f.category,
+    }));
+
+    // Try USDA search in parallel (may fail if backend is down)
+    let usdaResults: any[] = [];
+    try {
+      usdaResults = await flaskGet<any[]>(`/food?query=${encodeURIComponent(query)}`);
+    } catch {
+      // USDA unavailable — still return Indian results
+    }
+
+    // Indian results first, then USDA
+    return [...indianResults, ...usdaResults];
+  },
 };
 
 // ── Exercises (Wger via Flask) ───────────────────────────────────────────────

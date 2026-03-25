@@ -162,7 +162,7 @@ export default function Reminders() {
             style={{
               width: '100%', maxWidth: 430,
               background: '#fff', borderRadius: '28px 28px 0 0',
-              padding: '20px 24px calc(24px + env(safe-area-inset-bottom, 16px))',
+              padding: '20px 24px calc(80px + env(safe-area-inset-bottom, 16px))',
             }}
             onClick={(e) => e.stopPropagation()}
             className="animate-slideUp"

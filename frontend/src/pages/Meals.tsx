@@ -194,52 +194,59 @@ export default function Meals() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
           <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18' }}>Suggested Meals</h2>
           <span style={{ fontSize: '0.625rem', fontWeight: 600, color: '#72796a' }}>
-            {profile?.diet_preference ? profile.diet_preference.replace('_', ' ') : 'Any'}
+            Tap to add · {profile?.diet_preference ? profile.diet_preference.replace('_', ' ') : 'Any'}
           </span>
         </div>
         <div className="scrollbar-hide" style={{ display: 'flex', gap: 10, overflowX: 'auto', margin: '0 -20px', padding: '0 20px 6px' }}>
           {(profile?.diet_preference === 'vegan' ? [
-            { name: 'Quinoa Power Bowl', cal: 380, protein: 14, icon: '🥗', tag: 'High Fiber' },
-            { name: 'Chickpea Curry', cal: 320, protein: 12, icon: '🍛', tag: 'Iron Rich' },
-            { name: 'Tofu Stir Fry', cal: 290, protein: 18, icon: '🥘', tag: 'Complete Protein' },
-            { name: 'Lentil Dal', cal: 250, protein: 16, icon: '🍲', tag: 'Budget Friendly' },
+            { name: 'Quinoa Power Bowl', calories: 380, protein_g: 14, carbs_g: 48, fat_g: 12, serving_size: 250, icon: '🥗', tag: 'High Fiber' },
+            { name: 'Chickpea Curry', calories: 320, protein_g: 12, carbs_g: 32, fat_g: 8, serving_size: 200, icon: '🍛', tag: 'Iron Rich' },
+            { name: 'Tofu Stir Fry', calories: 290, protein_g: 18, carbs_g: 20, fat_g: 14, serving_size: 200, icon: '🥘', tag: 'Complete Protein' },
+            { name: 'Lentil Dal', calories: 250, protein_g: 16, carbs_g: 30, fat_g: 5, serving_size: 200, icon: '🍲', tag: 'Budget Friendly' },
           ] : profile?.diet_preference === 'keto' ? [
-            { name: 'Avocado Eggs', cal: 340, protein: 20, icon: '🥑', tag: 'High Fat' },
-            { name: 'Butter Chicken', cal: 450, protein: 32, icon: '🍗', tag: 'Low Carb' },
-            { name: 'Salmon & Asparagus', cal: 420, protein: 35, icon: '🐟', tag: 'Omega-3' },
-            { name: 'Cheese Omelette', cal: 380, protein: 28, icon: '🧀', tag: 'Quick Prep' },
+            { name: 'Avocado Eggs', calories: 340, protein_g: 20, carbs_g: 6, fat_g: 28, serving_size: 200, icon: '🥑', tag: 'High Fat' },
+            { name: 'Butter Chicken', calories: 390, protein_g: 28, carbs_g: 10, fat_g: 26, serving_size: 200, icon: '🍗', tag: 'Low Carb' },
+            { name: 'Salmon & Asparagus', calories: 420, protein_g: 35, carbs_g: 8, fat_g: 26, serving_size: 250, icon: '🐟', tag: 'Omega-3' },
+            { name: 'Cheese Omelette', calories: 380, protein_g: 28, carbs_g: 4, fat_g: 28, serving_size: 200, icon: '🧀', tag: 'Quick Prep' },
           ] : profile?.diet_preference === 'vegetarian' ? [
-            { name: 'Greek Yogurt Bowl', cal: 280, protein: 22, icon: '🫐', tag: 'Probiotics' },
-            { name: 'Paneer Tikka', cal: 350, protein: 24, icon: '🧀', tag: 'High Protein' },
-            { name: 'Veggie Pasta', cal: 380, protein: 14, icon: '🍝', tag: 'Comfort Food' },
-            { name: 'Egg Fried Rice', cal: 340, protein: 18, icon: '🍳', tag: 'Quick Prep' },
+            { name: 'Greek Yogurt Bowl', calories: 280, protein_g: 22, carbs_g: 30, fat_g: 8, serving_size: 250, icon: '🫐', tag: 'Probiotics' },
+            { name: 'Paneer Tikka', calories: 260, protein_g: 16, carbs_g: 8, fat_g: 18, serving_size: 150, icon: '🧀', tag: 'High Protein' },
+            { name: 'Palak Paneer', calories: 280, protein_g: 14, carbs_g: 10, fat_g: 20, serving_size: 200, icon: '🥬', tag: 'Iron Rich' },
+            { name: 'Curd Rice', calories: 220, protein_g: 6, carbs_g: 38, fat_g: 5, serving_size: 200, icon: '🍚', tag: 'Easy Digest' },
           ] : profile?.diet_preference === 'halal' ? [
-            { name: 'Chicken Shawarma', cal: 380, protein: 30, icon: '🌯', tag: 'High Protein' },
-            { name: 'Lamb Kebab', cal: 420, protein: 28, icon: '🍢', tag: 'Iron Rich' },
-            { name: 'Hummus & Falafel', cal: 350, protein: 14, icon: '🧆', tag: 'Fiber Rich' },
-            { name: 'Biryani Bowl', cal: 450, protein: 25, icon: '🍚', tag: 'Complete Meal' },
+            { name: 'Chicken Biryani', calories: 400, protein_g: 22, carbs_g: 48, fat_g: 14, serving_size: 250, icon: '🍚', tag: 'Complete Meal' },
+            { name: 'Seekh Kebab', calories: 300, protein_g: 22, carbs_g: 6, fat_g: 20, serving_size: 150, icon: '🍢', tag: 'High Protein' },
+            { name: 'Chicken Shawarma', calories: 380, protein_g: 30, carbs_g: 28, fat_g: 16, serving_size: 200, icon: '🌯', tag: 'Balanced' },
+            { name: 'Dal Tadka', calories: 180, protein_g: 10, carbs_g: 24, fat_g: 5, serving_size: 200, icon: '🍲', tag: 'Budget Friendly' },
           ] : [
-            { name: 'Grilled Chicken', cal: 320, protein: 34, icon: '🍗', tag: 'Lean Protein' },
-            { name: 'Salmon Bowl', cal: 450, protein: 32, icon: '🐟', tag: 'Omega-3' },
-            { name: 'Turkey Wrap', cal: 350, protein: 28, icon: '🌯', tag: 'Low Fat' },
-            { name: 'Beef Stir Fry', cal: 400, protein: 30, icon: '🥩', tag: 'Iron Rich' },
+            { name: 'Grilled Chicken', calories: 320, protein_g: 34, carbs_g: 8, fat_g: 16, serving_size: 200, icon: '🍗', tag: 'Lean Protein' },
+            { name: 'Salmon Bowl', calories: 450, protein_g: 32, carbs_g: 40, fat_g: 16, serving_size: 300, icon: '🐟', tag: 'Omega-3' },
+            { name: 'Chicken Biryani', calories: 400, protein_g: 22, carbs_g: 48, fat_g: 14, serving_size: 250, icon: '🍚', tag: 'Indian' },
+            { name: 'Dal Makhani', calories: 260, protein_g: 11, carbs_g: 28, fat_g: 12, serving_size: 200, icon: '🍛', tag: 'Comfort Food' },
           ]).map((meal, i) => (
-            <div key={i} style={{
-              flexShrink: 0, width: 140, padding: '14px 12px',
+            <div key={i} onClick={() => handleAddFood(meal)} style={{
+              flexShrink: 0, width: 140, padding: '14px 12px', cursor: 'pointer',
               borderRadius: 18, background: 'rgba(255,255,255,0.55)', backdropFilter: 'blur(30px)',
               border: '1px solid rgba(255,255,255,0.6)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
+              transition: 'all 0.2s ease', position: 'relative' as const,
             }}>
               <span style={{ fontSize: '1.75rem', display: 'block', marginBottom: 8 }}>{meal.icon}</span>
               <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1b1c18', fontFamily: 'var(--font-display)', marginBottom: 4 }}>{meal.name}</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                <span style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#3d6a00' }}>{meal.cal} kcal</span>
+                <span style={{ fontSize: '0.5625rem', fontWeight: 700, color: '#3d6a00' }}>{meal.calories} kcal</span>
                 <span style={{ width: 3, height: 3, borderRadius: '50%', background: '#c6c8b9' }} />
-                <span style={{ fontSize: '0.5625rem', fontWeight: 600, color: '#72796a' }}>{meal.protein}g protein</span>
+                <span style={{ fontSize: '0.5625rem', fontWeight: 600, color: '#72796a' }}>{meal.protein_g}g protein</span>
               </div>
               <span style={{
                 fontSize: '0.5rem', fontWeight: 700, color: '#65a30d', background: '#f0fdf4',
                 padding: '2px 8px', borderRadius: 100, border: '1px solid #dcfce7',
               }}>{meal.tag}</span>
+              <div style={{
+                position: 'absolute', top: 8, right: 8, width: 20, height: 20, borderRadius: '50%',
+                background: '#ecfccb', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 12, color: '#3d6a00', fontVariationSettings: "'wght' 700" }}>add</span>
+              </div>
             </div>
           ))}
         </div>
