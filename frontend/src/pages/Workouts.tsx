@@ -43,65 +43,80 @@ export default function Workouts() {
   });
 
   return (
-    <div className="page-container relative" style={{ paddingTop: 'env(safe-area-inset-top, 2.5rem)', paddingBottom: 'calc(100px + env(safe-area-inset-bottom, 0px))' }}>
-      {/* Glow */}
-      <div className="absolute top-0 right-0 w-72 h-72 rounded-full pointer-events-none -z-10" style={{ background: 'radial-gradient(circle, rgba(163,230,53,0.08) 0%, transparent 70%)', transform: 'translate(20%, -20%)' }} />
+    <div className="page-shell" style={{ paddingTop: 24 }}>
 
-      {/* Header */}
-      <div className="px-4 pt-12 pb-4 animate-slideUp" style={{ paddingTop: 'calc(16px + env(safe-area-inset-top, 30px))' }}>
-        <h1 className="text-3xl font-extrabold tracking-tight font-headline text-on-surface leading-none">Training Center</h1>
-        <p className="text-sm text-on-surface-variant font-medium mt-1 flex items-center gap-1">
-          <span className="material-symbols-outlined" style={{ fontSize: 16 }}>library_books</span>
+      {/* ▸ Header ─────────────────────────────── */}
+      <header className="anim-fade-up" style={{ marginBottom: 20 }}>
+        <h1 style={{ fontSize: '1.5rem' }}>Training Center</h1>
+        <p style={{ fontSize: '0.75rem', fontWeight: 500, color: '#72796a', marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+          <span className="material-symbols-outlined" style={{ fontSize: 14 }}>library_books</span>
           {exercises.length} exercises available
         </p>
-      </div>
+      </header>
 
-      {/* Search */}
-      <div className="px-4 mb-4 relative animate-slideUp" style={{ animationDelay: '0.05s' }}>
-        <span className="material-symbols-outlined absolute left-8 top-1/2 -translate-y-1/2 text-on-surface-variant" style={{ fontSize: 20 }}>search</span>
+      {/* ▸ Search ─────────────────────────────── */}
+      <div className="anim-fade-up anim-delay-1" style={{ position: 'relative', marginBottom: 16 }}>
+        <span className="material-symbols-outlined" style={{
+          position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)',
+          fontSize: 18, color: '#72796a',
+        }}>search</span>
         <input
           type="text" value={search} onChange={(e) => setSearch(e.target.value)}
           placeholder="Search exercises or muscle groups..."
           style={{
-            width: '100%', paddingLeft: 48, paddingRight: 16, paddingTop: 14, paddingBottom: 14,
-            borderRadius: '999px', border: '1px solid rgba(194,202,176,0.3)',
-            background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(8px)',
-            fontSize: '0.9rem', fontFamily: 'Plus Jakarta Sans', color: '#1a1c1c', outline: 'none',
+            width: '100%', padding: '14px 40px 14px 44px',
+            borderRadius: 100, border: '1px solid rgba(198,200,185,0.3)',
+            background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(8px)',
+            fontSize: '0.8125rem', fontFamily: 'var(--font-display)',
+            color: '#1b1c18', outline: 'none',
           }}
         />
         {search && (
-          <button onClick={() => setSearch('')} style={{ position: 'absolute', right: 24, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer' }}>
-            <span className="material-symbols-outlined" style={{ fontSize: 18, color: '#5a5c5c' }}>close</span>
+          <button onClick={() => setSearch('')} style={{
+            position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)',
+            background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+          }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#72796a' }}>close</span>
           </button>
         )}
       </div>
 
-      {/* Category Filter */}
-      <div className="flex gap-2 mb-3 overflow-x-auto pb-1 px-4 animate-slideUp" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', animationDelay: '0.08s' }}>
+      {/* ▸ Category Chips ─────────────────────── */}
+      <div
+        className="scrollbar-hide anim-fade-up anim-delay-2"
+        style={{
+          display: 'flex', gap: 8, overflowX: 'auto',
+          margin: '0 -20px', padding: '0 20px 4px',
+          marginBottom: 12,
+        }}
+      >
         {CATEGORIES.map((c) => {
           const isActive = category === c;
           return (
             <button
               key={c}
               onClick={() => setCategory(c)}
-              className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-bold transition-all"
               style={{
-                background: isActive ? '#1a1c1c' : 'rgba(255,255,255,0.8)',
-                color: isActive ? 'white' : '#5a5c5c',
-                border: `1px solid ${isActive ? '#1a1c1c' : 'rgba(194,202,176,0.3)'}`,
-                boxShadow: isActive ? '0 4px 12px rgba(26,28,28,0.15)' : 'none',
-                backdropFilter: 'blur(8px)',
+                flexShrink: 0, display: 'flex', alignItems: 'center', gap: 6,
+                padding: '8px 16px', borderRadius: 100, border: 'none',
+                background: isActive ? '#1b1c18' : 'rgba(255,255,255,0.6)',
+                color: isActive ? 'white' : '#72796a',
+                fontSize: '0.75rem', fontWeight: 700,
+                fontFamily: 'var(--font-display)',
+                boxShadow: isActive ? '0 4px 12px rgba(27,28,24,0.15)' : '0 1px 3px rgba(0,0,0,0.04)',
+                cursor: 'pointer',
+                transition: 'all 0.25s cubic-bezier(.22,1,.36,1)',
               }}
             >
-              {c !== 'All' && <span className="material-symbols-outlined" style={{ fontSize: 16 }}>{CATEGORY_ICONS[c]}</span>}
+              {c !== 'All' && <span className="material-symbols-outlined" style={{ fontSize: 14 }}>{CATEGORY_ICONS[c]}</span>}
               {c}
             </button>
           );
         })}
       </div>
 
-      {/* Difficulty */}
-      <div className="flex gap-2 mb-5 px-4 animate-slideUp" style={{ animationDelay: '0.12s' }}>
+      {/* ▸ Difficulty Chips ───────────────────── */}
+      <div className="anim-fade-up anim-delay-3" style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
         {DIFFICULTIES.map((d) => {
           const isActive = difficulty === d;
           const diff = DIFFICULTY_COLORS[d];
@@ -109,11 +124,15 @@ export default function Workouts() {
             <button
               key={d}
               onClick={() => setDifficulty(d)}
-              className="flex-shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all"
               style={{
-                background: isActive && diff ? diff.bg : (isActive ? '#f3f3f4' : 'transparent'),
-                color: isActive && diff ? diff.text : (isActive ? '#1a1c1c' : '#5a5c5c'),
-                border: `1px solid ${isActive ? (diff?.text || '#1a1c1c') : 'rgba(194,202,176,0.3)'}`,
+                flexShrink: 0, padding: '6px 14px', borderRadius: 100,
+                fontSize: '0.6875rem', fontWeight: 700, border: 'none',
+                background: isActive && diff ? diff.bg : (isActive ? '#e9e9e4' : 'transparent'),
+                color: isActive && diff ? diff.text : (isActive ? '#1b1c18' : '#a1a79a'),
+                outline: isActive ? `1.5px solid ${diff?.text || '#1b1c18'}` : '1.5px solid transparent',
+                cursor: 'pointer',
+                fontFamily: 'var(--font-display)',
+                transition: 'all 0.2s ease',
               }}
             >
               {d}
@@ -122,80 +141,98 @@ export default function Workouts() {
         })}
       </div>
 
-      {/* Exercise List */}
-      <div className="px-4 space-y-3 pb-6 animate-slideUp stagger-children" style={{ animationDelay: '0.15s' }}>
+      {/* ▸ Exercise Cards ─────────────────────── */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, paddingBottom: 16 }}>
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 text-on-surface-variant">
-            <span className="material-symbols-outlined animate-spin mb-3" style={{ fontSize: 36 }}>progress_activity</span>
-            <p className="text-sm font-medium">Loading exercises...</p>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '80px 0', color: '#72796a' }}>
+            <span className="material-symbols-outlined animate-spin" style={{ fontSize: 32, marginBottom: 12 }}>progress_activity</span>
+            <p style={{ fontSize: '0.8125rem', fontWeight: 500 }}>Loading exercises...</p>
           </div>
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-on-surface-variant" style={{ background: '#f3f3f4', borderRadius: '1.5rem', padding: '2rem' }}>
-            <span className="material-symbols-outlined mb-3" style={{ fontSize: 48, fontVariationSettings: "'FILL' 0, 'wght' 200" }}>search_off</span>
-            <p className="text-sm font-medium">No exercises found</p>
-            <button onClick={() => { setSearch(''); setCategory('All'); setDifficulty('All'); }}
-              style={{ marginTop: 12, fontSize: '0.8rem', fontWeight: 700, color: '#1a1c1c', background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer' }}>
+          <div className="card" style={{ padding: '40px 20px', textAlign: 'center' }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 44, color: '#c6c8b9', marginBottom: 8, display: 'block', fontVariationSettings: "'wght' 200" }}>search_off</span>
+            <p style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#72796a' }}>No exercises found</p>
+            <button onClick={() => { setSearch(''); setCategory('All'); setDifficulty('All'); }} style={{
+              marginTop: 12, fontSize: '0.75rem', fontWeight: 700, color: '#1b1c18',
+              background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer',
+            }}>
               Clear filters
             </button>
           </div>
         ) : (
           filtered.map((ex) => {
             const isExpanded = expanded === ex.name;
-            const diff = DIFFICULTY_COLORS[ex.difficulty] || { text: '#5a5c5c', bg: '#f3f3f4' };
+            const diff = DIFFICULTY_COLORS[ex.difficulty] || { text: '#72796a', bg: '#e9e9e4' };
             return (
-              <div
-                key={ex.name}
-                style={{
-                  background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(8px)',
-                  borderRadius: '1.25rem', border: '1px solid rgba(194,202,176,0.2)',
-                  overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
-                  transition: 'all 0.25s ease',
-                }}
-              >
+              <div key={ex.name} className="card" style={{ overflow: 'hidden' }}>
                 <button
                   onClick={() => setExpanded(isExpanded ? null : ex.name)}
-                  className="w-full flex items-center gap-3 text-left"
-                  style={{ padding: '14px 16px' }}
+                  style={{
+                    width: '100%', display: 'flex', alignItems: 'center', gap: 12,
+                    textAlign: 'left', padding: '16px 18px',
+                    background: 'none', border: 'none', cursor: 'pointer',
+                  }}
                 >
-                  <div style={{ width: 48, height: 48, borderRadius: '0.875rem', background: '#f3f3f4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 24, color: '#1a1c1c' }}>{CATEGORY_ICONS[ex.category] || 'fitness_center'}</span>
+                  <div style={{
+                    width: 44, height: 44, borderRadius: 14, background: '#e9e9e4',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                  }}>
+                    <span className="material-symbols-outlined" style={{ fontSize: 22, color: '#1b1c18' }}>
+                      {CATEGORY_ICONS[ex.category] || 'fitness_center'}
+                    </span>
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div className="text-sm font-headline font-bold text-on-surface truncate">{ex.name}</div>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs font-medium text-on-surface-variant">{ex.category}</span>
-                      <span style={{ display: 'inline-block', width: 3, height: 3, borderRadius: '50%', background: '#c2cab0' }} />
-                      <span style={{ fontSize: '0.65rem', fontWeight: 700, padding: '2px 8px', borderRadius: 999, background: diff.bg, color: diff.text, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    <div style={{
+                      fontSize: '0.8125rem', fontWeight: 700, color: '#1b1c18',
+                      fontFamily: 'var(--font-display)',
+                      overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                    }}>{ex.name}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
+                      <span style={{ fontSize: '0.6875rem', fontWeight: 500, color: '#72796a' }}>{ex.category}</span>
+                      <span style={{ width: 3, height: 3, borderRadius: '50%', background: '#c6c8b9', display: 'inline-block' }} />
+                      <span className="badge" style={{
+                        fontSize: '0.5625rem', fontWeight: 700, padding: '2px 8px',
+                        borderRadius: 100, background: diff.bg, color: diff.text,
+                      }}>
                         {ex.difficulty}
                       </span>
                     </div>
                   </div>
                   <div style={{
-                    width: 32, height: 32, borderRadius: '50%',
-                    background: isExpanded ? '#a3e635' : '#f3f3f4',
+                    width: 30, height: 30, borderRadius: '50%',
+                    background: isExpanded ? '#a3e635' : '#e9e9e4',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    transition: 'all 0.3s ease',
+                    transition: 'all 0.25s ease', flexShrink: 0,
                   }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: 18, color: isExpanded ? '#416400' : '#5a5c5c', transform: isExpanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s ease' }}>keyboard_arrow_down</span>
+                    <span className="material-symbols-outlined" style={{
+                      fontSize: 16, color: isExpanded ? '#3d6a00' : '#72796a',
+                      transform: isExpanded ? 'rotate(180deg)' : 'none',
+                      transition: 'transform 0.3s ease',
+                    }}>keyboard_arrow_down</span>
                   </div>
                 </button>
-                <div
-                  style={{
-                    overflow: 'hidden', maxHeight: isExpanded ? '400px' : 0,
-                    opacity: isExpanded ? 1 : 0,
-                    transition: 'max-height 0.35s ease, opacity 0.25s ease',
-                  }}
-                >
-                  <div style={{ padding: '0 16px 16px' }}>
-                    <div style={{ background: '#f9f9f9', borderRadius: '0.875rem', padding: '14px' }}>
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#5a5c5c' }}>accessibility_new</span>
-                        <span style={{ fontSize: '0.7rem', fontWeight: 700, fontFamily: 'Plus Jakarta Sans', color: '#5a5c5c', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Target Muscles</span>
+
+                {/* Expanded content */}
+                <div style={{
+                  overflow: 'hidden',
+                  maxHeight: isExpanded ? 400 : 0,
+                  opacity: isExpanded ? 1 : 0,
+                  transition: 'max-height 0.35s ease, opacity 0.25s ease',
+                }}>
+                  <div style={{ padding: '0 18px 18px' }}>
+                    <div style={{ background: '#f8f8f3', borderRadius: 14, padding: 16 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 14, color: '#72796a' }}>accessibility_new</span>
+                        <span style={{
+                          fontSize: '0.625rem', fontWeight: 700, color: '#72796a',
+                          textTransform: 'uppercase', letterSpacing: '0.08em',
+                          fontFamily: 'var(--font-display)',
+                        }}>Target Muscles</span>
                       </div>
-                      <p className="text-sm font-medium text-on-surface ml-6 mb-3">{ex.muscles}</p>
-                      <div className="flex items-start gap-2">
-                        <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#5a5c5c', marginTop: 2 }}>info</span>
-                        <p className="text-sm leading-relaxed text-on-surface-variant">{ex.description}</p>
+                      <p style={{ fontSize: '0.8125rem', fontWeight: 500, color: '#1b1c18', marginLeft: 20, marginBottom: 12 }}>{ex.muscles}</p>
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6 }}>
+                        <span className="material-symbols-outlined" style={{ fontSize: 14, color: '#72796a', marginTop: 2 }}>info</span>
+                        <p style={{ fontSize: '0.8125rem', lineHeight: 1.6, color: '#45483d' }}>{ex.description}</p>
                       </div>
                     </div>
                   </div>

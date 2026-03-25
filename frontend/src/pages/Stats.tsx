@@ -39,10 +39,10 @@ export default function Stats() {
             water: log?.water_glasses || 0,
           });
         } catch {
-          data.push({ 
-            date: dateStr, 
-            day: d.toLocaleDateString('en', { weekday: 'short' }).slice(0, 3), 
-            calories: 0, protein: 0, carbs: 0, fat: 0, water: 0 
+          data.push({
+            date: dateStr,
+            day: d.toLocaleDateString('en', { weekday: 'short' }).slice(0, 3),
+            calories: 0, protein: 0, carbs: 0, fat: 0, water: 0,
           });
         }
       }
@@ -52,82 +52,93 @@ export default function Stats() {
     init();
   }, [dailyLog]);
 
-  // Averages
   const avgCal = useMemo(() => {
-    if (!weeklyData || weeklyData.length === 0) return 0;
+    if (!weeklyData.length) return 0;
     return Math.round(weeklyData.reduce((s, d) => s + d.calories, 0) / weeklyData.length);
   }, [weeklyData]);
 
   const avgProtein = useMemo(() => {
-    if (!weeklyData || weeklyData.length === 0) return 0;
+    if (!weeklyData.length) return 0;
     return Math.round(weeklyData.reduce((s, d) => s + d.protein, 0) / weeklyData.length);
   }, [weeklyData]);
 
   const avgCarbs = useMemo(() => {
-    if (!weeklyData || weeklyData.length === 0) return 0;
+    if (!weeklyData.length) return 0;
     return Math.round(weeklyData.reduce((s, d) => s + d.carbs, 0) / weeklyData.length);
   }, [weeklyData]);
 
   const avgFat = useMemo(() => {
-    if (!weeklyData || weeklyData.length === 0) return 0;
+    if (!weeklyData.length) return 0;
     return Math.round(weeklyData.reduce((s, d) => s + d.fat, 0) / weeklyData.length);
   }, [weeklyData]);
 
-  // Streak Calculation
   const streakDays = useMemo(() => {
-    if (!weeklyData || weeklyData.length === 0) return 0;
+    if (!weeklyData.length) return 0;
     let streak = 0;
     for (let i = weeklyData.length - 1; i >= 0; i--) {
-      if (weeklyData[i].calories > 0) {
-        streak++;
-      } else {
-        break;
-      }
+      if (weeklyData[i].calories > 0) streak++;
+      else break;
     }
     return streak;
   }, [weeklyData]);
 
   const summaryCards = [
-    { label: "Avg Calories", value: avgCal.toLocaleString(), unit: "kcal", icon: "local_fire_department", color: "text-primary" },
-    { label: "Avg Protein", value: `${avgProtein}g`, unit: "", icon: "bolt", color: "text-primary" },
-    { label: "Streak", value: `${streakDays}`, unit: "days", icon: "trending_up", color: "text-primary" },
+    { label: 'Avg Calories', value: avgCal.toLocaleString(), unit: 'kcal', icon: 'local_fire_department', iconColor: '#ef4444' },
+    { label: 'Avg Protein', value: `${avgProtein}g`, unit: '', icon: 'bolt', iconColor: '#f59e0b' },
+    { label: 'Streak', value: `${streakDays}`, unit: 'days', icon: 'trending_up', iconColor: '#65a30d' },
   ];
 
-  // Current Week String e.g. "Mar 17 - Mar 23, 2026"
   const weekLabel = useMemo(() => {
-    if (!weeklyData || weeklyData.length < 7) return "";
-    const start = new Date(weeklyData[0].date).toLocaleDateString("en-US", { month: "short", day: "numeric" });
-    const end = new Date(weeklyData[weeklyData.length - 1].date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    if (!weeklyData || weeklyData.length < 7) return '';
+    const start = new Date(weeklyData[0].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const end = new Date(weeklyData[weeklyData.length - 1].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     return `${start} – ${end}`;
   }, [weeklyData]);
 
   return (
-    <div className="min-h-screen bg-surface pt-[max(env(safe-area-inset-top),2.5rem)] pb-[max(env(safe-area-inset-bottom),6rem)] px-5">
-      <div className="mb-6 animate-fade-in pt-4">
-        <h1 className="text-2xl font-bold font-headline text-on-surface">Weekly Stats</h1>
-        <p className="text-sm text-on-surface-variant mt-1 font-medium">{weekLabel}</p>
-      </div>
+    <div className="page-shell" style={{ paddingTop: 24 }}>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-3 gap-3 mb-5 animate-fade-in">
-        {summaryCards.map((card) => (
-          <div key={card.label} className="glass rounded-2xl p-3 text-center border border-outline-variant/15 shadow-sm flex flex-col items-center">
-            <span className={`material-symbols-outlined mb-1 ${card.color}`} style={{ fontSize: 24, fontVariationSettings: "'FILL' 1" }}>
-              {card.icon}
-            </span>
-            <p className="text-lg font-bold font-headline text-on-surface">{card.value}</p>
-            <p className="text-[10px] text-on-surface-variant">{card.label}{card.unit ? ` (${card.unit})` : ""}</p>
+      {/* ▸ Header ─────────────────────────────── */}
+      <header className="anim-fade-up" style={{ marginBottom: 24 }}>
+        <h1 style={{ fontSize: '1.5rem' }}>Weekly Stats</h1>
+        <p style={{ fontSize: '0.75rem', fontWeight: 500, color: '#72796a', marginTop: 4 }}>{weekLabel}</p>
+      </header>
+
+      {/* ▸ Summary Cards ──────────────────────── */}
+      <div className="anim-fade-up anim-delay-1" style={{
+        display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: 10, marginBottom: 20,
+      }}>
+        {summaryCards.map((c) => (
+          <div key={c.label} className="card" style={{
+            padding: '16px 12px', textAlign: 'center',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
+          }}>
+            <span className="material-symbols-outlined" style={{
+              fontSize: 22, color: c.iconColor, marginBottom: 4,
+              fontVariationSettings: "'FILL' 1",
+            }}>{c.icon}</span>
+            <span style={{
+              fontSize: '1.125rem', fontWeight: 800, color: '#1b1c18',
+              fontFamily: 'var(--font-display)', lineHeight: 1,
+            }}>{c.value}</span>
+            <span style={{
+              fontSize: '0.5625rem', fontWeight: 600, color: '#a1a79a',
+              marginTop: 2,
+            }}>{c.label}{c.unit ? ` (${c.unit})` : ''}</span>
           </div>
         ))}
       </div>
 
-      {/* Weekly Chart */}
-      <div className="mb-5 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+      {/* ▸ Weekly Chart ───────────────────────── */}
+      <div className="anim-fade-up anim-delay-2 card" style={{ padding: '18px 16px', marginBottom: 20 }}>
+        <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18', marginBottom: 14 }}>Calorie Trend</h2>
         {weeklyData.length > 0 && <WeeklyChart data={weeklyData} goal={Math.round(targets.calories)} />}
       </div>
 
-      {/* Macro Donut */}
-      <div className="animate-fade-in mb-8" style={{ animationDelay: "0.2s" }}>
+      {/* ▸ Macro Donut ────────────────────────── */}
+      <div className="anim-fade-up anim-delay-3 card" style={{ padding: '18px 16px', marginBottom: 20 }}>
+        <h2 style={{ fontSize: '0.8125rem', color: '#1b1c18', marginBottom: 14 }}>Macro Breakdown</h2>
         <MacroDonut protein={avgProtein} carbs={avgCarbs} fat={avgFat} />
       </div>
     </div>
