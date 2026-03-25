@@ -47,8 +47,8 @@ export default function Dashboard() {
     } catch { /* ignore */ }
   };
 
-  const showToast = (msg: string) => {
-    setToast(msg);
+  const _showToast = (_msg: string) => {
+    setToast(_msg);
     setTimeout(() => setToast(null), 2000);
   };
 
@@ -73,58 +73,72 @@ export default function Dashboard() {
   }, [dailyLog]);
 
   return (
-    <div className="min-h-screen bg-surface pt-[max(env(safe-area-inset-top),2.5rem)] pb-[max(env(safe-area-inset-bottom),6rem)] px-5">
+    <div
+      className="min-h-screen pb-24 px-5"
+      style={{
+        background: 'var(--surface)',
+        paddingTop: 'max(env(safe-area-inset-top, 0px), 1.5rem)',
+      }}
+    >
       
       {/* Header */}
-      <div className="mb-6 animate-fade-in flex justify-between items-center">
+      <div className="mb-6 animate-fadeIn flex justify-between items-center">
         <div>
-          <p className="text-sm text-muted-foreground font-medium">{today}</p>
-          <h1 className="text-2xl font-bold text-foreground mt-1">
+          <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant)' }}>{today}</p>
+          <h1
+            className="text-2xl font-extrabold mt-1 tracking-tight"
+            style={{ color: 'var(--on-surface)', fontFamily: 'var(--font-display)' }}
+          >
             {getGreeting()}, {profile?.name || 'Guest'} 👋
           </h1>
         </div>
-        <div
-          className="w-10 h-10 rounded-full overflow-hidden cursor-pointer shrink-0 border-2 border-primary-container bg-primary flex items-center justify-center shadow-sm"
+        <button
+          className="w-10 h-10 rounded-full overflow-hidden cursor-pointer shrink-0 flex items-center justify-center"
           onClick={() => navigate('/profile')}
+          style={{
+            background: 'linear-gradient(135deg, #a3e635, #65a30d)',
+            border: '2px solid rgba(163, 230, 53, 0.4)',
+            boxShadow: '0 4px 14px rgba(163, 230, 53, 0.3)',
+          }}
         >
-          <span className="text-primary-foreground font-bold text-sm">
+          <span className="font-bold text-sm" style={{ color: 'white' }}>
             {profile?.name?.charAt(0)?.toUpperCase() || 'U'}
           </span>
-        </div>
+        </button>
       </div>
 
-      {/* Calorie Ring */}
-      <div className="glass rounded-3xl p-6 mb-5">
+      {/* Calorie Ring Card */}
+      <div className="glass rounded-3xl p-6 mb-5 editorial-shadow">
         <CalorieRing consumed={Math.round(totals.calories)} goal={Math.round(targets.calories)} />
       </div>
 
-      {/* Macro Progress */}
-      <div className="glass rounded-3xl p-5 mb-5 space-y-3 animate-fade-in" style={{ animationDelay: "0.1s" }}>
-        <h2 className="text-sm font-bold text-foreground mb-3">Macros</h2>
-        <MacroBar label="Protein" current={Math.round(totals.protein)} goal={Math.round(targets.protein)} color="#a3e635" />
-        <MacroBar label="Carbs" current={Math.round(totals.carbs)} goal={Math.round(targets.carbs)} color="#fbbf24" />
-        <MacroBar label="Fat" current={Math.round(totals.fat)} goal={Math.round(targets.fat)} color="#f87171" />
+      {/* Macro Progress Card */}
+      <div className="glass rounded-3xl p-5 mb-5 space-y-3 animate-fadeIn" style={{ animationDelay: '0.1s' }}>
+        <h2 className="text-sm font-bold mb-3" style={{ color: 'var(--on-surface)', fontFamily: 'var(--font-display)' }}>Macros</h2>
+        <MacroBar label="Protein" current={Math.round(totals.protein)} goal={Math.round(targets.protein)} color="#0ea5e9" />
+        <MacroBar label="Carbs" current={Math.round(totals.carbs)} goal={Math.round(targets.carbs)} color="#f59e0b" />
+        <MacroBar label="Fat" current={Math.round(totals.fat)} goal={Math.round(targets.fat)} color="#ec4899" />
       </div>
 
-      {/* Hydration Tracker - Custom Blue Tinted Glass */}
-      <div className="glass rounded-3xl p-5 mb-5 space-y-4 animate-fade-in shadow-sm border border-secondary-container/30 bg-secondary-container/10" style={{ animationDelay: "0.15s" }}>
-        <div className="flex justify-between items-center">
+      {/* Hydration Tracker — Blue Glass */}
+      <div className="glass-blue-card rounded-3xl p-5 mb-5 animate-fadeIn" style={{ animationDelay: '0.15s' }}>
+        <div className="flex justify-between items-center mb-4">
           <div>
-            <h2 className="text-sm font-bold text-foreground">Hydration</h2>
-            <p className="text-xs text-muted-foreground mt-0.5">Goal: {waterTargetLiters}L</p>
+            <h2 className="text-sm font-bold" style={{ color: 'var(--on-surface)', fontFamily: 'var(--font-display)' }}>
+              Hydration
+            </h2>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--on-surface-variant)' }}>Goal: {waterTargetLiters}L</p>
           </div>
-          <div className="text-right">
-            <span className="text-xl font-black text-secondary-container tracking-tight">{waterLiters}L</span>
-          </div>
+          <span className="text-xl font-extrabold tracking-tight" style={{ color: 'var(--secondary-container)' }}>{waterLiters}L</span>
         </div>
         
-        <div className="flex gap-2 mb-2 items-center justify-between">
+        <div className="flex gap-2 items-center justify-between">
            <div className="flex gap-1.5 flex-1 max-w-[70%]">
              {Array.from({ length: Math.min(waterGlasses, 8) }).map((_, i) => (
                 <span
                   key={`filled-${i}`}
-                  className="material-symbols-outlined text-secondary-container drop-shadow-sm"
-                  style={{ fontVariationSettings: "'FILL' 1", fontSize: 24 }}
+                  className="material-symbols-outlined"
+                  style={{ fontVariationSettings: "'FILL' 1", fontSize: 24, color: 'var(--secondary-container)' }}
                 >
                   water_drop
                 </span>
@@ -132,8 +146,8 @@ export default function Dashboard() {
               {Array.from({ length: Math.max(8 - waterGlasses, 0) }).map((_, i) => (
                 <span
                   key={`empty-${i}`}
-                  className="material-symbols-outlined text-secondary-container/30"
-                  style={{ fontSize: 24 }}
+                  className="material-symbols-outlined"
+                  style={{ fontSize: 24, color: 'rgba(33, 112, 228, 0.25)' }}
                 >
                   water_drop
                 </span>
@@ -142,7 +156,12 @@ export default function Dashboard() {
            
            <button 
              onClick={() => handleWater(1)}
-             className="w-10 h-10 rounded-full bg-secondary-container text-primary-foreground shadow-md shadow-secondary-container/30 flex items-center justify-center active:scale-95 transition-transform shrink-0"
+             className="w-10 h-10 rounded-full flex items-center justify-center active:scale-95 transition-transform shrink-0"
+             style={{
+               background: 'var(--secondary-container)',
+               color: 'white',
+               boxShadow: '0 4px 14px rgba(33, 112, 228, 0.3)',
+             }}
             >
               <span className="material-symbols-outlined font-bold" style={{ fontSize: 20 }}>add</span>
            </button>
@@ -150,10 +169,10 @@ export default function Dashboard() {
       </div>
 
       {/* Today's Meals */}
-      <div className="animate-fade-in mb-8" style={{ animationDelay: "0.2s" }}>
+      <div className="animate-fadeIn mb-8" style={{ animationDelay: '0.2s' }}>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-bold text-foreground">Today's Meals</h2>
-          <span className="text-xs text-muted-foreground">{actualMeals.length} logged</span>
+          <h2 className="text-sm font-bold" style={{ color: 'var(--on-surface)', fontFamily: 'var(--font-display)' }}>Today's Meals</h2>
+          <span className="text-xs" style={{ color: 'var(--on-surface-variant)' }}>{actualMeals.length} logged</span>
         </div>
         {actualMeals.length > 0 ? (
           <div className="flex gap-3 overflow-x-auto pb-4 -mx-5 px-5 scrollbar-hide">
@@ -162,24 +181,46 @@ export default function Dashboard() {
             ))}
           </div>
         ) : (
-          <div className="glass rounded-xl p-6 text-center flex flex-col items-center justify-center gap-2 mt-2">
-            <span className="material-symbols-outlined text-muted-foreground/40" style={{ fontSize: 32 }}>restaurant</span>
-            <p className="text-sm font-medium text-muted-foreground">No meals logged yet.</p>
-            <button onClick={() => navigate('/meals')} className="mt-2 text-xs font-bold text-primary-foreground bg-primary px-4 py-1.5 rounded-full inline-block">Log food</button>
+          <div className="glass rounded-2xl p-6 text-center flex flex-col items-center justify-center gap-2">
+            <span
+              className="material-symbols-outlined"
+              style={{ fontSize: 36, color: 'var(--outline-variant)' }}
+            >
+              restaurant
+            </span>
+            <p className="text-sm font-medium" style={{ color: 'var(--on-surface-variant)' }}>No meals logged yet.</p>
+            <button
+              onClick={() => navigate('/meals')}
+              className="mt-2 text-xs font-bold px-5 py-2 rounded-full"
+              style={{
+                background: 'linear-gradient(135deg, #a3e635, #84cc16)',
+                color: 'var(--on-primary-container)',
+                boxShadow: '0 4px 14px rgba(163, 230, 53, 0.3)',
+              }}
+            >
+              Log food
+            </button>
           </div>
         )}
       </div>
 
-      {/* FAB - Using Material Icons */}
+      {/* FAB */}
       <button 
-        className="fixed bottom-24 right-5 z-40 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 flex items-center justify-center active:scale-95 transition-transform"
+        className="fixed bottom-24 right-5 z-40 w-14 h-14 rounded-full flex items-center justify-center active:scale-95 transition-transform"
         onClick={() => navigate('/meals')}
+        style={{
+          background: 'linear-gradient(135deg, #a3e635, #65a30d)',
+          color: 'white',
+          boxShadow: '0 8px 30px rgba(163, 230, 53, 0.4)',
+        }}
       >
         <span className="material-symbols-outlined" style={{ fontSize: 28, fontVariationSettings: "'wght' 600" }}>add</span>
       </button>
 
       {/* Toast */}
-      {toast && <div className="fixed top-12 left-1/2 -translate-x-1/2 bg-foreground text-background px-4 py-2 rounded-full text-sm font-medium shadow-xl z-50 animate-fade-in">{toast}</div>}
+      {toast && (
+        <div className="toast">{toast}</div>
+      )}
     </div>
   );
 }

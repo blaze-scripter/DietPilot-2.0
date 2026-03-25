@@ -6,20 +6,20 @@ interface CalorieRingProps {
 const CalorieRing = ({ consumed, goal }: CalorieRingProps) => {
   const percentage = Math.min((consumed / goal) * 100, 100);
   const remaining = Math.max(goal - consumed, 0);
-  const radius = 90;
+  const radius = 80;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   return (
-    <div className="flex flex-col items-center animate-scale-in">
-      <div className="relative w-56 h-56">
-        <svg viewBox="0 0 200 200" className="w-full h-full -rotate-90">
+    <div className="flex flex-col items-center animate-scaleIn">
+      <div className="relative" style={{ width: 192, height: 192 }}>
+        <svg viewBox="0 0 200 200" className="w-full h-full" style={{ transform: 'rotate(-90deg)' }}>
           {/* Background ring */}
           <circle
             cx="100" cy="100" r={radius}
             fill="none"
-            stroke="hsl(var(--secondary))"
-            strokeWidth="14"
+            stroke="#e8e8e8"
+            strokeWidth="10"
             strokeLinecap="round"
           />
           {/* Progress ring */}
@@ -27,26 +27,38 @@ const CalorieRing = ({ consumed, goal }: CalorieRingProps) => {
             cx="100" cy="100" r={radius}
             fill="none"
             stroke="url(#limeGradient)"
-            strokeWidth="14"
+            strokeWidth="10"
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
-            className="transition-all duration-1000 ease-out"
+            style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1)' }}
           />
           <defs>
             <linearGradient id="limeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="hsl(var(--tb-lime))" />
-              <stop offset="100%" stopColor="hsl(var(--tb-lime-dark))" />
+              <stop offset="0%" stopColor="#a3e635" />
+              <stop offset="100%" stopColor="#65a30d" />
             </linearGradient>
           </defs>
         </svg>
         {/* Center text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-4xl font-bold tracking-tight text-foreground">{consumed}</span>
-          <span className="text-xs text-muted-foreground font-medium mt-0.5">kcal eaten</span>
-          <div className="flex items-center gap-1 mt-2 px-3 py-1 rounded-full bg-secondary">
-            <span className="text-xs font-semibold text-foreground">{remaining}</span>
-            <span className="text-[10px] text-muted-foreground">left</span>
+          <span
+            className="font-extrabold tracking-tight"
+            style={{ color: 'var(--on-surface)', fontFamily: 'var(--font-display)', fontSize: consumed > 999 ? '2rem' : '2.5rem' }}
+          >
+            {consumed.toLocaleString()}
+          </span>
+          <span className="text-xs font-medium mt-0.5" style={{ color: 'var(--on-surface-variant)' }}>
+            kcal eaten
+          </span>
+          <div
+            className="flex items-center gap-1 mt-2 px-3 py-1 rounded-full"
+            style={{ background: 'var(--primary-soft)' }}
+          >
+            <span className="text-xs font-bold" style={{ color: 'var(--on-primary-container)' }}>
+              {remaining.toLocaleString()}
+            </span>
+            <span className="text-[10px]" style={{ color: 'var(--on-surface-variant)' }}>left</span>
           </div>
         </div>
       </div>

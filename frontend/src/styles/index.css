@@ -2,34 +2,113 @@
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
 @import "tailwindcss";
 
-/* ===== DESIGN SYSTEM TOKENS ===== */
+/* ===== TAILWIND V4 THEME ===== */
 @theme {
-  --color-primary: #446900;
-  --color-primary-light: #a3e635;
-  --color-primary-container: #a3e635;
-  --color-on-primary-container: #416400;
-  --color-primary-soft: #ecfccb;
-  --color-secondary: #0058be;
-  --color-secondary-container: #2170e4;
-  --color-on-secondary-container: #fefcff;
   --color-background: #f9f9f9;
+  --color-foreground: #1a1c1c;
   --color-surface: #f9f9f9;
   --color-surface-container-low: #f3f3f4;
   --color-surface-container: #eeeeee;
-  --color-foreground: #1a1c1c;
+  --color-surface-container-high: #e8e8e8;
   --color-on-surface: #1a1c1c;
   --color-on-surface-variant: #5a5c5c;
   --color-muted: #5a5c5c;
-  --color-outline: #727a64;
+  --color-muted-light: #9ca3af;
+  --color-primary: #446900;
+  --color-primary-container: #a3e635;
+  --color-primary-soft: #ecfccb;
+  --color-on-primary-container: #416400;
   --color-outline-variant: #c2cab0;
+  --color-secondary-container: #2170e4;
   --color-danger: #ba1a1a;
-  --color-error: #ba1a1a;
+  --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-info: #3b82f6;
-  --color-success: #10b981;
-  
+  --color-inverse-surface: #2f3131;
+  /* Track Bite macro colors (from Stitch) */
+  --color-tb-lime: #84cc16;
+  --color-tb-lime-light: #a3e635;
+  --color-tb-lime-dark: #65a30d;
+  --color-tb-protein: #0ea5e9;
+  --color-tb-carbs: #f59e0b;
+  --color-tb-fat: #ec4899;
+  /* Font families */
+  --font-family-display: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  --font-family-body: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+  /* Radii */
+  --radius-DEFAULT: 16px;
+  --radius-sm: 12px;
+  --radius-xs: 8px;
+  --radius-full: 9999px;
+}
+
+/* ===== DESIGN SYSTEM TOKENS (CSS Variables) ===== */
+:root {
+  /* Primary Palette (Lime/Green) */
+  --primary: #446900;
+  --primary-light: #a3e635;
+  --primary-container: #a3e635;
+  --on-primary-container: #416400;
+  --primary-soft: #ecfccb;
+  --primary-glow: rgba(163, 230, 53, 0.4);
+
+  /* Secondary (Blue) */
+  --secondary: #0058be;
+  --secondary-container: #2170e4;
+  --on-secondary-container: #fefcff;
+
+  /* Tertiary (Purple) */
+  --tertiary: #784f85;
+  --tertiary-container: #f3c1ff;
+
+  /* Surface & Background */
+  --background: #f9f9f9;
+  --surface: #f9f9f9;
+  --surface-container-low: #f3f3f4;
+  --surface-container: #eeeeee;
+  --surface-container-high: #e8e8e8;
+  --surface-container-highest: #e2e2e2;
+
+  /* Text */
+  --foreground: #1a1c1c;
+  --on-surface: #1a1c1c;
+  --on-surface-variant: #5a5c5c;
+  --muted: #5a5c5c;
+  --muted-light: #9ca3af;
+  --outline: #727a64;
+  --outline-variant: #c2cab0;
+
+  /* Semantic */
+  --danger: #ba1a1a;
+  --error: #ba1a1a;
+  --error-container: #ffdad6;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+  --success: #10b981;
+
+  /* Cards */
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(255, 255, 255, 0.5);
+
+  /* Radii */
+  --radius: 16px;
+  --radius-sm: 12px;
+  --radius-xs: 8px;
+  --radius-full: 9999px;
+
+  /* Typography */
   --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
   --font-body: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+
+  /* Onboarding Step Colors */
+  --step-0: #f0fdf4;
+  --step-1: #fef3c7;
+  --step-2: #e0f2fe;
+  --step-3: #fce7f3;
+  --step-4: #ecfccb;
+  --step-5: #f5f3ff;
+  --step-6: #ccfbf1;
+  --step-7: #fef9c3;
 }
 
 /* ===== BASE STYLES ===== */
@@ -54,8 +133,6 @@ body {
   justify-content: center;
   min-height: 100dvh;
   overflow-x: hidden;
-  padding-top: env(safe-area-inset-top, 30px);
-  padding-bottom: env(safe-area-inset-bottom, 20px);
 }
 
 #root {
@@ -97,7 +174,23 @@ h1, h2, h3, h4, h5, h6 {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
-/* ===== GLASS CARD ===== */
+/* ===== GLASS UTILITIES (Stitch-compatible) ===== */
+.glass {
+  background: rgba(255, 255, 255, 0.70);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.50);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.60);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
 .glass-card {
   background: var(--card-bg);
   backdrop-filter: blur(16px);
@@ -132,10 +225,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .glass-blue-card {
-  background: rgba(59, 130, 246, 0.1);
+  background: rgba(59, 130, 246, 0.08);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(0, 88, 190, 0.1);
+  border: 1px solid rgba(33, 112, 228, 0.15);
   border-radius: var(--radius);
 }
 
@@ -315,8 +408,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 /* ===== PAGE WRAPPER ===== */
 .page-container {
   padding: 16px;
-  padding-top: calc(16px + env(safe-area-inset-top, 30px));
-  padding-bottom: calc(100px + env(safe-area-inset-bottom, 20px));
+  padding-bottom: 100px;
   min-height: 100dvh;
 }
 
@@ -425,3 +517,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   border-color: var(--primary-container) !important;
   background: rgba(255, 255, 255, 0.8) !important;
 }
+
+/* ===== SCROLLBAR HIDE ===== */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
