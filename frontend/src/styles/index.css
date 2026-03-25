@@ -54,6 +54,8 @@ body {
   justify-content: center;
   min-height: 100dvh;
   overflow-x: hidden;
+  padding-top: env(safe-area-inset-top, 30px);
+  padding-bottom: env(safe-area-inset-bottom, 20px);
 }
 
 #root {
@@ -313,7 +315,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
 /* ===== PAGE WRAPPER ===== */
 .page-container {
   padding: 16px;
-  padding-bottom: 100px;
+  padding-top: calc(16px + env(safe-area-inset-top, 30px));
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 20px));
   min-height: 100dvh;
 }
 

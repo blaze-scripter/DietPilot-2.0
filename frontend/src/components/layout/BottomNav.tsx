@@ -25,6 +25,7 @@ export default function BottomNav() {
           WebkitBackdropFilter: 'blur(30px)',
           borderTop: '1px solid rgba(194,202,176,0.15)',
           boxShadow: '0 -4px 24px rgba(45,47,47,0.06)',
+          paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 20px))',
         }}
       >
         {tabs.map((tab) => {

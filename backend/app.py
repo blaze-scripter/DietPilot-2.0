@@ -22,7 +22,7 @@ WGER_API_KEY = os.getenv('WGER_API_KEY', '')
 
 # ── Flask app ────────────────────────────────────────────────────────────────
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:5173", "http://127.0.0.1:5173"])
+CORS(app, resources={r"/api/*": {"origins": "*" }})
 
 
 # ── Health check ─────────────────────────────────────────────────────────────
