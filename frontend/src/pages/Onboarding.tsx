@@ -56,6 +56,7 @@ export default function Onboarding() {
   const [targets, setTargets] = useState<any>(null);
   const [saving, setSaving] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
+  const [heightUnit, setHeightUnit] = useState<'cm' | 'ft'>('cm');
 
   const update = (key: string, value: any) => setForm((p) => ({ ...p, [key]: value }));
 
@@ -186,13 +187,38 @@ export default function Onboarding() {
     </div>
   );
 
+  const cmToFtIn = (cm: number) => {
+    const totalIn = cm / 2.54;
+    const ft = Math.floor(totalIn / 12);
+    const inches = Math.round(totalIn % 12);
+    return `${ft}'${inches}\"`;
+  };
+
   const renderBody = () => (
     <div className={`space-y-5 ${animClass}`} key={animKey}>
       <div style={{ background: 'var(--tb-surface-elevated)', backdropFilter: 'blur(12px)', borderRadius: '1.25rem', padding: '1.5rem' }}>
         <div className="space-y-2 mb-8">
-          <label style={labelStyle}>Height — <span style={{ color: 'var(--tb-accent-dark)' }}>{form.height_cm} cm</span></label>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+            <label style={labelStyle}>Height — <span style={{ color: 'var(--tb-accent-dark)' }}>{heightUnit === 'cm' ? `${form.height_cm} cm` : cmToFtIn(form.height_cm)}</span></label>
+            <button
+              onClick={() => setHeightUnit(heightUnit === 'cm' ? 'ft' : 'cm')}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 4,
+                padding: '4px 10px', borderRadius: 100, border: 'none',
+                background: 'var(--tb-accent-muted)', cursor: 'pointer',
+                fontSize: '0.625rem', fontWeight: 700, fontFamily: 'Plus Jakarta Sans',
+                color: 'var(--tb-accent-dark)', transition: 'all 0.2s ease',
+              }}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: 14 }}>swap_horiz</span>
+              {heightUnit === 'cm' ? 'ft' : 'cm'}
+            </button>
+          </div>
           <input type="range" min={120} max={220} value={form.height_cm} onChange={(e) => update('height_cm', parseInt(e.target.value))} />
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--tb-text-muted)' }}><span>120 cm</span><span>220 cm</span></div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--tb-text-muted)' }}>
+            <span>{heightUnit === 'cm' ? '120 cm' : cmToFtIn(120)}</span>
+            <span>{heightUnit === 'cm' ? '220 cm' : cmToFtIn(220)}</span>
+          </div>
         </div>
         <div className="space-y-2">
           <label style={labelStyle}>Weight — <span style={{ color: 'var(--tb-accent-dark)' }}>{form.weight_kg} kg</span></label>
@@ -204,7 +230,7 @@ export default function Onboarding() {
   );
 
   const renderActivity = () => (
-    <div className={`stagger-children space-y-3 ${animClass}`} key={animKey}>
+    <div className={`stagger-children space-y-4 ${animClass}`} key={animKey}>
       {ACTIVITY_OPTIONS.map((opt) => (
         <button key={opt.value} onClick={() => update('activity_level', opt.value)}
           className={opt.value === form.activity_level ? 'option-selected-glow' : ''}
@@ -266,7 +292,7 @@ export default function Onboarding() {
   );
 
   const renderDiet = () => (
-    <div className={`${animClass}`} key={animKey} style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
+    <div className={`${animClass}`} key={animKey} style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 14 }}>
       {DIET_OPTIONS.map((opt) => (
         <button key={opt.value} onClick={() => update('diet_preference', opt.value)} style={{
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
@@ -285,7 +311,7 @@ export default function Onboarding() {
   );
 
   const renderHealth = () => (
-    <div className={`${animClass}`} key={animKey} style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
+    <div className={`${animClass}`} key={animKey} style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 14 }}>
       {HEALTH_OPTIONS.map((opt) => {
         const selected = opt.value === 'none' ? form.health_conditions.length === 0 : form.health_conditions.includes(opt.value);
         return (

@@ -638,10 +638,24 @@ export default function Meals() {
                 <span className="material-symbols-outlined" style={{ fontSize: 22, fontVariationSettings: "'wght' 600" }}>remove</span>
               </button>
               <div style={{ textAlign: 'center', minWidth: 80 }}>
-                <div style={{
-                  fontSize: '2rem', fontWeight: 900, color: 'var(--tb-text)',
-                  fontFamily: 'var(--font-display)', lineHeight: 1,
-                }}>{quantity}</div>
+                <input
+                  type="number"
+                  value={quantity}
+                  onChange={(e) => {
+                    const val = parseFloat(e.target.value);
+                    if (!isNaN(val)) setQuantity(val);
+                  }}
+                  onBlur={() => setQuantity(Math.min(10, Math.max(0.5, Math.round(quantity * 10) / 10)))}
+                  step={0.5}
+                  min={0.5}
+                  max={10}
+                  style={{
+                    width: 80, textAlign: 'center', background: 'transparent',
+                    fontSize: '2rem', fontWeight: 900, color: 'var(--tb-text)',
+                    fontFamily: 'var(--font-display)', lineHeight: 1,
+                    outline: 'none', MozAppearance: 'textfield',
+                  }}
+                />
                 <div style={{
                   fontSize: '0.5625rem', fontWeight: 700, color: 'var(--tb-text-muted)',
                   textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: 4,
