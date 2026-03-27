@@ -39,7 +39,7 @@ export default function Reminders() {
   };
 
   return (
-    <div className="page-shell" style={{ paddingTop: 24 }}>
+    <div className="page-shell">
 
       {/* ▸ Header ─────────────────────────────── */}
       <header className="anim-fade-up" style={{

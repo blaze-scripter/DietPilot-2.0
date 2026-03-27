@@ -102,7 +102,7 @@ export default function Stats() {
   const macroProgress = (actual: number, target: number) => Math.min((actual / Math.max(target, 1)) * 100, 100);
 
   return (
-    <div className="page-shell" style={{ paddingTop: 24 }}>
+    <div className="page-shell">
 
       {/* ▸ Header ─────────────────────────────── */}
       <header className="anim-fade-up" style={{ marginBottom: 28 }}>
@@ -140,10 +140,10 @@ export default function Stats() {
       <div className="anim-fade-up anim-delay-2 card" style={{ padding: '18px 16px', marginBottom: 20 }}>
         <h2 style={{ fontSize: '0.8125rem', color: 'var(--tb-text)', marginBottom: 16 }}>Nutrition vs Goals</h2>
         {[
-          { label: 'Calories', actual: avgCal, target: Math.round(targets.calories), unit: 'kcal', color: '#ef4444', bg: '#fef2f2' },
-          { label: 'Protein', actual: avgProtein, target: Math.round(targets.protein), unit: 'g', color: '#65a30d', bg: '#f0fdf4' },
-          { label: 'Carbs', actual: avgCarbs, target: Math.round(targets.carbs), unit: 'g', color: '#f59e0b', bg: '#fffbeb' },
-          { label: 'Fat', actual: avgFat, target: Math.round(targets.fat), unit: 'g', color: '#ec4899', bg: '#fdf2f8' },
+          { label: 'Calories', actual: avgCal, target: Math.round(targets.calories), unit: 'kcal', color: 'var(--tb-error)', bg: 'var(--tb-error-bg)' },
+          { label: 'Protein', actual: avgProtein, target: Math.round(targets.protein), unit: 'g', color: 'var(--tb-success)', bg: 'var(--tb-success-bg)' },
+          { label: 'Carbs', actual: avgCarbs, target: Math.round(targets.carbs), unit: 'g', color: 'var(--tb-warning)', bg: 'var(--tb-warning-bg)' },
+          { label: 'Fat', actual: avgFat, target: Math.round(targets.fat), unit: 'g', color: 'var(--tb-fat)', bg: 'var(--tb-accent-muted)' },
         ].map((m) => (
           <div key={m.label} style={{ marginBottom: 14 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
@@ -186,18 +186,18 @@ export default function Stats() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 16 }}>
           <div style={{
             padding: '12px', borderRadius: 14, textAlign: 'center',
-            background: '#eff6ff', border: '1px solid #dbeafe',
+            background: 'var(--tb-blue-subtle)', border: `1px solid var(--tb-blue-card-border)`,
           }}>
-            <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#2563eb', fontFamily: 'var(--font-display)' }}>
+            <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--tb-blue-dark)', fontFamily: 'var(--font-display)' }}>
               {avgWater}
             </div>
             <div style={{ fontSize: '0.5625rem', fontWeight: 600, color: 'var(--tb-blue)' }}>Avg Glasses/Day</div>
           </div>
           <div style={{
             padding: '12px', borderRadius: 14, textAlign: 'center',
-            background: '#eff6ff', border: '1px solid #dbeafe',
+            background: 'var(--tb-blue-subtle)', border: `1px solid var(--tb-blue-card-border)`,
           }}>
-            <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#2563eb', fontFamily: 'var(--font-display)' }}>
+            <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--tb-blue-dark)', fontFamily: 'var(--font-display)' }}>
               {(totalWater * 0.25).toFixed(1)}L
             </div>
             <div style={{ fontSize: '0.5625rem', fontWeight: 600, color: 'var(--tb-blue)' }}>Total This Week</div>
@@ -210,11 +210,11 @@ export default function Stats() {
             <div key={i} style={{ textAlign: 'center', flex: 1 }}>
               <div style={{
                 width: 28, height: 28, borderRadius: '50%', margin: '0 auto 4px',
-                background: d.water >= 8 ? '#2563eb' : d.water >= 4 ? '#93c5fd' : '#e0f2fe',
+                background: d.water >= 8 ? 'var(--tb-blue-dark)' : d.water >= 4 ? 'var(--tb-blue)' : 'var(--tb-blue-subtle)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 transition: 'all 0.3s ease',
               }}>
-                <span style={{ fontSize: '0.5rem', fontWeight: 800, color: d.water >= 8 ? '#fff' : '#2563eb' }}>
+                <span style={{ fontSize: '0.5rem', fontWeight: 800, color: d.water >= 8 ? '#fff' : 'var(--tb-blue-dark)' }}>
                   {d.water}
                 </span>
               </div>
@@ -316,12 +316,12 @@ export default function Stats() {
                 {d.calories > 0 && (
                   <div style={{
                     width: 28, height: 28, borderRadius: '50%',
-                    background: d.calories >= targets.calories * 0.8 ? '#dcfce7' : '#fef3c7',
+                    background: d.calories >= targets.calories * 0.8 ? 'var(--tb-success-bg)' : 'var(--tb-warning-bg)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
                     <span className="material-symbols-outlined" style={{
                       fontSize: 14,
-                      color: d.calories >= targets.calories * 0.8 ? '#16a34a' : '#f59e0b',
+                      color: d.calories >= targets.calories * 0.8 ? 'var(--tb-success)' : 'var(--tb-warning)',
                       fontVariationSettings: "'FILL' 1",
                     }}>{d.calories >= targets.calories * 0.8 ? 'check_circle' : 'warning'}</span>
                   </div>

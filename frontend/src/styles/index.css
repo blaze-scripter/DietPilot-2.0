@@ -603,6 +603,48 @@ input[type="range"]::-webkit-slider-thumb:hover {
   transform: scale(1.15);
 }
 
+/* Firefox range thumb */
+input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: var(--tb-accent-gradient);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(101,163,13,0.3);
+}
+
+input[type="range"]::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--tb-input-bg);
+  border: none;
+}
+
+/* Dark mode slider enhancements */
+[data-theme="dark"] input[type="range"] {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] input[type="range"]::-webkit-slider-thumb {
+  box-shadow: 0 2px 12px rgba(163,230,53,0.4);
+}
+
+[data-theme="dark"] input[type="range"]::-moz-range-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Input placeholder — dark mode visibility */
+::placeholder {
+  color: var(--tb-text-muted);
+  opacity: 1;
+}
+
+[data-theme="dark"] ::placeholder {
+  color: var(--tb-text-muted);
+  opacity: 0.8;
+}
+
 /* ==========================================
    ✦ BADGES
    ========================================== */

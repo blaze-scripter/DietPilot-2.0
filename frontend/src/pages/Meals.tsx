@@ -19,6 +19,10 @@ export default function Meals() {
   const [dragTarget, setDragTarget] = useState<string | null>(null);
   const searchTimeout = useRef<any>(null);
 
+  // ── Quantity selector state ──
+  const [pendingFood, setPendingFood] = useState<any | null>(null);
+  const [quantity, setQuantity] = useState(1);
+
   // ── Tab scroll state ──
   const tabScrollRef = useRef<HTMLDivElement>(null);
   const [showTabLeft, setShowTabLeft] = useState(false);
@@ -166,24 +170,40 @@ export default function Meals() {
     }, 300);
   }, [searchQuery]);
 
-  const handleAddFood = async (food: any) => {
+  /* ── Open the quantity selector for a food ── */
+  const openQuantitySelector = (food: any) => {
+    setPendingFood(food);
+    setQuantity(1);
+  };
+
+  /* ── Confirm add with quantity ── */
+  const handleConfirmAdd = async () => {
+    if (!pendingFood) return;
+    const food = pendingFood;
+    const q = quantity;
     try {
       await dailyLogApi.addFood(new Date().toISOString().split('T')[0], {
         meal_type: selectedSlot,
         food: {
-          name: food.name,
-          serving_size: food.servingSize || food.serving_size,
+          name: `${food.name}${q !== 1 ? ` (×${q})` : ''}`,
+          serving_size: Math.round((food.servingSize || food.serving_size || 100) * q),
           serving_unit: food.servingUnit || food.serving_unit || 'g',
-          calories: food.calories,
-          protein_g: food.protein || food.protein_g,
-          carbs_g: food.carbs || food.carbs_g,
-          fat_g: food.fat || food.fat_g,
+          calories: Math.round((food.calories || 0) * q),
+          protein_g: Math.round(((food.protein || food.protein_g || 0) * q) * 10) / 10,
+          carbs_g: Math.round(((food.carbs || food.carbs_g || 0) * q) * 10) / 10,
+          fat_g: Math.round(((food.fat || food.fat_g || 0) * q) * 10) / 10,
         },
       });
       await refreshLog();
+      setPendingFood(null);
       setShowSearch(false);
       setSearchQuery('');
     } catch { /* ignore */ }
+  };
+
+  /* Legacy direct add (kept for backward compat) */
+  const handleAddFood = async (food: any) => {
+    openQuantitySelector(food);
   };
 
   const handleRemoveFood = async (mealType: string, foodId: string) => {
@@ -196,7 +216,7 @@ export default function Meals() {
   const dayTotals = MEAL_TYPES.reduce((acc, mt) => acc + slotTotals(mt.value).calories, 0);
 
   return (
-    <div className="page-shell" style={{ paddingTop: 24 }}>
+    <div className="page-shell">
 
       {/* ▸ Header ─────────────────────────────── */}
       <header className="anim-fade-up" style={{ marginBottom: 28 }}>
@@ -531,7 +551,7 @@ export default function Meals() {
               {searchResults.map((food) => (
                 <button
                   key={food.fdcId}
-                  onClick={() => handleAddFood(food)}
+                  onClick={() => openQuantitySelector(food)}
                   className="card"
                   style={{
                     width: '100%', textAlign: 'left',
@@ -563,6 +583,125 @@ export default function Meals() {
                 </button>
               ))}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ▸ Quantity Selector Bottom Sheet ────── */}
+      {pendingFood && (
+        <div
+          style={{
+            position: 'fixed', inset: 0, zIndex: 70,
+            display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
+            background: 'var(--tb-modal-overlay)', backdropFilter: 'blur(6px)',
+          }}
+          onClick={() => setPendingFood(null)}
+        >
+          <div
+            style={{
+              width: '100%', maxWidth: 430,
+              background: 'var(--tb-modal-bg)', borderRadius: '28px 28px 0 0',
+              padding: '20px 24px calc(24px + env(safe-area-inset-bottom, 16px))',
+            }}
+            onClick={(e) => e.stopPropagation()}
+            className="animate-slideUp"
+          >
+            {/* Drag handle */}
+            <div style={{ width: 40, height: 4, background: 'var(--tb-input-bg)', borderRadius: 999, margin: '0 auto 20px' }} />
+
+            {/* Food Name */}
+            <h3 style={{
+              fontSize: '1rem', fontWeight: 800, color: 'var(--tb-text)',
+              fontFamily: 'var(--font-display)', marginBottom: 4,
+              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+            }}>{pendingFood.name}</h3>
+            <p style={{ fontSize: '0.6875rem', color: 'var(--tb-text-secondary)', marginBottom: 20 }}>
+              Per serving: {pendingFood.servingSize || pendingFood.serving_size || 100}{pendingFood.servingUnit || pendingFood.serving_unit || 'g'}
+            </p>
+
+            {/* Quantity Stepper */}
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              gap: 20, marginBottom: 24,
+            }}>
+              <button
+                onClick={() => setQuantity(Math.max(0.5, Math.round((quantity - 0.5) * 10) / 10))}
+                disabled={quantity <= 0.5}
+                style={{
+                  width: 44, height: 44, borderRadius: '50%', border: 'none',
+                  background: quantity > 0.5 ? 'var(--tb-input-bg)' : 'transparent',
+                  color: 'var(--tb-text)', cursor: quantity > 0.5 ? 'pointer' : 'not-allowed',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  opacity: quantity > 0.5 ? 1 : 0.3, transition: 'all 0.2s ease',
+                }}
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: 22, fontVariationSettings: "'wght' 600" }}>remove</span>
+              </button>
+              <div style={{ textAlign: 'center', minWidth: 80 }}>
+                <div style={{
+                  fontSize: '2rem', fontWeight: 900, color: 'var(--tb-text)',
+                  fontFamily: 'var(--font-display)', lineHeight: 1,
+                }}>{quantity}</div>
+                <div style={{
+                  fontSize: '0.5625rem', fontWeight: 700, color: 'var(--tb-text-muted)',
+                  textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: 4,
+                }}>servings</div>
+              </div>
+              <button
+                onClick={() => setQuantity(Math.min(10, Math.round((quantity + 0.5) * 10) / 10))}
+                disabled={quantity >= 10}
+                style={{
+                  width: 44, height: 44, borderRadius: '50%', border: 'none',
+                  background: quantity < 10 ? 'var(--tb-accent)' : 'transparent',
+                  color: 'var(--tb-accent-pill-text)', cursor: quantity < 10 ? 'pointer' : 'not-allowed',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  opacity: quantity < 10 ? 1 : 0.3, transition: 'all 0.2s ease',
+                  boxShadow: quantity < 10 ? '0 4px 16px rgba(163,230,53,0.3)' : 'none',
+                }}
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: 22, fontVariationSettings: "'wght' 600" }}>add</span>
+              </button>
+            </div>
+
+            {/* Nutrition Preview */}
+            <div style={{
+              display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8,
+              marginBottom: 24,
+            }}>
+              {[
+                { label: 'Calories', value: Math.round((pendingFood.calories || 0) * quantity), unit: 'kcal', color: 'var(--tb-accent-dark)' },
+                { label: 'Protein', value: Math.round(((pendingFood.protein || pendingFood.protein_g || 0) * quantity) * 10) / 10, unit: 'g', color: 'var(--tb-protein)' },
+                { label: 'Carbs', value: Math.round(((pendingFood.carbs || pendingFood.carbs_g || 0) * quantity) * 10) / 10, unit: 'g', color: 'var(--tb-carbs)' },
+                { label: 'Fat', value: Math.round(((pendingFood.fat || pendingFood.fat_g || 0) * quantity) * 10) / 10, unit: 'g', color: 'var(--tb-fat)' },
+              ].map((m) => (
+                <div key={m.label} style={{
+                  background: 'var(--tb-input-bg)', borderRadius: 14,
+                  padding: '12px 8px', textAlign: 'center',
+                  transition: 'background 0.3s ease',
+                }}>
+                  <div style={{ fontSize: '1rem', fontWeight: 800, color: m.color, fontFamily: 'var(--font-display)' }}>
+                    {m.value}
+                  </div>
+                  <div style={{
+                    fontSize: '0.5rem', fontWeight: 700, color: 'var(--tb-text-muted)',
+                    textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: 2,
+                  }}>{m.label}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Add Button */}
+            <button
+              onClick={handleConfirmAdd}
+              className="btn-primary"
+              style={{
+                width: '100%', padding: '16px', fontSize: '0.9375rem',
+                borderRadius: 999, gap: 8,
+              }}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: 18, fontVariationSettings: "'FILL' 1" }}>add_circle</span>
+              Add to {selectedSlot.charAt(0).toUpperCase() + selectedSlot.slice(1)}
+            </button>
           </div>
         </div>
       )}
