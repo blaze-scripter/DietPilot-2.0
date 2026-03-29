@@ -155,18 +155,18 @@ export default function Onboarding() {
   );
 
   const renderBasics = () => (
-    <div className={`space-y-5 ${animClass}`} key={animKey}>
+    <div className={`flex flex-col gap-5 ${animClass}`} key={animKey}>
       <div style={{ background: 'var(--tb-surface-elevated)', backdropFilter: 'blur(12px)', borderRadius: '1.25rem', padding: '1.5rem' }}>
-        <div className="space-y-2 mb-5">
+        <div className="flex flex-col gap-2 mb-5">
           <label style={labelStyle}>Full Name</label>
           <input type="text" value={form.name} onChange={(e) => update('name', e.target.value)}
             placeholder="How should we call you?" style={inputStyle} />
         </div>
-        <div className="space-y-2 mb-5">
+        <div className="flex flex-col gap-2 mb-5">
           <label style={labelStyle}>Age — <span style={{ color: 'var(--tb-accent-dark)' }}>{form.age}</span></label>
           <input type="range" min={15} max={80} value={form.age} onChange={(e) => update('age', parseInt(e.target.value))} />
         </div>
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <label style={labelStyle}>Gender</label>
           <div className="flex gap-2">
             {(['male', 'female', 'other'] as const).map((g) => (
@@ -195,9 +195,9 @@ export default function Onboarding() {
   };
 
   const renderBody = () => (
-    <div className={`space-y-5 ${animClass}`} key={animKey}>
+    <div className={`flex flex-col gap-5 ${animClass}`} key={animKey}>
       <div style={{ background: 'var(--tb-surface-elevated)', backdropFilter: 'blur(12px)', borderRadius: '1.25rem', padding: '1.5rem' }}>
-        <div className="space-y-2 mb-8">
+        <div className="flex flex-col gap-2 mb-8">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
             <label style={labelStyle}>Height — <span style={{ color: 'var(--tb-accent-dark)' }}>{heightUnit === 'cm' ? `${form.height_cm} cm` : cmToFtIn(form.height_cm)}</span></label>
             <button
@@ -220,7 +220,7 @@ export default function Onboarding() {
             <span>{heightUnit === 'cm' ? '220 cm' : cmToFtIn(220)}</span>
           </div>
         </div>
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <label style={labelStyle}>Weight — <span style={{ color: 'var(--tb-accent-dark)' }}>{form.weight_kg} kg</span></label>
           <input type="range" min={30} max={200} value={form.weight_kg} onChange={(e) => update('weight_kg', parseInt(e.target.value))} />
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--tb-text-muted)' }}><span>30 kg</span><span>200 kg</span></div>
@@ -230,7 +230,7 @@ export default function Onboarding() {
   );
 
   const renderActivity = () => (
-    <div className={`stagger-children space-y-4 ${animClass}`} key={animKey}>
+    <div className={`stagger-children flex flex-col gap-4 ${animClass}`} key={animKey}>
       {ACTIVITY_OPTIONS.map((opt) => (
         <button key={opt.value} onClick={() => update('activity_level', opt.value)}
           className={opt.value === form.activity_level ? 'option-selected-glow' : ''}
@@ -261,7 +261,7 @@ export default function Onboarding() {
   );
 
   const renderGoal = () => (
-    <div className={`stagger-children space-y-4 ${animClass}`} key={animKey}>
+    <div className={`stagger-children flex flex-col gap-4 ${animClass}`} key={animKey}>
       {GOAL_OPTIONS.map((opt) => (
         <button key={opt.value} onClick={() => update('goal', opt.value)}
           className={opt.value === form.goal ? 'option-selected-glow' : ''}
@@ -333,12 +333,12 @@ export default function Onboarding() {
   );
 
   const renderSummary = () => (
-    <div className={`space-y-4 ${animClass}`} key={animKey}>
-      <div style={{ background: 'var(--tb-surface-elevated)', backdropFilter: 'blur(12px)', borderRadius: '1.25rem', padding: '1.25rem' }}>
+    <div className={`flex flex-col gap-4 ${animClass}`} key={animKey}>
+      <div style={{ background: 'var(--tb-surface-elevated)', backdropFilter: 'blur(12px)', borderRadius: '1.25rem', padding: '1.25rem', border: '1px solid var(--tb-border-subtle)', boxShadow: '0 30px 60px -12px rgba(45,47,47,0.08)' }}>
         <h3 style={{ fontSize: '0.8rem', fontWeight: 700, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'Plus Jakarta Sans', color: 'var(--tb-text)' }}>
           <span className="material-symbols-outlined" style={{ fontSize: 18, fontVariationSettings: "'FILL' 1", color: 'var(--tb-accent-dark)' }}>monitoring</span> Calculated Targets
         </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
           {[
             { label: 'BMR', value: targets?.bmr || 0, unit: 'kcal' },
             { label: 'TDEE', value: targets?.tdee || 0, unit: 'kcal' },
@@ -356,11 +356,11 @@ export default function Onboarding() {
           ))}
         </div>
       </div>
-      <div style={{ background: 'var(--tb-surface-elevated)', backdropFilter: 'blur(12px)', borderRadius: '1.25rem', padding: '1.25rem' }}>
+      <div style={{ background: 'var(--tb-surface-elevated)', backdropFilter: 'blur(12px)', borderRadius: '1.25rem', padding: '1.25rem', border: '1px solid var(--tb-border-subtle)', boxShadow: '0 30px 60px -12px rgba(45,47,47,0.08)' }}>
         <h3 style={{ fontSize: '0.8rem', fontWeight: 700, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'Plus Jakarta Sans', color: 'var(--tb-text)' }}>
           <span className="material-symbols-outlined" style={{ fontSize: 18, fontVariationSettings: "'FILL' 1", color: 'var(--tb-accent-dark)' }}>person</span> Profile Summary
         </h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {[['Name', form.name], ['Age', form.age], ['Gender', form.gender], ['Height', `${form.height_cm} cm`], ['Weight', `${form.weight_kg} kg`], ['Activity', form.activity_level.replace('_', ' ')], ['Goal', form.goal.replace('_', ' ')], ['Diet', form.diet_preference]].map(([label, value]) => (
             <div key={label as string} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
               <span style={{ color: 'var(--tb-text-secondary)' }}>{label}</span>

@@ -124,7 +124,7 @@ export default function HealthConditions() {
             <p className="font-display font-medium text-sm">Loading guidelines...</p>
           </div>
         ) : selected && tips[selected] ? (
-          <div className="space-y-4 stagger-children">
+          <div className="flex flex-col gap-4 stagger-children">
             {tips[selected].map((tip, i) => {
               const isDo = tip.type !== 'dont';
               return (
