@@ -32,3 +32,10 @@ __pycache__/
 # Backend
 dietpilot.db
 .env
+.tmp/
+credentials.json
+token.json
+
+# Extraneous files
+Gemini_Generated_Image_*.svg
+stitch-style-upgrade-main/
