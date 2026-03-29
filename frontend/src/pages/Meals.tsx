@@ -209,7 +209,7 @@ export default function Meals() {
           colors: ['#446900', '#a3e635', '#ffffff', '#ffd700', '#ff8c00']
         });
         setShowShawarmaPopup(true);
-        setTimeout(() => setShowShawarmaPopup(false), 3000);
+        setTimeout(() => setShowShawarmaPopup(false), 4500);
       }
 
       setPendingFood(null);
@@ -239,12 +239,12 @@ export default function Meals() {
       {showShawarmaPopup && (
         <div style={{
           position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-          background: 'var(--tb-accent)', color: 'var(--tb-accent-dark)',
-          padding: '32px 40px', borderRadius: 32, zIndex: 9999,
-          boxShadow: '0 24px 48px rgba(163,230,53,0.3), 0 0 0 10000px rgba(0,0,0,0.4)', 
-          fontSize: '1.75rem', fontWeight: 900, fontFamily: 'var(--font-display)',
-          textAlign: 'center', 
-          animation: 'popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+          background: 'var(--tb-surface)', border: '4px solid var(--tb-accent)',
+          padding: '36px 40px', borderRadius: 32, zIndex: 9999,
+          boxShadow: '0 24px 48px rgba(0,0,0,0.2), 0 0 0 10000px var(--tb-modal-overlay)', 
+          textAlign: 'center', minWidth: 280,
+          animation: 'popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center'
         }}>
           <style>{`
             @keyframes popIn {
@@ -253,8 +253,32 @@ export default function Meals() {
               100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
             }
           `}</style>
-          <span style={{fontSize: '4rem', display: 'block', marginBottom: 16}}>🌯</span>
-          <span style={{ display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>shawarma Fan Boy</span>
+          <span style={{fontSize: '4.5rem', display: 'block', marginBottom: 16}}>🌯</span>
+          
+          <div style={{ 
+            fontSize: '0.7rem', fontWeight: 800, color: 'var(--tb-accent-dark)', 
+            background: 'var(--tb-accent-muted)', padding: '6px 14px', borderRadius: 100, 
+            marginBottom: 16, textTransform: 'uppercase', letterSpacing: '0.1em',
+            fontFamily: 'var(--font-display)'
+          }}>
+            Achievement Unlocked
+          </div>
+          
+          <div style={{ 
+            fontSize: '1.75rem', fontWeight: 900, color: 'var(--tb-text)', 
+            fontFamily: 'var(--font-display)', textTransform: 'uppercase', 
+            letterSpacing: '0.05em', lineHeight: 1.2, marginBottom: 8
+          }}>
+            Shawarma<br/>Fan Boy
+          </div>
+          
+          <div style={{ 
+            fontSize: '1.25rem', fontWeight: 800, color: 'var(--tb-accent-dark)', 
+            fontFamily: 'var(--font-display)', textTransform: 'uppercase', 
+            letterSpacing: '0.05em'
+          }}>
+            &amp; Shawarma Paglu
+          </div>
         </div>
       )}
 
